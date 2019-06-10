@@ -1,14 +1,27 @@
 import 'package:apcc_wallet/router.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import './src/store/state.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
+import './src/store/reducer.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+   /// initialState 初始化 State
+  final store = new Store<AppState>(
+    appReducer,
+    initialState: new AppState(),
+  );
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return new  StoreProvider(
+      store:store,
+      child:  MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -25,6 +38,6 @@ class MyApp extends StatelessWidget {
       ),
       home: NoWalletPage(),
       routes: routes,
-    );
+    ));
   }
 }
