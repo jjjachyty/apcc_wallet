@@ -9,12 +9,13 @@ AppState appReducer(AppState state, action) {
   );
 }
 
-
 final mnemonicReducer = combineReducers<String>([
   TypedReducer<String, RefreshMnemonicAction>(_refresh),
 ]);
 
 String _refresh(String mnemonic, action) {
+  print("mnemonic   _refresh");
+  print(action);
   mnemonic = action.mnemonic;
   return mnemonic;
 }
