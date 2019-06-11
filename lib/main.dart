@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/router.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
+import 'package:apcc_wallet/src/hdwallet/passwd.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import './src/store/state.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: NoWalletPage(),
+      home: WalletPasswdPage(),
+      // initialRoute: "/",
       routes: routes,
     ));
   }

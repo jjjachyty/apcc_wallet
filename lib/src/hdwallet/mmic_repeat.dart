@@ -51,12 +51,12 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
               _currentIndex = index;
               print(_currentIndex);
             },
-            // onSubmitted: (val) {
-            //   _controllers[index].text = val;
-            //   print("val=====" + val);
-            // },
-            onChanged: (val) {
-              print("val" + val);
+            onEditingComplete: () {
+              if (_currentIndex < 11) {
+                FocusScope.of(context)
+                    .requestFocus(_controllers[_currentIndex + 1][1]);
+                _currentIndex++;
+              }
             },
             maxLength: 1,
             decoration:
@@ -116,17 +116,21 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
   }
 
   void _showMsg() {
-    final mySnackBar = SnackBar(
-      content: new Text('我是SnackBar'),
-      backgroundColor: Colors.red,
-      duration: Duration(seconds: 1),
-      action: new SnackBarAction(
-          label: '我是scackbar按钮',
-          onPressed: () {
-            print('点击了snackbar按钮');
-          }),
-    );
-    Scaffold.of(context).showSnackBar(mySnackBar);
+    // final mySnackBar = SnackBar(
+    //   content: new Text('我是SnackBar'),
+    //   backgroundColor: Colors.red,
+    //   duration: Duration(seconds: 1),
+    //   action: new SnackBarAction(
+    //       label: '我是scackbar按钮',
+    //       onPressed: () {
+    //         print('点击了snackbar按钮');
+    //       }),
+    // );
+    // Scaffold.of(context).showSnackBar(mySnackBar);
+    
+    showDialog(context: context, builder: (ctx)=> new AlertDialog(
+        content:  new Text('输入单词与原单词不一致'),
+      ));
   }
 
   @override
