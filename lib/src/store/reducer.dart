@@ -3,19 +3,25 @@ import 'package:redux/redux.dart';
 
 import 'state.dart';
 
-AppState appReducer(AppState state, action) {
-  return AppState(
-    mnemonic: mnemonicReducer(state.mnemonic, action),
-  );
-}
+// AppState appReducer(AppState state, action) {
+//   return AppState(appReducer(state, action));
+// }
 
-final mnemonicReducer = combineReducers<String>([
-  TypedReducer<String, RefreshMnemonicAction>(_refresh),
+final appReducer = combineReducers<AppState>([
+  TypedReducer<AppState, RefreshMnemonicAction>(_refresh),
+  TypedReducer<AppState, RefreshWalletsAction>(_refreshWallets),
 ]);
 
-String _refresh(String mnemonic, action) {
+AppState _refresh(AppState state, action) {
   print("mnemonic   _refresh");
   print(action);
-  mnemonic = action.mnemonic;
-  return mnemonic;
+  state.mnemonic = action.mnemonic;
+  return state;
+}
+
+AppState _refreshWallets(AppState state, action) {
+  print("_refreshWallets   _refresh");
+  print(action);
+  state.wallets = action.wallets;
+  return state;
 }

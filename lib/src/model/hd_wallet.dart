@@ -22,9 +22,9 @@ class HDWallet {
   List<Address> address;
 }
 
-Create(String mnemonic, String passwd) async {
-  mnemonic =
-      "武 蛋 敲 缝 闻 亲 矩 圣 婚 淮 霞 警"; //await bip39.generateMnemonic(lang: 'zh_cn');
+Future<Map<String, dynamic>> Create(String mnemonic, String passwd) async {
+  // mnemonic =
+  //     "武 蛋 敲 缝 闻 亲 矩 圣 婚 淮 霞 警"; //await bip39.generateMnemonic(lang: 'zh_cn');
   print(mnemonic);
   // assert(bip39.validateMnemonic(mnemonic,lang: 'zh_cn'));
   final seed = bip39.mnemonicToSeed(mnemonic);
@@ -38,70 +38,62 @@ Create(String mnemonic, String passwd) async {
 
   Credentials fromHex = EthPrivateKey.fromHex(HEX.encode(path.privateKey));
   var address = await fromHex.extractAddress();
-  print(address.hex);
+
   Wallet wt = Wallet.createNew(fromHex, passwd, new Random.secure());
-  print(wt.toJson());
   _saveJsonFile(wt.toJson(), address.hex);
-  _readWallets();
+  return {address.hex: wt.toJson()};
 }
 
 // 读取 json 数据
-_readWallets() async {
+Future<Map<String, dynamic>> _readWallets() async {
   try {
+    Map<String, dynamic> wallets = new Map();
     List<String> walletsFiles = new List();
-    List<dynamic> wallets = new List();
-    await getApplicationDocumentsDirectory().then((directory) async{
-           directory.list().forEach((e) {
-      if (e.path.contains(".wallet")) {
-        print(e.path);
-        walletsFiles.add(e.path);
+    var directory = await getApplicationDocumentsDirectory();
+    for (var item in directory.listSync()) {
+      if (item.path.contains(".wallet")) {
+        print(item.path);
+        walletsFiles.add(item.path);
       }
-    });
-
-       print(walletsFiles.toString());
-   print("-----");
-  for (var i = 0; i < walletsFiles.length; i++) {
-       final file = new File(walletsFiles[i]);
-      String str = await file.readAsString();
-      wallets.add(json.decode(str));
     }
-
-    }).then((onValue){
-            print("------1-----");
-
- wallets.forEach((f){
-      print(f.toString());
-      print("-----2------");
-    });
-    });
-    
-      print("----3-------");
-
- 
-
-  
-
-   
-
-  
-  
-
- 
+    for (var item in walletsFiles) {
+      String key =
+          item.substring(item.lastIndexOf("/") + 1, item.lastIndexOf("."));
+      wallets[key] = await _getWallets(walletsFiles);
+    }
+    return wallets;
   } catch (err) {
     print(err);
   }
 }
 
+Future<List> _getWallets(List<String> walletsFiles) async {
+  List<dynamic> wallets = new List();
+
+  for (var i = 0; i < walletsFiles.length; i++) {
+    final file = new File(walletsFiles[i]);
+    String str = await file.readAsString();
+    wallets.add(json.decode(str));
+  }
+  return wallets;
+}
+
 //读取文件
-Future _saveJsonFile(String json, String name) async {
+_saveJsonFile(String json, String name) async {
   try {
     String appDocDirPath = await _localPath();
 
     print('文档目录: ' + appDocDirPath + name);
+
     final file = new File('$appDocDirPath/$name.wallet');
-    return file.writeAsString(json);
+    if (!file.existsSync()) {
+      file.writeAsString(json);
+      return;
+    }
+    print(name + "该地址钱包已存在");
   } catch (err) {
     print(err);
+    rethrow;
   }
 }
 
@@ -109,21 +101,3 @@ Future<String> _localPath() async {
   final directory = await getApplicationDocumentsDirectory();
   return directory.path;
 }
-
-//   Future<String> _localPath() async {
-//     try {
-
-//         var appDocDir = await getApplicationDocumentsDirectory();
-//         String appDocPath = appDocDir.path;
-
-//         print('文档目录: ' + appDocPath);
-//         return appDocPath;
-//     }
-//     catch(err) {
-//         print(err);
-//     }
-// }
-
-// _localFile(path,name) async {
-//   return new File('$path/$name.wallet');
-// }

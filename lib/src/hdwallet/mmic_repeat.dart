@@ -127,10 +127,12 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
     //       }),
     // );
     // Scaffold.of(context).showSnackBar(mySnackBar);
-    
-    showDialog(context: context, builder: (ctx)=> new AlertDialog(
-        content:  new Text('输入单词与原单词不一致'),
-      ));
+
+    showDialog(
+        context: context,
+        builder: (ctx) => new AlertDialog(
+              content: new Text('输入单词与原单词不一致'),
+            ));
   }
 
   @override
@@ -169,19 +171,7 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
                 if (inputmmic != _mmics) {
                   Navigator.pushNamed(context, "/wallet/passwd");
                 } else {
-                  // _showMsg();
-
-                  Scaffold.of(context).showSnackBar(new SnackBar(
-                    content: new ListTile(
-                      leading: Icon(
-                        Icons.warning,
-                        color: Colors.red,
-                      ),
-                      title: new Text("输入单词与记录单词不一致"),
-                    ),
-                    backgroundColor: Colors.blue,
-                    duration: Duration(milliseconds: 2000),
-                  ));
+                  _showMsg();
                 }
               },
             ),
