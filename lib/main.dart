@@ -36,8 +36,7 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             primarySwatch: Colors.green,
           ),
-          home: WalletPasswdPage(),
-          // initialRoute: "/",
+         
           routes: routes,
         ));
   }

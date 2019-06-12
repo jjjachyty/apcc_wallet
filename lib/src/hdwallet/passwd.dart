@@ -4,6 +4,9 @@ import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
+ProgressDialog pr;
 
 class WalletPasswdPage extends StatefulWidget {
   @override
@@ -18,43 +21,78 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
   String _passwd, _passwdConf;
   TextEditingController _passwdContrl = new TextEditingController();
   GlobalKey<FormState> _passwdForm = new GlobalKey<FormState>();
-  void _onSubmit(Store<AppState> store) {
-    //测试
 
+
+
+  void _onSubmit(Store<AppState> store) {
+    
+  
+
+    //测试
+ 
     final form = _passwdForm.currentState;
     if (form.validate()) {
+
+      pr.show();
       form.save();
-      Create(store.state.mnemonic, _passwdConf).then((mp) {
+
+      new Future.delayed(Duration(seconds: 1), () {
+             Create(store.state.mnemonic, _passwdConf).then((mp) {
         store.dispatch(RefreshWalletsAction(mp));
       });
-
-      showDialog(
+    pr.hide();
+                  showDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           builder: (ctx) => new AlertDialog(
-                content: new Text('创建成功,地址:' + store.state.wallets.keys.first),
+                content: Container(
+                  height: 150,
+                  child: Column(children: <Widget>[
+                    Row(
+                      mainAxisAlignment:MainAxisAlignment.center ,
+                      
+                      children: <Widget>[
+                      Icon(Icons.sentiment_very_satisfied,color: Colors.green,),
+                        new Text('创建成功')
+                    ]),
+                   
+                    new Text("地址:"+store.state.wallets.keys.first,style: Theme.of(context).textTheme.caption,)
+                ],
+                ) ) ,
                 actions: <Widget>[
                   RaisedButton(
-                    textColor: Color(0xffff0000),
-                    color: Color(0xfff1f1f1),
-                    highlightColor: Color(0xff00ff00),
-                    onPressed: () {},
+                    textColor: Colors.white,
+                    onPressed: () { 
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamedAndRemoveUntil("/index", (Route<dynamic> route) => false);},
                     child: Text("确认"),
                   )
                 ],
               ));
+
+      });
+ 
+  
+
+
+  
+        print("=============1==============");
+
+      
+ print('submitting to backend...');
+  
+
+
+   
+
+
+
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text("钱包密码"),
-        centerTitle: true,
-      ),
-      body: new Container(
+
+  Widget _buildWidget(){
+   return   new Container(
           padding: EdgeInsets.all(16.0),
           child: new Form(
               key: _passwdForm,
@@ -117,13 +155,32 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                             style: const TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            _onSubmit(store);
+                          
+                              _onSubmit(store);
+                            
                           },
                           color: Theme.of(context).primaryColor,
                         );
                       })
                 ],
-              ))),
-    );
+              )));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    pr = new ProgressDialog(context, ProgressDialogType.Normal);
+    pr.setMessage('创建中...');
+
+
+    // TODO: implement build
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text("钱包密码"),
+        centerTitle: true,
+      ),
+      body: _buildWidget(),
+      );
+   
   }
 }
