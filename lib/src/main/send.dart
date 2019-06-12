@@ -1,33 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:qrscan/qrscan.dart'as scanner;
+import 'package:qrcode_reader/qrcode_reader.dart';
 
 class Send extends StatefulWidget {
   @override
   _SendState createState() => _SendState();
 }
 
-
-
-
-
 class _SendState extends State<Send> {
-String barcode = "";
+  String barcode = "";
 
-  Future scan() async {
-    try {
-      String barcode = await scanner.scan();
-      setState(() => this.barcode = barcode);
-    } catch (e) {
-      if (e.code == scanner.CameraAccessDenied) {
-        setState(() {
-          this.barcode = 'The user did not grant the camera permission!';
-        });
-      } else {
-        setState(() => this.barcode = 'Unknown error: $e');
-      }
-    }
+  scan2() {
+    Future<String> futureString = new QRCodeReader()
+        .setAutoFocusIntervalInMs(200) // default 5000
+        .setForceAutoFocus(true) // default false
+        .setTorchEnabled(true) // default false
+        .setHandlePermissions(true) // default true
+        .setExecuteAfterPermissionGranted(true) // default true
+        // .setFrontCamera(false) // default false
+        .scan();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +30,11 @@ String barcode = "";
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-                hintText: "请输入转账地址",
-                suffixIcon: IconButton(
-                          icon: Icon(Icons.camera_alt),
-                          onPressed: scan,
-                        )
-              ),
+                  hintText: "请输入转账地址",
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    onPressed: scan2,
+                  )),
             )
           ],
         ),
@@ -52,7 +42,3 @@ String barcode = "";
     );
   }
 }
-
-
-
-
