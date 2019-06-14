@@ -5,8 +5,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-var gasLimit = 0.00003;
 
+var gasLimit = 0.00003;
 
 class MainCoinSend extends StatefulWidget {
   final String from, blance;
@@ -16,13 +16,11 @@ class MainCoinSend extends StatefulWidget {
 }
 
 class _MainCoinSendState extends State<MainCoinSend> {
-  String to,amount;
+  String _to, _amount, _passwd, _errorText = "";
   final String from, blance;
-    var _showpasswd = true;
-
+  bool _obscure = true;
   _MainCoinSendState(this.from, this.blance);
   GlobalKey<FormState> _sendForm = new GlobalKey<FormState>();
-
   scan2() {
     Future<String> futureString = new QRCodeReader()
         .setAutoFocusIntervalInMs(200) // default 5000
@@ -34,67 +32,25 @@ class _MainCoinSendState extends State<MainCoinSend> {
         .scan();
   }
 
-  void _onSubmit(Store<AppState> store) {
-    //测试
+  _onSubmit(Store<AppState> store) {
     final form = _sendForm.currentState;
-    String _passwd; 
-    bool _valid= false;
     if (form.validate()) {
       form.save();
-      print(to);
-      print(amount);
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (ctx) => new AlertDialog(
-        
-                content: Container(
-                  
-                  alignment: Alignment.center,
-                  height: 150,
-                  child: TextFormField(
-                  obscureText: true,
-                    decoration: InputDecoration(hintText: "密码" ),
-                    autovalidate: true,
-                    validator: (val){
-                      if (val=="" || val.length <6 || val.length > 16){
-                        return "请输入6-16位密码";
-                      }
-                      _valid=true;
-                    },
-                    onSaved: (val){
-                      _passwd = val;
-                    },
-                  ),
-                ),
-                actions: <Widget>[
-    ProgressButton(
-    defaultWidget: const Text('确认',style: TextStyle(color: Colors.white),),
-    progressWidget: const CircularProgressIndicator(backgroundColor: Colors.white,valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
-    width: 100,
-    height: 40,
-    onPressed: () async {
-      if( _valid ){
-      print("111111111111111");
-                  sendETH(store.state.wallets[from].toString(), to, _passwd, amount);
 
-        int score = await Future.delayed(
-            const Duration(milliseconds: 3000), () => 50);
-        // // After [onPressed], it will trigger animation running backwards, from end to beginning
-          return () {
-        // // Optional returns is returning a VoidCallback that will be called
-        // // after the animation is stopped at the beginning.
-        // // A best practice would be to do time-consuming task in [onPressed],
-        // // and do page navigation in the returned VoidCallback.
-        // // So that user won't missed out the reverse animation.
-          };
-          }
-    },
-),
-                 
-                ],
-              ));
-      // sendMain(walletJson,to,passwd,amount);
+      print(_to);
+      print(_passwd);
+      print(_amount);
+      print("开始转账");
+      sendETH(store.state.wallets[from], _to, _passwd, _amount).then((onValue) {
+        print("转账成功");
+        print(onValue);
+      }).catchError((onError) {
+        print("转账失败");
+        print(onError);
+        setState(() {
+          _errorText = onError.toString();
+        });
+      });
     }
   }
 
@@ -126,18 +82,19 @@ class _MainCoinSendState extends State<MainCoinSend> {
                     ],
                   ),
                   TextFormField(
+                    enableInteractiveSelection: true,
                     validator: (val) {
                       if (val == "") {
                         return "地址不正确";
                       }
                     },
-                    
-                    onSaved: (val){
+                    onSaved: (val) {
                       setState(() {
-                       this.to = val; 
+                        this._to = val;
                       });
                     },
                     decoration: InputDecoration(
+                        border: OutlineInputBorder(),
                         hintText: "请输入转账地址",
                         suffixIcon: IconButton(
                           icon: Icon(Icons.camera_alt),
@@ -149,48 +106,89 @@ class _MainCoinSendState extends State<MainCoinSend> {
                     validator: (valStr) {
                       try {
                         var val = double.parse(valStr);
-                        if (val <= 0 || val+gasLimit > double.parse(this.blance)) {
+                        if (val <= 0 ||
+                            val + gasLimit > double.parse(this.blance)) {
                           return "转出金额(含手续费)为0至$blance之间";
                         }
                       } catch (e) {
                         return "金额错误";
                       }
-                        
-                      
                     },
-
-                    onSaved: (val){
+                    onSaved: (val) {
                       setState(() {
-                       this.amount = val; 
+                        this._amount = val;
                       });
                     },
                     decoration: InputDecoration(
+                      border: OutlineInputBorder(),
                       hintText: "请输入转账金额",
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    obscureText: _obscure,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "钱包密码",
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            setState(() {
+                              _obscure = !_obscure;
+                            });
+                          },
+                        )),
+                    autovalidate: true,
+                    validator: (val) {
+                      if (val == "" || val.length < 6 || val.length > 16) {
+                        return "请输入6-16位密码";
+                      }
+                    },
+                    onSaved: (val) {
+                      setState(() {
+                        this._passwd = val;
+                      });
+                    },
+                  ),
                   Row(
-                    children: <Widget>[
-                      Text("预估手续费"),
-                      Text("$gasLimit")
-                    ],
+                    children: <Widget>[Text("预估手续费"), Text("$gasLimit")],
                   ),
                   new StoreConnector<AppState, Store<AppState>>(
                       converter: (store) => store,
                       builder: (context, store) {
-                        return new RaisedButton(
-                          child: new Text(
-                            '转出',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                          
+                        return new ProgressButton(
+                            defaultWidget: const Text(
+                              '转出',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            progressWidget: const CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.lightGreen)),
+                            width: 100,
+                            height: 40,
+                            onPressed: () async {
+                              int score = await Future.delayed(
+                                  const Duration(milliseconds: 3000), () => 50);
+                              // // After [onPressed], it will trigger animation running backwards, from end to beginning
                               _onSubmit(store);
-                            
-                          },
-                          color: Theme.of(context).primaryColor,
-                        );
+                              return () {
+                                // // Optional returns is returning a VoidCallback that will be called
+                                // // after the animation is stopped at the beginning.
+                                // // A best practice would be to do time-consuming task in [onPressed],
+                                // // and do page navigation in the returned VoidCallback.
+                                // // So that user won't missed out the reverse animation.
+                              };
+                            });
                       }),
-                
+                  Container(
+                    child: Text(
+                      _errorText,
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                  )
                 ],
               ),
             )));

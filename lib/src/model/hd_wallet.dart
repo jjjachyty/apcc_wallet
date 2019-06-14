@@ -12,7 +12,8 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:path_provider/path_provider.dart';
-  final String apiUrl = "http://192.168.1.11:8545";
+
+final String apiUrl = "http://127.0.0.1:8545";
 
 class Address {
   String val;
@@ -25,46 +26,43 @@ class HDWallet {
   List<Address> address;
 }
 
-   Web3Client _ethClient = null ;
+Web3Client _ethClient;
 
-
- Web3Client  getEthClint(){
-     return _ethClient;
-   }
-
-initWallet(){
-
-
-      _ethClient = new Web3Client(apiUrl, new Client());
-      _ethClient.getGasPrice().catchError((onError){
-        _ethClient = null;
-      });
- 
-return _readWallets();
+Web3Client getEthClint() {
+  print("getEthClint");
+  print(_ethClient);
+  return _ethClient;
 }
 
-Future<String> sendETH(String fromJson,to,passwd,value) async{
-  Wallet wallet = Wallet.fromJson(fromJson, passwd);
+initWallet() {
+  _ethClient = new Web3Client(apiUrl, new Client());
 
-  // var ethClient = new Web3Client(apiUrl, new Client());
- 
-  
- return await _ethClient.sendTransaction(
-  wallet.privateKey,
-  Transaction(
-    to: EthereumAddress.fromHex(to),
-    gasPrice: EtherAmount.inWei(BigInt.one),
-    maxGas: 2100000,
-    value: EtherAmount.fromUnitAndValue(EtherUnit.ether, value),
-  )
-);
+  _ethClient.getGasPrice().catchError((onError) {
+    print("服务器连接失败");
+    _ethClient = null;
+  });
+
+  return _readWallets();
+}
+
+Future<String> sendETH(dynamic fromJson, to, passwd, value) async {
+  Wallet wallet = Wallet.fromJson(fromJson, passwd);
+  print("---------");
+  print(wallet.privateKey.toString());
+  return new Web3Client(apiUrl, new Client()).sendTransaction(
+      wallet.privateKey,
+      Transaction(
+        to: EthereumAddress.fromHex(to),
+        gasPrice: EtherAmount.inWei(BigInt.one),
+        maxGas: 2100000,
+        value: EtherAmount.fromUnitAndValue(EtherUnit.ether, value),
+      ),
+      chainId: 3333);
 }
 
 Future<EtherAmount> getETHblance(String address) async {
   return _ethClient.getBalance(EthereumAddress.fromHex(address));
 }
-
-
 
 Future<Map<String, dynamic>> createMain(String mnemonic, String passwd) async {
   // mnemonic =
@@ -103,7 +101,7 @@ Future<Map<String, dynamic>> _readWallets() async {
     for (var item in walletsFiles) {
       String key =
           item.substring(item.lastIndexOf("/") + 1, item.lastIndexOf("."));
-      wallets[key] = await _getWallets(walletsFiles);
+      wallets[key] = await _getWallets(item);
     }
     return wallets;
   } catch (err) {
@@ -111,15 +109,11 @@ Future<Map<String, dynamic>> _readWallets() async {
   }
 }
 
-Future<List> _getWallets(List<String> walletsFiles) async {
-  List<dynamic> wallets = new List();
+Future<String> _getWallets(String walletsFile) async {
+  final file = new File(walletsFile);
+  String str = await file.readAsString();
 
-  for (var i = 0; i < walletsFiles.length; i++) {
-    final file = new File(walletsFiles[i]);
-    String str = await file.readAsString();
-    wallets.add(json.decode(str));
-  }
-  return wallets;
+  return str;
 }
 
 //读取文件
@@ -127,7 +121,7 @@ _saveJsonFile(String json, String name) async {
   try {
     String appDocDirPath = await _localPath();
 
-    print('文档目录: ' + appDocDirPath +"/"+ name);
+    print('文档目录: ' + appDocDirPath + "/" + name);
 
     final file = new File('$appDocDirPath/$name.wallet');
     if (!file.existsSync()) {

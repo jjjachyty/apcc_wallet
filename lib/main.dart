@@ -19,16 +19,12 @@ class MyApp extends StatelessWidget {
     initialState: AppState.initialState(),
   );
 
-
-
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context){
-
-    initWallet().then((val){
+  Widget build(BuildContext context) {
+    initWallet().then((val) {
       store.dispatch(RefreshWalletsAction(val));
     });
-    
 
     return new StoreProvider(
         store: store,

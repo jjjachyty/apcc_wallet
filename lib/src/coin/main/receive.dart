@@ -24,40 +24,41 @@ class _blance {
 
 class _MainCoinReceiveState extends State<MainCoinReceive> {
   List<_blance> _keys = new List();
-  bool _online = false;
+  var _online = false;
+
   @override
   void initState() {
-    print("+++++");
-    getEthClint().getClientVersion().then((onValue){
-      print(onValue);
-    });
-    if (getEthClint() != null) {
-      _online = true;
-    }
-
     // TODO: implement initState
     super.initState();
   }
-  _getData(Store<AppState> store){
-                  var keys = store.state.wallets.keys;
 
-              for (var key in keys) {
-                if (_online) {
-                  getETHblance(key).then((amount) {
-                    setState(() {
-                                          _keys.add(new _blance(address: key, amount: amount));
-
-                    });
-                  });
-                } else {
-                  _keys.add(
-                      new _blance(address: key, amount: EtherAmount.zero()));
-                }
-              }
+  @override
+  dispose() {
+    _keys.clear();
+    super.dispose();
   }
+
+  _getData(Store<AppState> store) {
+    var keys = store.state.wallets.keys;
+    _keys.clear();
+    for (var key in keys) {
+      getETHblance(key).then((amount) {
+        setState(() {
+          _online = true;
+          _keys.add(new _blance(address: key, amount: amount));
+        });
+      }).catchError((onError) {
+        setState(() {
+          _keys.add(new _blance(address: key, amount: EtherAmount.zero()));
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
+
     return Container(
         child: new StoreConnector<AppState, Store<AppState>>(
             onInit: (store) {
@@ -68,25 +69,28 @@ class _MainCoinReceiveState extends State<MainCoinReceive> {
               return Center(
                   child: Column(children: <Widget>[
                 Container(
-                 
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: _size.width*0.8,
+                        width: _size.width * 0.8,
                         alignment: Alignment.center,
-                        child: _online ? null : Text("钱包服务器无法连接,请稍后再试",style: TextStyle(color: Colors.red),),
+                        child: _online
+                            ? null
+                            : Text(
+                                "钱包服务器无法连接,请稍后再试",
+                                style: TextStyle(color: Colors.red),
+                              ),
                       ),
                       Container(
-                        width: _size.width*0.2,
-                         alignment: Alignment.centerRight,
-                        child: 
-                      IconButton(
-                        tooltip: "新增",
-                        icon: Icon(Icons.add, color: Colors.green),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed("/wallet/mmic");
-                        },
-                      ))
+                          width: _size.width * 0.2,
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            tooltip: "新增",
+                            icon: Icon(Icons.add, color: Colors.green),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed("/wallet/mmic");
+                            },
+                          ))
                     ],
                   ),
                 ),
@@ -147,7 +151,6 @@ class _MainCoinReceiveState extends State<MainCoinReceive> {
                                         Container(
                                           alignment: Alignment.bottomRight,
                                           child: IconButton(
-                                            
                                             icon: Icon(
                                               Icons.send,
                                               color: _online
