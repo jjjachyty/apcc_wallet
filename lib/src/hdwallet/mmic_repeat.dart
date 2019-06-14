@@ -14,7 +14,7 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
   List<List<dynamic>> _controllers;
   int _currentIndex = 0;
   var _inputs, _tips;
-  var _mmics = "";
+  var _mmics ;
   @override
   initState() {
     super.initState();
@@ -64,7 +64,15 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
           );
         });
 
-    _tips = new GridView.builder(
+    _tips =  new StoreConnector<AppState, String>(
+            converter: (store) => store.state.mnemonic,
+            builder: (context, mmic) {
+                print(mmic);
+               _mmics = mmic.split(" ");
+               _mmics.shuffle();
+             
+
+              return new GridView.builder(
         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 6,
           mainAxisSpacing: 10.0,
@@ -73,30 +81,16 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
         ),
         itemCount: 12,
         itemBuilder: (BuildContext context, int index) {
-          return new StoreConnector<AppState, String>(
-            converter: (store) => store.state.mnemonic,
-            builder: (context, mmic) {
-              print("====------=====");
-              _mmics = mmic;
-              print(mmic);
-              var _mmic = mmic.split(" ");
-              print(_mmic);
-
-              return new MaterialButton(
+          return new MaterialButton(
                 padding: EdgeInsets.zero,
                 color: Colors.green,
                 textColor: Colors.white,
                 child: new Text(
-                  _mmic[index],
+                  _mmics[index],
                   style: TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
-                  _controllers[_currentIndex][0].text = _mmic[index];
-
-                  // ...
-                  print(_currentIndex);
-                  print("controllers[_currentIndex].text=" +
-                      _controllers[_currentIndex][0].text);
+                  _controllers[_currentIndex][0].text = _mmics[index];
                   if (_currentIndex < 11) {
                     FocusScope.of(context)
                         .requestFocus(_controllers[_currentIndex + 1][1]);

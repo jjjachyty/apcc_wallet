@@ -33,14 +33,14 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
     final form = _passwdForm.currentState;
     if (form.validate()) {
 
-      pr.show();
+     
       form.save();
 
       new Future.delayed(Duration(seconds: 1), () {
-             Create(store.state.mnemonic, _passwdConf).then((mp) {
+             createMain(store.state.mnemonic, _passwdConf).then((mp) {
         store.dispatch(RefreshWalletsAction(mp));
       });
-    pr.hide();
+  
                   showDialog(
           context: context,
           barrierDismissible: true,

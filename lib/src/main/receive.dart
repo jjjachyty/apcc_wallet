@@ -47,25 +47,21 @@ class _ReceiveState extends State<Receive> {
       },
         converter: (store) => store,
         builder: (context, store) {
-          return Scaffold(
-              appBar: AppBar(title: Text("接收"),centerTitle: true,),
-              body: Center(
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
+          return  PageView.builder(
+            itemCount: keys.length,
+            itemBuilder: (context,index){
+               return     Container(
                         child: new QrImage(
                           data: _currentAddr,
                           foregroundColor: Colors.green,
                           size: 250.0,
-                        )),
-                        Expanded(
-                          child: _addressList(),
-                        ),
-                       
+                        ));
+             
+                       }
                     
-                  ],
-                ),
-              ));
+              
+                );
+              
         });
   }
 }

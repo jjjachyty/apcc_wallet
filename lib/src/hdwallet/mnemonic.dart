@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -6,7 +9,33 @@ import '../store/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:bip39/bip39.dart' as bip39;
 
-class MnemonicPage extends StatelessWidget {
+class MnemonicPage extends StatefulWidget {
+  @override
+  _MnemonicPageState createState() => _MnemonicPageState();
+}
+
+class _MnemonicPageState extends State<MnemonicPage> {
+  var _left = 0;
+  Timer _timer ;
+  @override
+  void initState() {
+    // _timer = countDown(_left, (int count) {
+    //   setState(() {
+    //     _left = count;
+    //   });
+    // });
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -61,10 +90,10 @@ class MnemonicPage extends StatelessWidget {
                     minWidth: 200,
                     color: Colors.green,
                     textColor: Colors.white,
-                    child: new Text('已记录'),
-                    onPressed: () {
+                    child: new Text(_left==0 ? '已记录' : _left.toString()),
+                    onPressed: _left==0?() {
                       Navigator.of(context).pushNamed("/wallet/mmicrepeat");
-                    },
+                    }:null,
                   )
                 ],
               )));
@@ -72,17 +101,6 @@ class MnemonicPage extends StatelessWidget {
   }
 }
 
-// class MnemonicPage extends StatefulWidget {
-//   // final  Store<AppState> store;
-//   // MnemonicPage(this.store);
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     // TODO: implement createState
-//     return _MnemonicPageState();
-//   }
-
-// }
 
 String _getRoundMnemonic() {
   return bip39.generateMnemonic(lang: 'zh_cn');

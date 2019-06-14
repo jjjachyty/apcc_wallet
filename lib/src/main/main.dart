@@ -1,6 +1,7 @@
-import 'package:apcc_wallet/src/main/send.dart';
+import 'package:apcc_wallet/src/main/coins.dart';
 import 'package:flutter/material.dart';
 
+import 'dapp.dart';
 import 'index.dart';
 import 'receive.dart';
 
@@ -28,7 +29,7 @@ List<Widget> pages = List<Widget>();
   @override
   void initState() {
  
-    pages..add(Index())..add(Receive())..add(Send());
+    pages..add(Index())..add(Coins())..add(Dapp());
     super.initState();
   }
 
@@ -46,12 +47,12 @@ List<Widget> pages = List<Widget>();
             title: new Text('首页'),
           ),
           new BottomNavigationBarItem(
-            icon: new Icon(Icons.blur_on),
-            title: new Text('接收'),
+            icon: new Icon(Icons.attach_money),
+            title: new Text('资产'),
           ),
           new BottomNavigationBarItem(
-            icon: new Icon(Icons.send),
-            title: new Text('发送'),
+            icon: new Icon(Icons.apps),
+            title: new Text('Dapp'),
           ),
           new BottomNavigationBarItem(
             icon: new Icon(Icons.person),

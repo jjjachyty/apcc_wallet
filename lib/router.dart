@@ -1,3 +1,5 @@
+import 'package:apcc_wallet/src/coin/main/receive.dart';
+import 'package:apcc_wallet/src/coin/main/send.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';
 import 'package:apcc_wallet/src/hdwallet/mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
@@ -12,5 +14,7 @@ final Map<String, WidgetBuilder> routes = {
     "/": (BuildContext context) => new MainPage(),
   "/wallet/mmic": (BuildContext context) => new MnemonicPage(),
   "/wallet/mmicrepeat": (BuildContext context) => new MnemonicRepeatPage(),
-  "/wallet/passwd": (BuildContext context) => new WalletPasswdPage()
+  "/wallet/passwd": (BuildContext context) => new WalletPasswdPage(),
+  "/coin/main/receive": (BuildContext context) => new MainCoinReceive(),
+
 };

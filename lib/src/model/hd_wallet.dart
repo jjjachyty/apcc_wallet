@@ -4,12 +4,15 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:bs58check/bs58check.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 
 import '../bip39/src/bip39_base.dart' as bip39;
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:path_provider/path_provider.dart';
+  final String apiUrl = "http://192.168.1.11:8545";
 
 class Address {
   String val;
@@ -22,7 +25,48 @@ class HDWallet {
   List<Address> address;
 }
 
-Future<Map<String, dynamic>> Create(String mnemonic, String passwd) async {
+   Web3Client _ethClient = null ;
+
+
+ Web3Client  getEthClint(){
+     return _ethClient;
+   }
+
+initWallet(){
+
+
+      _ethClient = new Web3Client(apiUrl, new Client());
+      _ethClient.getGasPrice().catchError((onError){
+        _ethClient = null;
+      });
+ 
+return _readWallets();
+}
+
+Future<String> sendETH(String fromJson,to,passwd,value) async{
+  Wallet wallet = Wallet.fromJson(fromJson, passwd);
+
+  // var ethClient = new Web3Client(apiUrl, new Client());
+ 
+  
+ return await _ethClient.sendTransaction(
+  wallet.privateKey,
+  Transaction(
+    to: EthereumAddress.fromHex(to),
+    gasPrice: EtherAmount.inWei(BigInt.one),
+    maxGas: 2100000,
+    value: EtherAmount.fromUnitAndValue(EtherUnit.ether, value),
+  )
+);
+}
+
+Future<EtherAmount> getETHblance(String address) async {
+  return _ethClient.getBalance(EthereumAddress.fromHex(address));
+}
+
+
+
+Future<Map<String, dynamic>> createMain(String mnemonic, String passwd) async {
   // mnemonic =
   //     "武 蛋 敲 缝 闻 亲 矩 圣 婚 淮 霞 警"; //await bip39.generateMnemonic(lang: 'zh_cn');
   print(mnemonic);
@@ -83,7 +127,7 @@ _saveJsonFile(String json, String name) async {
   try {
     String appDocDirPath = await _localPath();
 
-    print('文档目录: ' + appDocDirPath + name);
+    print('文档目录: ' + appDocDirPath +"/"+ name);
 
     final file = new File('$appDocDirPath/$name.wallet');
     if (!file.existsSync()) {

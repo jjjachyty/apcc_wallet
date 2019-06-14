@@ -21,7 +21,7 @@ AppState _refresh(AppState state, action) {
 
 AppState _refreshWallets(AppState state, action) {
   print("_refreshWallets   _refresh");
-  print(action);
+  print(action.wallets);
   state.wallets = action.wallets;
   return state;
 }
