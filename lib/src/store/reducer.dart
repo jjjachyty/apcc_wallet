@@ -10,6 +10,7 @@ import 'state.dart';
 final appReducer = combineReducers<AppState>([
   TypedReducer<AppState, RefreshMnemonicAction>(_refresh),
   TypedReducer<AppState, RefreshWalletsAction>(_refreshWallets),
+  TypedReducer<AppState, RefreshUserAction>(_refreshUser),
 ]);
 
 AppState _refresh(AppState state, action) {
@@ -23,5 +24,11 @@ AppState _refreshWallets(AppState state, action) {
   print("_refreshWallets   _refresh");
   print(action.wallets);
   state.wallets = action.wallets;
+  return state;
+}
+
+AppState _refreshUser(AppState state, action) {
+  print("_refreshUser   _refresh");
+  state.user = action.user;
   return state;
 }

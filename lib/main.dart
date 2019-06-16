@@ -4,6 +4,7 @@ import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import './src/store/state.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,10 @@ import 'package:redux/redux.dart';
 import './src/store/reducer.dart';
 
 void main() => runApp(MyApp());
+
+// SystemUiOverlayStyle systemUiOverlayStyle =
+//     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+// SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 
 class MyApp extends StatelessWidget {
   /// initialState 初始化 State

@@ -6,13 +6,15 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Xxx"),
+      ),
+      body: TextField(
+        decoration: InputDecoration(hintText: "xxx"),
+      ),
     );
   }
 }

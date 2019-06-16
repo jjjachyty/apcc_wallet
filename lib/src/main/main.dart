@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/main/coins.dart';
 import 'package:flutter/material.dart';
 
@@ -5,31 +6,26 @@ import 'dapp.dart';
 import 'index.dart';
 import 'receive.dart';
 
-
 class MainPage extends StatefulWidget {
-  
- @override
+  @override
   State<StatefulWidget> createState() {
     return new _MainPageState();
   }
-
 }
 
 class _MainPageState extends State<MainPage> {
-int _currentMain = 0;
-    void onTabTapped(int Main) {
+  int _currentMain = 0;
+  void onTabTapped(int Main) {
     setState(() {
       _currentMain = Main;
     });
   }
 
-List<Widget> pages = List<Widget>();
-
+  List<Widget> pages = List<Widget>();
 
   @override
   void initState() {
- 
-    pages..add(Index())..add(Coins())..add(Dapp());
+    pages..add(Index())..add(Coins())..add(Dapp())..add(UserCenter());
     super.initState();
   }
 
@@ -42,7 +38,7 @@ List<Widget> pages = List<Widget>();
         currentIndex: _currentMain,
         type: BottomNavigationBarType.fixed,
         items: [
-         new BottomNavigationBarItem(
+          new BottomNavigationBarItem(
             icon: new Icon(Icons.home),
             title: new Text('首页'),
           ),
@@ -63,5 +59,4 @@ List<Widget> pages = List<Widget>();
       body: pages[_currentMain],
     );
   }
-  
 }

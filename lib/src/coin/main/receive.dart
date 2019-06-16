@@ -59,129 +59,134 @@ class _MainCoinReceiveState extends State<MainCoinReceive> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
 
-    return Container(
+    return SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: new StoreConnector<AppState, Store<AppState>>(
             onInit: (store) {
               _getData(store);
             },
             converter: (store) => store,
             builder: (context, store) {
-              return Center(
+              return Container(
+                  height: 600,
                   child: Column(children: <Widget>[
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: _size.width * 0.8,
-                        alignment: Alignment.center,
-                        child: _online
-                            ? null
-                            : Text(
-                                "钱包服务器无法连接,请稍后再试",
-                                style: TextStyle(color: Colors.red),
-                              ),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: _size.width * 0.8,
+                            alignment: Alignment.center,
+                            child: _online
+                                ? null
+                                : Text(
+                                    "钱包服务器无法连接,请稍后再试",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                          ),
+                          Container(
+                              width: _size.width * 0.2,
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                tooltip: "新增",
+                                icon: Icon(Icons.add, color: Colors.green),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed("/wallet/mmic");
+                                },
+                              ))
+                        ],
                       ),
-                      Container(
-                          width: _size.width * 0.2,
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            tooltip: "新增",
-                            icon: Icon(Icons.add, color: Colors.green),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed("/wallet/mmic");
-                            },
-                          ))
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: new Swiper(
-                        loop: false,
-                        viewportFraction: 0.9,
-                        scale: 0.9,
-                        itemHeight: 200,
-                        //  itemWidth: 300,
-                        itemCount: _keys.length,
-                        itemBuilder: (context, index) {
-                          return Center(
-                              child: Column(
-                            children: <Widget>[
-                              new QrImage(
-                                data: _keys[index].address.toString(),
-                                foregroundColor: Colors.green,
-                                //  size: 250.0,
-                              ),
-                              Card(
-                                  elevation: 5.0,
-                                  child: Container(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          _keys[index].address.toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green),
-                                        ),
-                                        Container(
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.only(top: 20),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.attach_money,
-                                                  color: Colors.green,
-                                                ),
-                                                Text(
-                                                  _keys[index]
-                                                      .amount
-                                                      .getInEther
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontFamily: 'Raleway',
-                                                      fontSize: 25),
-                                                )
-                                              ],
-                                            )),
-                                        Container(
-                                          alignment: Alignment.bottomRight,
-                                          child: IconButton(
-                                            icon: Icon(
-                                              Icons.send,
-                                              color: _online
-                                                  ? Colors.green
-                                                  : Colors.grey,
+                    ),
+                    Expanded(
+                        child: new Swiper(
+                            loop: false,
+                            viewportFraction: 0.9,
+                            scale: 0.9,
+                            itemHeight: 200,
+                            //  itemWidth: 300,
+                            itemCount: _keys.length,
+                            itemBuilder: (context, index) {
+                              return Center(
+                                  child: Column(
+                                children: <Widget>[
+                                  new QrImage(
+                                    data: _keys[index].address.toString(),
+                                    foregroundColor: Colors.green,
+                                    //  size: 250.0,
+                                  ),
+                                  Card(
+                                      elevation: 5.0,
+                                      child: Container(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              _keys[index].address.toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green),
                                             ),
-                                            onPressed: _online
-                                                ? () {
-                                                    Navigator.of(context).push(
-                                                        new MaterialPageRoute(
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                      return new MainCoinSend(
-                                                          _keys[index].address,
-                                                          _keys[index]
-                                                              .amount
-                                                              .getInEther
-                                                              .toString());
-                                                    }));
-                                                  }
-                                                : null,
-                                          ),
+                                            Container(
+                                                alignment: Alignment.center,
+                                                margin:
+                                                    EdgeInsets.only(top: 20),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.attach_money,
+                                                      color: Colors.green,
+                                                    ),
+                                                    Text(
+                                                      _keys[index]
+                                                          .amount
+                                                          .getInEther
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontFamily: 'Raleway',
+                                                          fontSize: 25),
+                                                    )
+                                                  ],
+                                                )),
+                                            Container(
+                                              alignment: Alignment.bottomRight,
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.send,
+                                                  color: _online
+                                                      ? Colors.green
+                                                      : Colors.grey,
+                                                ),
+                                                onPressed: _online
+                                                    ? () {
+                                                        Navigator.of(context).push(
+                                                            new MaterialPageRoute(
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                          return new MainCoinSend(
+                                                              _keys[index]
+                                                                  .address,
+                                                              _keys[index]
+                                                                  .amount
+                                                                  .getInEther
+                                                                  .toString());
+                                                        }));
+                                                      }
+                                                    : null,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ))
-                            ],
-                          ));
-                        }))
-              ]));
+                                      ))
+                                ],
+                              ));
+                            }))
+                  ]));
             }));
   }
 }

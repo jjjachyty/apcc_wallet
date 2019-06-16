@@ -16,7 +16,7 @@ class MnemonicPage extends StatefulWidget {
 
 class _MnemonicPageState extends State<MnemonicPage> {
   var _left = 0;
-  Timer _timer ;
+  Timer _timer;
   @override
   void initState() {
     // _timer = countDown(_left, (int count) {
@@ -31,7 +31,7 @@ class _MnemonicPageState extends State<MnemonicPage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer != null ? _timer.cancel() : null;
     // TODO: implement dispose
     super.dispose();
   }
@@ -90,17 +90,19 @@ class _MnemonicPageState extends State<MnemonicPage> {
                     minWidth: 200,
                     color: Colors.green,
                     textColor: Colors.white,
-                    child: new Text(_left==0 ? '已记录' : _left.toString()),
-                    onPressed: _left==0?() {
-                      Navigator.of(context).pushNamed("/wallet/mmicrepeat");
-                    }:null,
+                    child: new Text(_left == 0 ? '已记录' : _left.toString()),
+                    onPressed: _left == 0
+                        ? () {
+                            Navigator.of(context)
+                                .pushNamed("/wallet/mmicrepeat");
+                          }
+                        : null,
                   )
                 ],
               )));
         });
   }
 }
-
 
 String _getRoundMnemonic() {
   return bip39.generateMnemonic(lang: 'zh_cn');
