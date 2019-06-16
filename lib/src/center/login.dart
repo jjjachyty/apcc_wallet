@@ -198,7 +198,7 @@ class _UserLoginState extends State<UserLogin> {
                                         passWord: "12121212",
                                         nickName: "0009",
                                         avatar:
-                                            "http://b-ssl.duitang.com/uploads/item/201608/21/20160821230024_MyCYK.thumb.700_0.jpeg"),
+                                            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560704834807&di=ce70fc5cd9a615af0f266b3004bdb0d0&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201605%2F07%2F20160507191419_J2m8R.thumb.700_0.jpeg"),
                                     "1245");
                                 // // Optional returns is returning a VoidCallback that will be called
                                 // // after the animation is stopped at the beginning.

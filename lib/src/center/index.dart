@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/center/login.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -65,14 +66,14 @@ class _UserCenterState extends State<UserCenter> {
         converter: (store) => store,
         builder: (context, store) {
           if (_loginFlag) {
-            return _logined();
+            return _logined(store);
           } else {
             return _nologin();
           }
         });
   }
 
-  Widget _logined() {
+  Widget _logined(Store<AppState> store) {
     return Scaffold(
         body: Column(
       children: <Widget>[
@@ -87,23 +88,20 @@ class _UserCenterState extends State<UserCenter> {
                 child: Column(
                   children: <Widget>[
                     new GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(new MaterialPageRoute(builder: (context) {
-                            return UserLogin();
-                          }));
-                        },
-                        child: Image.network(
-                          user.avatar,
-                          width: 50,
-                          color: Colors.white,
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          child: CircleAvatar(
+                              backgroundImage: NetworkImage(user.avatar)),
                         )),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
                       user.nickName,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -132,7 +130,12 @@ class _UserCenterState extends State<UserCenter> {
                 "退出登录",
                 style: TextStyle(color: Colors.green),
               ),
-              onPressed: () {},
+              onPressed: () {
+                store.dispatch(RefreshUserAction(null));
+                setState(() {
+                  this.user = User();
+                });
+              },
             ),
           ],
         )),
