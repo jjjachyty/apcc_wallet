@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/center/login.dart';
+import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
@@ -14,23 +15,18 @@ class Item {
 }
 
 class UserCenter extends StatefulWidget {
-  User user;
 
   @override
-  UserCenter({this.user});
   _UserCenterState createState() {
-    print("createState---------------");
-    print(user);
-    return _UserCenterState(user);
+    return _UserCenterState();
   }
 }
 
 class _UserCenterState extends State<UserCenter> {
-  User user;
-  _UserCenterState(this.user);
+  User _user;
+ 
   List<Item> _items = new List();
-
-  bool _loginFlag = false;
+   dynamic _resultData;
   @override
   void initState() {
     _items
@@ -57,15 +53,11 @@ class _UserCenterState extends State<UserCenter> {
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, Store<AppState>>(
         onInit: (store) {
-          user = user == null ? store.state.user : null;
-
-          if (user != null) {
-            this._loginFlag = true;
-          }
+          _user = _user == null ? store.state.user : _user;
         },
         converter: (store) => store,
         builder: (context, store) {
-          if (_loginFlag) {
+          if (_user !=null) {
             return _logined(store);
           } else {
             return _nologin();
@@ -90,16 +82,17 @@ class _UserCenterState extends State<UserCenter> {
                     new GestureDetector(
                         onTap: () {},
                         child: Container(
+                          padding: EdgeInsets.only(top: 30),
                           width: 100,
                           height: 100,
                           child: CircleAvatar(
-                              backgroundImage: NetworkImage(user.avatar)),
+                              backgroundImage: NetworkImage(_user.avatar)),
                         )),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
-                      user.nickName,
+                      _user.nickName,
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -133,8 +126,9 @@ class _UserCenterState extends State<UserCenter> {
               onPressed: () {
                 store.dispatch(RefreshUserAction(null));
                 setState(() {
-                  this.user = User();
+                  this._user = null;
                 });
+                removeStorage("_user");
               },
             ),
           ],
@@ -158,17 +152,26 @@ class _UserCenterState extends State<UserCenter> {
                 child: Column(
                   children: <Widget>[
                     new GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
+                        onTap: () async  {
+                          final _returnData = await Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (context) {
                             return UserLogin();
                           }));
+                          
+
+            setState(() {
+             this._user =  _returnData;
+            });
+                         
+
                         },
-                        child: Image.asset(
+                        child: Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child:Image.asset(
                           "assets/images/nologinavatar.png",
                           width: 50,
                           color: Colors.white,
-                        )),
+                        ))),
                     SizedBox(
                       height: 20,
                     ),

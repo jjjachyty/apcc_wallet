@@ -27,7 +27,6 @@ class _UserLoginState extends State<UserLogin> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     if (_countdonwn != null) {
       _countdonwn.cancel();
@@ -55,6 +54,7 @@ class _UserLoginState extends State<UserLogin> {
               Positioned(
                 width: MediaQuery.of(context).size.width,
                 child: AppBar(
+                  centerTitle: true,
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   title: Text(
@@ -208,10 +208,11 @@ class _UserLoginState extends State<UserLogin> {
                                 print("user");
                                 if (user.nickName != "") {
                                   store.dispatch(RefreshUserAction(user));
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(builder: (context) {
-                                    return MainPage();
-                                  }), (router) => false);
+                                  Navigator.of(context).pop(user);
+                                  // Navigator.of(context).pushAndRemoveUntil(
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return MainPage();
+                                  // }), (router) => false);
                                 }
                               }
                               ;

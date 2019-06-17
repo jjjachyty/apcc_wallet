@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:http/http.dart';
 
 class User {
@@ -23,6 +26,13 @@ class User {
       this.state,
       this.idCard,
       this.accounts});
+
+      User.fromJson(Map<String,dynamic> json):phone=json["phone"],nickName=json["nickName"],avatar=json["avatar"];
+      @override
+     String toString(){
+        var _tmp= {'phone':this.phone,'nickName':this.nickName,'avatar':this.avatar};
+      return json.encode(_tmp);
+       }
 }
 
 //身份证
@@ -38,8 +48,12 @@ class Account {
   String address; //地址
 }
 
+
+
+
 Future<User> login(User user, sms) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   await Future.delayed(Duration(seconds: 5));
+ setStorageString("_user",user.toString());
   return user;
 }

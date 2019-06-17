@@ -1,0 +1,29 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1560761470754'); /* IE9 */
+  src: url('iconfont.eot?t=1560761470754#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAARUAAsAAAAACGwAAAQFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDHAqEMIQAATYCJAMQCwoABCAFhG0HQBtqB1GU7k2I7GOh3LiypYwiSQruxg8R1I/99t47VJMk0chQfbp4NSmNRIIQSY2SCcWT1z/8b7OnsIhmlU1cFLqHusJDuIhK4iLj0/85Zrx6PrD8a5tLRutmA5zggKKCok40gOmY7yHe6jJ3E2g3Jo5qvaIOB9aSPigQNwYdDawTOlmBDa3K5oKZKR6AhdZyp74BuPd+Pz6lhDVFU6XvtXFW3gaKXnx/LkfGmMfoU9eAicNZwM6jYh6QxEWh7QgSxOYh2uVM1CKg1fhO4cX3XfjP5WYzCrYia8V/eYSqEM10WSdiFuKVF1+LSfASzqTytVynACr7t6Idj0B0E8zIH5SKHA2193RHUSdL+8Dhi6Yt8TgrAfENLr8jlffUdGLh4sWLPOUXuPiQkF5TyuNeG8MXbl7uuSli0YYluMoe2AFR9F4qEWo7RFH8lsmkilgi4mG2GbLsu1yhwMbpkSpJGj5A04FqoI6eJpPyI0p5TUgPcfEFJc/ApZm9ZZkURVySCEXp53PGqTytVMoypShUzkmSiF+U8pXHpCznvFpY6T62qmf4uHL0mr39NQuD7aSh19Cr9g72l5FNAfTBujrNwUJqBL2x95ZSZv7wxUKXzZyRM8YnGf47BjgKHilMULzgFeJ93y7Dfg870sRZzInw9bXyORTcGpixUQMtmm7MdjH69ER/pL3ohfoSF6johdS8LPtZ05PLAKkxKPGIQWVjTjyaeOwawDy6/XRLdd2IKT60bmnnotYBOyq21K3PDjkUecD1+fAVU/keZqtpPFloLprxE7QqYDtlao1aO368Vg1sOPG9wyzwdlH2uIzxiY4D9B/ZnFtUbPNW9wGe/ecLGgBsYAfsBDtzCyr2FpvzcYA+0TFjfPa4t4uAEdB4Zx6OuiNrAGiMqUnfM/ePeTTqjaxkDw3+5/zk+zvl/bW2S/AcL4zyeN2Q3vwPyW/M/+LSHNT1AfVWhLouUzI03nmyP6o/Heo9UtBuGPnOKfo9G0I+NAHPcbQaiqBoMQpVq3FEYuahSYcFaNZqCdrNqZzfYQAHEdmGWRMJhF67oej2BFWvm4jEPIUmw75Cs95AoN1euK3YYTIMtqUcpHnYhmmGYgYt282YRt7WL26BOqGT5uJCD0dCzmQIYskJSelkJeyG3BBjTIN0KTzPYAzHdmEVZD/Y2cliRo5th1o+Qc/zxpzERKboQQlatgvYWsOBaDyoDUZjKIyBFqsb4zTm2WZ+vgWkI+hE4yqqyqwkiGNiaB6TLEFSA0SlrLtR1aW0NxlEJwWPx1D9GBxWF0wFWKBOI8bCGIu7tYO0eAn0HSJGORKxHtNUljC9ousO83+7mvqlGSVqZDTJ3dYy3BryeshBoQsVTJADAAAAAA==') format('woff2'),
+  url('iconfont.woff?t=1560761470754') format('woff'),
+  url('iconfont.ttf?t=1560761470754') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1560761470754#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-USDT:before {
+  content: "\e61a";
+}
+
+.icon-ethereum:before {
+  content: "\f19b";
+}
+
+.icon-user:before {
+  content: "\e625";
+}
+

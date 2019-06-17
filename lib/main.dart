@@ -1,10 +1,8 @@
+
 import 'package:apcc_wallet/router.dart';
-import 'package:apcc_wallet/src/center/index.dart';
-import 'package:apcc_wallet/src/hdwallet/index.dart';
-import 'package:apcc_wallet/src/hdwallet/passwd.dart';
-import 'package:apcc_wallet/src/model/hd_wallet.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:flutter/services.dart';
+
+import 'package:apcc_wallet/src/common/init.dart';
+
 import 'package:flutter_redux/flutter_redux.dart';
 import './src/store/state.dart';
 import 'package:flutter/material.dart';
@@ -23,18 +21,14 @@ class MyApp extends StatelessWidget {
     appReducer,
     initialState: AppState.initialState(),
   );
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    initWallet().then((val) {
-      store.dispatch(RefreshWalletsAction(val));
-    });
+        init(context, store);
 
     return new StoreProvider(
         store: store,
         child: MaterialApp(
-          title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             // This is the theme of your application.
