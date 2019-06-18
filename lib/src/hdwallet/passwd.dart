@@ -169,8 +169,6 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
   @override
   Widget build(BuildContext context) {
 
-    pr = new ProgressDialog(context, ProgressDialogType.Normal);
-    pr.setMessage('创建中...');
 
 
     // TODO: implement build

@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:apcc_wallet/src/center/login.dart';
+import 'package:apcc_wallet/src/center/setting.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
@@ -15,7 +18,6 @@ class Item {
 }
 
 class UserCenter extends StatefulWidget {
-
   @override
   _UserCenterState createState() {
     return _UserCenterState();
@@ -24,27 +26,11 @@ class UserCenter extends StatefulWidget {
 
 class _UserCenterState extends State<UserCenter> {
   User _user;
- 
-  List<Item> _items = new List();
-   dynamic _resultData;
+
+  dynamic _resultData;
   @override
   void initState() {
-    _items
-      // ..add(Item(index: 0, leading: Icon(Icons.person), text: "认证"))
-      ..add(Item(
-          onClick: () {},
-          leading: Icon(
-            Icons.info,
-            color: Colors.green,
-          ),
-          text: "关于我们"))
-      ..add(Item(
-          onClick: () {},
-          leading: Icon(
-            Icons.exit_to_app,
-            color: Colors.green,
-          ),
-          text: "退出"));
+    
     // TODO: implement initState
     super.initState();
   }
@@ -57,7 +43,7 @@ class _UserCenterState extends State<UserCenter> {
         },
         converter: (store) => store,
         builder: (context, store) {
-          if (_user !=null) {
+          if (_user != null) {
             return _logined(store);
           } else {
             return _nologin();
@@ -65,48 +51,8 @@ class _UserCenterState extends State<UserCenter> {
         });
   }
 
-  Widget _logined(Store<AppState> store) {
-    return Scaffold(
-        body: Column(
-      children: <Widget>[
-        Container(
-          color: Colors.grey,
-          child: Column(
-            children: <Widget>[
-              Container(
-                color: Colors.green,
-                padding: EdgeInsets.symmetric(vertical: 40),
-                alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    new GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.only(top: 30),
-                          width: 100,
-                          height: 100,
-                          child: CircleAvatar(
-                              backgroundImage: NetworkImage(_user.avatar)),
-                        )),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      _user.nickName,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-            child: ListView(
+  Widget _item (){
+  return  ListView(
           children: <Widget>[
             new ListTile(
               dense: true,
@@ -115,27 +61,67 @@ class _UserCenterState extends State<UserCenter> {
               leading: Icon(Icons.info),
               trailing: Icon(Icons.keyboard_arrow_right),
               title: Text("关于我们"),
-            ),
-            FlatButton(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                "退出登录",
-                style: TextStyle(color: Colors.green),
-              ),
-              onPressed: () {
-                store.dispatch(RefreshUserAction(null));
-                setState(() {
-                  this._user = null;
-                });
-                removeStorage("_user");
-              },
-            ),
+            )
           ],
-        )),
-      ],
-    ));
+        );
   }
+
+
+
+  Widget _logined(Store<AppState> store) {
+    return Scaffold(
+        body: Column(
+      children: <Widget>[
+        new BackdropFilter(
+            filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+                height: 200,
+                decoration: new BoxDecoration(
+                    color: Colors.green.shade500.withOpacity(0.8)),
+                child: Column(
+                  children: <Widget>[
+                    AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.settings),
+                          onPressed: () {
+                          final _result=  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                                  return UserSetting();
+                            }));
+
+                          setState(() {
+                           _resultData =  _result;
+                          });
+
+                          },
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                            height: 100,
+                            width: 100,
+                            child: CircleAvatar(
+                                backgroundImage: NetworkImage(_user.avatar))),
+                        Text(
+                          _user.nickName,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ],
+                ))),
+        Expanded(
+            child:  _item()),
+      ],
+    )
+    );}
 
   Widget _nologin() {
     return Scaffold(
@@ -152,26 +138,23 @@ class _UserCenterState extends State<UserCenter> {
                 child: Column(
                   children: <Widget>[
                     new GestureDetector(
-                        onTap: () async  {
+                        onTap: () async {
                           final _returnData = await Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (context) {
                             return UserLogin();
                           }));
-                          
 
-            setState(() {
-             this._user =  _returnData;
-            });
-                         
-
+                          setState(() {
+                            this._user = _returnData;
+                          });
                         },
                         child: Container(
-                          margin: EdgeInsets.only(top: 30),
-                          child:Image.asset(
-                          "assets/images/nologinavatar.png",
-                          width: 50,
-                          color: Colors.white,
-                        ))),
+                            margin: EdgeInsets.only(top: 30),
+                            child: Image.asset(
+                              "assets/images/nologinavatar.png",
+                              width: 50,
+                              color: Colors.white,
+                            ))),
                     SizedBox(
                       height: 20,
                     ),
@@ -189,18 +172,7 @@ class _UserCenterState extends State<UserCenter> {
           height: 20,
         ),
         Expanded(
-            child: ListView(
-          children: <Widget>[
-            new ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              isThreeLine: false,
-              leading: Icon(Icons.info),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              title: Text("关于我们"),
-            )
-          ],
-        ))
+            child: _item())
       ],
     ));
   }

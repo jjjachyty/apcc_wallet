@@ -1,13 +1,18 @@
 import 'dart:convert';
 
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/store/state.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
+import 'package:redux/redux.dart';
 
 class User {
   String phone;
   String nickName;
   String avatar;
   String passWord;
+  bool hasTradePasswd; //是否有交易密码
   String lastLoginTime;
   String lastLoginIP;
   String lastLoginDevice;
@@ -56,4 +61,13 @@ Future<User> login(User user, sms) async {
   await Future.delayed(Duration(seconds: 5));
  setStorageString("_user",user.toString());
   return user;
+}
+
+
+Future<Data> setTradePasswd(String passwd,passwdConf,Store<AppState> store) async {
+  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
+  await Future.delayed(Duration(seconds: 5));
+  store.state.user.hasTradePasswd = true;
+  setStorageString("_user",store.state.user.toString());
+  return Data(state:true);
 }
