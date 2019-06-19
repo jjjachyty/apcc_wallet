@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/center/index.dart';
+import 'package:apcc_wallet/src/dapp/app.dart';
 import 'package:apcc_wallet/src/main/coins.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    pages..add(Index())..add(Coins())..add(Dapp())..add(UserCenter());
+    pages..add(Index())..add(Coins())..add(WebViewExample())..add(UserCenter());
     super.initState();
   }
 

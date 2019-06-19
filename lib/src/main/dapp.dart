@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:flutter/material.dart';
 
 class Dapp extends StatefulWidget {
@@ -8,10 +9,6 @@ class Dapp extends StatefulWidget {
 class _DappState extends State<Dapp> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text("DAPP"),centerTitle: true,),
-        body: Center(
-          child:Text("开发中...")),
-    );
+    return Dapps();
   }
 }
