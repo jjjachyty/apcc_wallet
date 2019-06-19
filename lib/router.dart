@@ -1,9 +1,12 @@
 import 'package:apcc_wallet/src/coin/main/receive.dart';
 import 'package:apcc_wallet/src/coin/main/send.dart';
+import 'package:apcc_wallet/src/common/about.dart';
+import 'package:apcc_wallet/src/common/contact.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';
 import 'package:apcc_wallet/src/hdwallet/mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
 import 'package:apcc_wallet/src/main/main.dart';
+import 'package:apcc_wallet/src/news/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -16,5 +19,7 @@ final Map<String, WidgetBuilder> routes = {
   "/wallet/mmicrepeat": (BuildContext context) => new MnemonicRepeatPage(),
   "/wallet/passwd": (BuildContext context) => new WalletPasswdPage(),
   "/coin/main/receive": (BuildContext context) => new MainCoinReceive(),
-
+  // "/news/detail": (BuildContext context) => new NewsDeatil(),
+  "/aboutus":(BuildContext context) => new AboutUs(),
+  "/contactus":(BuildContext context) => new ContactUs(),
 };

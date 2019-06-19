@@ -1,4 +1,7 @@
+import 'package:apcc_wallet/src/common/loding.dart';
+import 'package:apcc_wallet/src/model/ccin_price.dart';
 import 'package:apcc_wallet/src/model/news.dart';
+import 'package:apcc_wallet/src/news/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -10,7 +13,7 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   
-  List<news> _news = new List();
+  List<News> _news = new List();
   
 
   @override
@@ -35,41 +38,77 @@ class _IndexState extends State<Index> {
   }
   Widget _coinPrice(){
     return Container(
-      height: 100,
-      child: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
-                  Text("APCC"),
-                  Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(IconData(0xf19b,fontFamily: 'myIcon'),color: Colors.green,),
-                  Text("ETH"),
-                  Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
-                  Text("USDT"),
-                  Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
-                ],
-              ),
-            ],
-          ),
-        ]
+      height: 300,
+      child:FutureBuilder(
+        future: getPrice(),
+          builder: (context,snapshot){
+            
+              if (snapshot.hasData){
+                final price = snapshot.data as List<CoinPrice>;
+                return ListView.separated(
+                  itemCount: price.length,
+                  itemBuilder: (context,index){
+                   return ListTile(
+                     leading: coinIcons[price[index].code],
+                      title: Text(price[index].code),
+                      trailing:
+                      Container(
+                        width: 130,
+                        child: Row(children: <Widget>[
+                        Text("￥",style: TextStyle(fontSize: 10),),
+                        Text(price[index].priceCny.toStringAsFixed(2),style: TextStyle(color: price[index].percent24h>0?Colors.red:Colors.green,fontSize: 18),),
+                        Text(price[index].percent24h>0?"↑":"↓",style: TextStyle(fontSize: 10),),
+                        Text(price[index].percent24h.toStringAsFixed(2)+"%",style: TextStyle(color: price[index].percent24h>0?Colors.red:Colors.green,fontSize: 10)),
+                      ],),)
+                      
+                       
+                    );
+                  }, separatorBuilder: (BuildContext context, int index) =>Divider(),
+                );
+              }else {
+              return Loading();
+            }
+          },
+      ) 
+      
+      //  ListView(
+        
+      //   padding: EdgeInsets.all(8),
+      //   children: <Widget>[
+      //     Column(
+      //       children: <Widget>[
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: <Widget>[
+      //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
+      //             Text("APCC"),
+      //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
+      //           ],
+      //         ),
+      //         Divider(),
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: <Widget>[
+      //             Icon(IconData(0xf19b,fontFamily: 'myIcon'),color: Colors.green,),
+      //             Text("ETH"),
+      //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
+      //           ],
+      //         ),
+      //         Divider(),
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: <Widget>[
+      //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
+      //             Text("USDT"),
+      //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),), 
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ]
       
        
-      ),
+      // ),
     );
   }
   Widget _newsSwiper(){
@@ -95,7 +134,9 @@ class _IndexState extends State<Index> {
             )
         ),
             onTap: (index){
-              print(index);
+              Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                return NewsDeatil(_news[index].id);
+              }));
             },
             itemCount: _news.length,
             autoplay: true,

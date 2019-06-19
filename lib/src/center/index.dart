@@ -27,7 +27,7 @@ class UserCenter extends StatefulWidget {
 class _UserCenterState extends State<UserCenter> {
   User _user;
 
-  dynamic _resultData;
+
   @override
   void initState() {
     
@@ -61,6 +61,31 @@ class _UserCenterState extends State<UserCenter> {
               leading: Icon(Icons.info),
               trailing: Icon(Icons.keyboard_arrow_right),
               title: Text("关于我们"),
+              onTap: (){
+                Navigator.of(context).pushNamed("/aboutus");
+              },
+            ),
+            new ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              isThreeLine: false,
+              leading: Icon(Icons.message),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              title: Text("联系我们"),
+              onTap: (){
+                Navigator.of(context).pushNamed("/contactus");
+              },
+            ),
+            new ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              isThreeLine: false,
+              leading: Icon(Icons.get_app),
+              trailing: Text("最新版本1.1.0"),
+              title: Text("APP版本(1.0.0)"),
+              onTap: (){
+                
+              },
             )
           ],
         );
@@ -86,13 +111,13 @@ class _UserCenterState extends State<UserCenter> {
                       actions: <Widget>[
                         IconButton(
                           icon: Icon(Icons.settings),
-                          onPressed: () {
-                          final _result=  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          onPressed: () async{
+                          final _result=  await Navigator.of(context).push(MaterialPageRoute(builder: (context){
                                   return UserSetting();
                             }));
 
                           setState(() {
-                           _resultData =  _result;
+                           _user =  _result as User;
                           });
 
                           },

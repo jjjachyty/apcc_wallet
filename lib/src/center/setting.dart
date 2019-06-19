@@ -1,4 +1,6 @@
 import 'package:apcc_wallet/src/center/trade_passwd.dart';
+import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -40,7 +42,7 @@ class _UserSettingState extends State<UserSetting> {
                 title: Text("交易密码"),
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return TradePassWd(true);
+                    return TradePassWd(store.state.user.hasTradePasswd);
                   }));
                 },
               ),
@@ -60,11 +62,10 @@ class _UserSettingState extends State<UserSetting> {
                   style: TextStyle(color: Colors.green),
                 ),
                 onPressed: () {
-                  // store.dispatch(RefreshUserAction(null));
-                  // setState(() {
-                  //   this._user = null;
-                  // });
-                  // removeStorage("_user");
+                  store.dispatch(RefreshUserAction(null));
+                  
+                  removeStorage("_user");
+                  Navigator.of(context).pop(null);
                 },
               ),
             ],

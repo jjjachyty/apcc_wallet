@@ -25,6 +25,7 @@ class User {
       this.nickName,
       this.avatar,
       this.passWord,
+      this.hasTradePasswd,
       this.lastLoginTime,
       this.lastLoginIP,
       this.lastLoginDevice,
@@ -32,10 +33,10 @@ class User {
       this.idCard,
       this.accounts});
 
-      User.fromJson(Map<String,dynamic> json):phone=json["phone"],nickName=json["nickName"],avatar=json["avatar"];
+      User.fromJson(Map<String,dynamic> json):phone=json["phone"],nickName=json["nickName"],avatar=json["avatar"],hasTradePasswd=json["avatar"];
       @override
      String toString(){
-        var _tmp= {'phone':this.phone,'nickName':this.nickName,'avatar':this.avatar};
+        var _tmp= {'phone':this.phone,'nickName':this.nickName,'avatar':this.avatar,'hasTradePasswd':this.hasTradePasswd};
       return json.encode(_tmp);
        }
 }
@@ -69,5 +70,13 @@ Future<Data> setTradePasswd(String passwd,passwdConf,Store<AppState> store) asyn
   await Future.delayed(Duration(seconds: 5));
   store.state.user.hasTradePasswd = true;
   setStorageString("_user",store.state.user.toString());
+  print(getStorageString("_user"));
+  return Data(state:true);
+}
+
+Future<Data> modifiyTradePasswd(String orgPasswd,passwd,passwdConf) async {
+  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
+  await Future.delayed(Duration(seconds: 5));
+  print(getStorageString("_user"));
   return Data(state:true);
 }
