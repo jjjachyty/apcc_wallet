@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/dapp/app.dart';
+import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:apcc_wallet/src/main/coins.dart';
 import 'package:flutter/material.dart';
 
