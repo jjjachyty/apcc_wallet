@@ -33,12 +33,21 @@ class User {
       this.idCard,
       this.accounts});
 
-      User.fromJson(Map<String,dynamic> json):phone=json["phone"],nickName=json["nickName"],avatar=json["avatar"],hasTradePasswd=json["avatar"];
-      @override
-     String toString(){
-        var _tmp= {'phone':this.phone,'nickName':this.nickName,'avatar':this.avatar,'hasTradePasswd':this.hasTradePasswd};
-      return json.encode(_tmp);
-       }
+  User.fromJson(Map<String, dynamic> json)
+      : phone = json["phone"],
+        nickName = json["nickName"],
+        avatar = json["avatar"],
+        hasTradePasswd = json["avatar"];
+  @override
+  String toString() {
+    var _tmp = {
+      'phone': this.phone,
+      'nickName': this.nickName,
+      'avatar': this.avatar,
+      'hasTradePasswd': this.hasTradePasswd
+    };
+    return json.encode(_tmp);
+  }
 }
 
 //身份证
@@ -54,29 +63,33 @@ class Account {
   String address; //地址
 }
 
-
-
-
 Future<User> login(User user, sms) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   await Future.delayed(Duration(seconds: 5));
- setStorageString("_user",user.toString());
+  setStorageString("_user", user.toString());
   return user;
 }
 
+Future<dynamic> register(String phone, passwd) async {
+  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
+  await Future.delayed(Duration(seconds: 5));
+  print(phone + passwd);
+  return "";
+}
 
-Future<Data> setTradePasswd(String passwd,passwdConf,Store<AppState> store) async {
+Future<Data> setTradePasswd(
+    String passwd, passwdConf, Store<AppState> store) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   await Future.delayed(Duration(seconds: 5));
   store.state.user.hasTradePasswd = true;
-  setStorageString("_user",store.state.user.toString());
+  setStorageString("_user", store.state.user.toString());
   print(getStorageString("_user"));
-  return Data(state:true);
+  return Data(state: true);
 }
 
-Future<Data> modifiyTradePasswd(String orgPasswd,passwd,passwdConf) async {
+Future<Data> modifiyTradePasswd(String orgPasswd, passwd, passwdConf) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   await Future.delayed(Duration(seconds: 5));
   print(getStorageString("_user"));
-  return Data(state:true);
+  return Data(state: true);
 }

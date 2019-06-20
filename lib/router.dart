@@ -1,3 +1,5 @@
+import 'package:apcc_wallet/src/center/captcha.dart';
+import 'package:apcc_wallet/src/center/register.dart';
 import 'package:apcc_wallet/src/coin/main/receive.dart';
 import 'package:apcc_wallet/src/coin/main/send.dart';
 import 'package:apcc_wallet/src/common/about.dart';
@@ -14,12 +16,14 @@ import 'package:redux/redux.dart';
 import 'src/store/state.dart';
 
 final Map<String, WidgetBuilder> routes = {
-    "/": (BuildContext context) => new MainPage(),
+  "/": (BuildContext context) => new MainPage(),
   "/wallet/mmic": (BuildContext context) => new MnemonicPage(),
   "/wallet/mmicrepeat": (BuildContext context) => new MnemonicRepeatPage(),
   "/wallet/passwd": (BuildContext context) => new WalletPasswdPage(),
   "/coin/main/receive": (BuildContext context) => new MainCoinReceive(),
   // "/news/detail": (BuildContext context) => new NewsDeatil(),
-  "/aboutus":(BuildContext context) => new AboutUs(),
-  "/contactus":(BuildContext context) => new ContactUs(),
+  "/aboutus": (BuildContext context) => new AboutUs(),
+  "/contactus": (BuildContext context) => new ContactUs(),
+  "/register": (BuildContext context) => new UserRegister(),
+  "/captcha": (BuildContext context) => new Captcha(),
 };
