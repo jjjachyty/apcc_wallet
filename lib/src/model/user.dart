@@ -73,7 +73,8 @@ Future<User> login(User user, sms) async {
 Future<dynamic> register(String phone, passwd) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   await Future.delayed(Duration(seconds: 5));
-  print(phone + passwd);
+  print(phone);
+  print( passwd);
   return "";
 }
 

@@ -25,5 +25,5 @@ final Map<String, WidgetBuilder> routes = {
   "/aboutus": (BuildContext context) => new AboutUs(),
   "/contactus": (BuildContext context) => new ContactUs(),
   "/register": (BuildContext context) => new UserRegister(),
-  "/captcha": (BuildContext context) => new Captcha(),
+
 };

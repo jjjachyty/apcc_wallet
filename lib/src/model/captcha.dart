@@ -1,11 +1,19 @@
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:dio/dio.dart';
+
 class Captcha {}
 
-Future<bool> verificationCaptcha() async {
-  await Future.delayed(Duration(seconds: 5));
-  return true;
+Future<String> getCaptcha(String id) async {
+  var  response = await Dio().get(apiURL+"/com/captcha",queryParameters: {"phone":id});
+  return response.data["Data"]["img"];
 }
 
-Future<bool> verificationSms() async {
-  await Future.delayed(Duration(seconds: 5));
-  return true;
+Future<bool> verificationCaptcha(String id,value) async {
+  var  response = await Dio().post(apiURL+"/com/captcha",queryParameters: {"phone":id,"value":value});
+  return response.data["Status"];
+}
+
+Future<bool> verificationSms(String id,value ) async {
+   var  response = await Dio().post(apiURL+"/com/sms",data: {"phone":id,"value":value});
+  return response.data["Status"];
 }

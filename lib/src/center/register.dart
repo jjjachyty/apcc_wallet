@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:apcc_wallet/src/center/captcha.dart' as prefix0;
 import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/main/main.dart';
@@ -24,13 +25,29 @@ class UserRegister extends StatefulWidget {
 class _UserRegisterState extends State<UserRegister> {
   Timer _countdonwn;
   var _leftCount = 0;
-  int _opType = 2;
+  int _opType = 0;
   String _phoneVal;
-  String _sms1, _sms2, _sms3, _sms4;
+  String _sms1 = "", _sms2 = "", _sms3 = "", _sms4 = "";
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  FocusNode _sms2Node = new FocusNode() ,_sms3Node = new FocusNode(),_sms4Node = new FocusNode();
+
+  var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _passwdCtr = TextEditingController();
+
+
+    void _startTimer(){
+    setState(() {
+        _leftCount= 60; 
+      });
+    _countdonwn = countDown(59, (int left){
+      setState(() {
+        _leftCount= left; 
+      });
+    });
+}
+
 
   @override
   void dispose() {
@@ -44,6 +61,7 @@ class _UserRegisterState extends State<UserRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldkey,
         // backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
         // appBar: AppBar(
@@ -79,9 +97,7 @@ class _UserRegisterState extends State<UserRegister> {
                   ? _phone()
                   : _opType == 1 ? _smsCode() : _passwd(),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            Divider(),
             Text.rich(new TextSpan(
                 text: '已有账号? ',
                 style: new TextStyle(
@@ -92,9 +108,7 @@ class _UserRegisterState extends State<UserRegister> {
                   TextSpan(
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
-                          setState(() {
-                            _opType = 0;
-                          });
+                          Navigator.of(context).pop();
                         },
                       text: '去登录',
                       style: new TextStyle(
@@ -132,6 +146,9 @@ class _UserRegisterState extends State<UserRegister> {
           TextFormField(
             maxLength: 16,
             obscureText: true,
+            onEditingComplete: () {
+              print("onEditingComplete");
+            },
             decoration: InputDecoration(
                 hintText: "请再次输入密码",
                 border: OutlineInputBorder(),
@@ -166,87 +183,112 @@ class _UserRegisterState extends State<UserRegister> {
   }
 
   Widget _smsCode() {
+  
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
           height: 100,
           padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return "";
-                      }
-                    },
-                    keyboardType: TextInputType.number,
-                    maxLength: 1,
-                    decoration: InputDecoration(
-                        hintText: "1",
-                        counterText: "",
-                        border: OutlineInputBorder()),
-                    onSaved: (val) {
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              SizedBox(
+                width: 50,
+                child: TextField(
+                  onChanged: (val) {
+                    setState(() {
                       _sms1 = val;
-                    },
-                  ),
+                    });
+                    if (val != "") {
+                      
+                      FocusScope.of(context).requestFocus(_sms2Node);
+                    }
+                  },
+                  keyboardType: TextInputType.number,
+                  maxLength: 1,
+                  decoration: InputDecoration(
+                      hintText: "1",
+                      counterText: "",
+                      border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return "";
-                      }
-                    },
-                    maxLength: 1,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "2",
-                        counterText: "",
-                        border: OutlineInputBorder()),
-                  ),
+              ),
+              SizedBox(
+                width: 50,
+                child: TextField(
+                  focusNode: _sms2Node,
+                  onChanged: (val) {
+                    setState(() {
+                      _sms2 = val;
+                    });
+                    if (val != "") {
+                      FocusScope.of(context).requestFocus(_sms3Node);
+                    }
+                  },
+                  maxLength: 1,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      hintText: "2",
+                      counterText: "",
+                      border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return "";
-                      }
-                    },
-                    maxLength: 1,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "3",
-                        counterText: "",
-                        border: OutlineInputBorder()),
-                  ),
+              ),
+              SizedBox(
+                width: 50,
+                child: TextField(
+                  focusNode: _sms3Node,
+                  onChanged: (val) {
+                    setState(() {
+                      _sms3 = val;
+                    });
+                    if (val != "") {
+                      FocusScope.of(context).requestFocus(_sms4Node);
+                    }
+                  },
+                  maxLength: 1,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      hintText: "3",
+                      counterText: "",
+                      border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return "";
-                      }
-                    },
-                    keyboardType: TextInputType.number,
-                    maxLength: 1,
-                    decoration: InputDecoration(
-                        hintText: "4",
-                        counterText: "",
-                        border: OutlineInputBorder()),
-                  ),
-                )
-              ],
-            ),
+              ),
+              SizedBox(
+                width: 50,
+                child: TextField(
+                  focusNode: _sms4Node,
+                  onChanged: (val) {
+                    setState(() {
+                      _sms4 = val;
+                    });
+                   
+                  },
+                  keyboardType: TextInputType.number,
+                  maxLength: 1,
+                  decoration: InputDecoration(
+                      hintText: "4",
+                      counterText: "",
+                      border: OutlineInputBorder()),
+                ),
+              )
+            ],
           ),
+        ),
+        SizedBox(
+          height: 30,
+          child: Text.rich(TextSpan(text: _leftCount==0?"重新发送":_leftCount.toString(),recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                   final _result = await Navigator.of(context).push(
+                     PageRouteBuilder(
+                       pageBuilder: (context,am1,am2){
+                         return prefix0.Captcha(this._phoneVal);
+                       }
+                     )
+                   );
+                         if (_result !=null && _result as bool){
+                  _startTimer();
+                         }
+                })),
         ),
         ProgressButton(
           color: Colors.green,
@@ -258,10 +300,16 @@ class _UserRegisterState extends State<UserRegister> {
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
           onPressed: () async {
-            if (_formKey.currentState.validate() || await verificationSms()) {
+            var sms = (_sms1+_sms2+_sms3+_sms4).trim();
+            if (sms.length == 4 && await verificationSms(this._phoneVal,sms)) {
               setState(() {
                 _opType = 2;
               });
+            }else{
+             _scaffoldkey.currentState.showSnackBar(SnackBar(
+                              content: Text("验证码校验错误"),
+                              backgroundColor: Colors.red,
+                            ));
             }
           },
         ),
@@ -296,33 +344,48 @@ class _UserRegisterState extends State<UserRegister> {
                     color: Colors.green,
                   ),
                   suffixStyle: TextStyle(),
-                  suffixIcon: Container(
-                    color: Colors.green,
-                    width: 80,
-                    height: 55,
-                    padding: EdgeInsets.zero,
-                    child: IconButton(
-                      icon: Text(
+                  suffixIcon: 
+                     FlatButton(
+                      child: Text(
                         "下一步",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.green),
                       ),
                       onPressed: () async {
                         if (_phoneKey.currentState.validate()) {
                           _phoneKey.currentState.save();
-                          await Navigator.of(context).pushNamed("/captcha");
-
+                         final _result = await Navigator.of(context).push(
+                           PageRouteBuilder(pageBuilder: (context,animation1,animation2){
+                             return prefix0.Captcha(this._phoneVal);
+                             })
+                         );
+                         if (_result !=null && _result){
+                           _startTimer();
                           setState(() {
                             _opType = 1;
                           });
+                         }
+                          
                         }
                       },
                     ),
-                  ),
+                  
                   border: OutlineInputBorder()),
               onSaved: (val) {
-                _phoneVal = val;
+                setState(() {
+                    _phoneVal = val;
+                });
+                
               },
-            ))
+            )),
+            Text.rich(TextSpan(
+              text: "点击下一步表示已经同意",
+              style: TextStyle(fontSize: 12,color: Colors.grey),
+              children: [
+                TextSpan(text: "用户注册协议",style: TextStyle(color: Colors.blue), recognizer: new TapGestureRecognizer()
+                        ..onTap = () {
+                         print("用户注册协议");
+                        },)
+              ]            )),
       ],
     );
   }
