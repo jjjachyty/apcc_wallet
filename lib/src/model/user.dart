@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/store/state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
@@ -63,19 +64,23 @@ class Account {
   String address; //地址
 }
 
-Future<User> login(User user, sms) async {
-  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
-  await Future.delayed(Duration(seconds: 5));
-  setStorageString("_user", user.toString());
-  return user;
+Future<dynamic> loginWithPW(String phone, passwd) async {
+    var response=await dio.post("/auth/loginwithpw",data:{"phone":phone,"password":passwd});
+    print(response);
+  return response.data;
+}
+
+
+Future<dynamic> loginWithSMS(String phone, sms) async {
+ 
+    var response=await dio.post(apiURL+"/auth/loginwithsms",data:new FormData.from({"phone":phone,"sms":sms}));
+   print(response.data);
+  return response.data;
 }
 
 Future<dynamic> register(String phone, passwd) async {
-  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
-  await Future.delayed(Duration(seconds: 5));
-  print(phone);
-  print( passwd);
-  return "";
+  var response=await dio.post(apiURL+"/auth/register",data:{"phone":phone,"password":passwd});
+  return response.data;
 }
 
 Future<Data> setTradePasswd(

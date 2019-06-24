@@ -130,7 +130,7 @@ class _UserCenterState extends State<UserCenter> {
                             height: 100,
                             width: 100,
                             child: CircleAvatar(
-                                backgroundImage: NetworkImage(_user.avatar))),
+                                backgroundImage: _user.avatar==null?AssetImage("assets/images/nologinavatar.png"):NetworkImage(_user.avatar))),
                         Text(
                           _user.nickName,
                           style: TextStyle(

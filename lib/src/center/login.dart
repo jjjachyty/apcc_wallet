@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:apcc_wallet/src/center/captcha.dart';
 import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/main/main.dart';
@@ -21,20 +22,36 @@ class UserLogin extends StatefulWidget {
 }
 
 class _UserLoginState extends State<UserLogin> {
-  Timer _countdonwn;
+  Timer _counter;
   var _leftCount = 0;
+  var _phoneVal,_passwordVal,_smsVal;
   bool _opType = true;
   GlobalKey<FormState> _loginForm = new GlobalKey<FormState>();
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
+    GlobalKey<FormFieldState> _smsKey = new GlobalKey<FormFieldState>();
+
   TextEditingController _phoneCtr = new TextEditingController();
   @override
   void dispose() {
     super.dispose();
-    if (_countdonwn != null) {
-      _countdonwn.cancel();
+    if (_counter != null) {
+      _counter.cancel();
     }
     _phoneCtr.dispose();
   }
+
+
+
+    void _startTimer(){
+    setState(() {
+        _leftCount= 60; 
+      });
+    _counter = countDown(59, (int left){
+      setState(() {
+        _leftCount= left; 
+      });
+    });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +116,12 @@ class _UserLoginState extends State<UserLogin> {
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
+                    onSaved: (val){
+                      setState(() {
+                                              _phoneVal = val;
+
+                      });
+                    },
               ),
               SizedBox(
                 height: 10,
@@ -121,6 +144,12 @@ class _UserLoginState extends State<UserLogin> {
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
+                    onSaved: (val){
+                      setState(() {
+                                              _passwordVal = val;
+
+                      });
+                    },
               ),
               SizedBox(
                   height: 30,
@@ -162,30 +191,17 @@ class _UserLoginState extends State<UserLogin> {
                           // // // // After [onPressed], it will trigger animation running backwards, from end to beginning
 
                           // return () async {
-                          var user = await login(
-                              User(
-                                  phone: "15520010009",
-                                  passWord: "12121212",
-                                  nickName: "0009",
-                                  avatar:
-                                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560704834807&di=ce70fc5cd9a615af0f266b3004bdb0d0&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201605%2F07%2F20160507191419_J2m8R.thumb.700_0.jpeg"),
-                              "1245");
-                          // // Optional returns is returning a VoidCallback that will be called
-                          // // after the animation is stopped at the beginning.
-                          // // A best practice would be to do time-consuming task in [onPressed],
-                          // // and do page navigation in the returned VoidCallback.
-                          // // So that user won't missed out the reverse animation.
-                          print("user");
-                          if (user.nickName != "") {
-                            store.dispatch(RefreshUserAction(user));
-                            Navigator.of(context).pop(user);
-                            // Navigator.of(context).pushAndRemoveUntil(
-                            //     MaterialPageRoute(builder: (context) {
-                            //   return MainPage();
-                            // }), (router) => false);
+                          var _response = await loginWithPW(_phoneVal,_passwordVal);
+                          
+                          if (_response["Status"]) {
+                           
+                            Navigator.of(context).pop();
+                           
+                          }else{
+                            Scaffold.of(context).showSnackBar(SnackBar(content: _response["Message"]));
                           }
                         }
-                        ;
+                        
                         // }
                       },
                     );
@@ -226,6 +242,11 @@ class _UserLoginState extends State<UserLogin> {
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
+                    onSaved: (val){
+                      setState(() {
+                       _phoneVal = val; 
+                      });
+                    },
               ),
               SizedBox(
                 height: 10,
@@ -242,10 +263,11 @@ class _UserLoginState extends State<UserLogin> {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: TextFormField(
+                        key: _smsKey,
                         keyboardType: TextInputType.number,
-                        maxLength: 6,
+                        maxLength:4,
                         validator: (sms) {
-                          if (sms == null || sms.length != 6) {
+                          if (sms == null || sms.length != 4) {
                             return "请输入正确的验证码";
                           }
                         },
@@ -259,6 +281,11 @@ class _UserLoginState extends State<UserLogin> {
                               color: Colors.green,
                             ),
                             border: OutlineInputBorder()),
+                            onSaved: (val){
+                              setState(() {
+                               _smsVal = val; 
+                              });
+                            },
                       )),
 
                   FlatButton(
@@ -268,44 +295,25 @@ class _UserLoginState extends State<UserLogin> {
                       style: TextStyle(color: Colors.green),
                     ),
                     onPressed: _leftCount == 0
-                        ? () {
+                        ? () async {
                             if (phoneExp.hasMatch(_phoneCtr.text)) {
-                              // setState(() {
-                              //   _leftCount = 60;
-                              // });
-                              // //验证
-                              // _countdonwn = countDown(_leftCount, (int count) {
-                              //   setState(() {
-                              //     _leftCount = count;
-                              //   });
-                              // });
-                              showDialog(
-                                  context: context, //BuildContext对象
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return new AlertDialog(
-                                        title: new Text("Dialog Title"),
-                                        content: new Text("This is my content"),
-                                        actions: <Widget>[
-                                          new FlatButton(
-                                            child: new Text("CANCEL"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          new FlatButton(
-                                            child: new Text("OK"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ]);
-                                  });
+                             
+                             if (_phoneKey.currentState.validate()) {
+                          _phoneKey.currentState.save();
+                         final _result = await Navigator.of(context).push(
+                           PageRouteBuilder(pageBuilder: (context,animation1,animation2){
+                             return Captcha(this._phoneVal);
+                             })
+                         );
+                         if (_result !=null && _result){
+                           _startTimer();
+                         
+                         }
+
                             } else {
-                              print("false");
                               _phoneKey.currentState.validate();
                             }
-                          }
+                          }}
                         : null,
                   )
                 ],
@@ -327,41 +335,31 @@ class _UserLoginState extends State<UserLogin> {
                   )),
               SizedBox(
                 width: double.infinity,
-                child: new RaisedButton(
-                  color: Colors.green,
-                  child: Text(
-                    "发送验证码",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () async {
+                child: new ProgressButton(
+            color: Colors.green,
+            defaultWidget: Text(
+              "登录",
+              style: TextStyle(color: Colors.white),
+            ),
+            progressWidget: CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+            onPressed: () async {
                     var _formState = _loginForm.currentState;
                     if (_formState.validate()) {
                       _formState.save();
 
-                      // int score = await Future.delayed(
-                      //     const Duration(milliseconds: 3000), () {
-                      //   print("object close");
-                      // });
-                      // // // // After [onPressed], it will trigger animation running backwards, from end to beginning
-
-                      // return () async {
-                      var user = await login(
-                          User(
-                              phone: "15520010009",
-                              passWord: "12121212",
-                              nickName: "0009",
-                              avatar:
-                                  "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560704834807&di=ce70fc5cd9a615af0f266b3004bdb0d0&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201605%2F07%2F20160507191419_J2m8R.thumb.700_0.jpeg"),
-                          "1245");
-                      // // Optional returns is returning a VoidCallback that will be called
-                      // // after the animation is stopped at the beginning.
-                      // // A best practice would be to do time-consuming task in [onPressed],
-                      // // and do page navigation in the returned VoidCallback.
-                      // // So that user won't missed out the reverse animation.
-                      print("user");
-                    }
-                    ;
-                    // }
+                      
+                      var _response = await loginWithSMS(_phoneVal,_smsVal);
+                        if (_response["Status"]){
+                          Navigator.of(context).pop();
+                        }else{
+                          _smsKey.currentState.reset();
+                          _smsKey.currentState.validate();
+                        
+                        }
+                   
+                     }
                   },
                 ),
               ),

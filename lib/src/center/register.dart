@@ -17,13 +17,17 @@ import 'package:redux/redux.dart';
 RegExp phoneExp = RegExp(
     r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
+RegExp passwdExp = RegExp(
+    r'^[a-z0-9_-]{6,16}');
+
+
 class UserRegister extends StatefulWidget {
   @override
   _UserRegisterState createState() => _UserRegisterState();
 }
 
 class _UserRegisterState extends State<UserRegister> {
-  Timer _countdonwn;
+  Timer _counter;
   var _leftCount = 0;
   int _opType = 0;
   String _phoneVal;
@@ -31,7 +35,7 @@ class _UserRegisterState extends State<UserRegister> {
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   FocusNode _sms2Node = new FocusNode() ,_sms3Node = new FocusNode(),_sms4Node = new FocusNode();
-
+  bool _obscureFlag = true;
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _passwdCtr = TextEditingController();
@@ -41,7 +45,7 @@ class _UserRegisterState extends State<UserRegister> {
     setState(() {
         _leftCount= 60; 
       });
-    _countdonwn = countDown(59, (int left){
+    _counter = countDown(59, (int left){
       setState(() {
         _leftCount= left; 
       });
@@ -52,8 +56,8 @@ class _UserRegisterState extends State<UserRegister> {
   @override
   void dispose() {
     super.dispose();
-    if (_countdonwn != null) {
-      _countdonwn.cancel();
+    if (_counter != null) {
+      _counter.cancel();
     }
     _passwdCtr.dispose();
   }
@@ -128,15 +132,22 @@ class _UserRegisterState extends State<UserRegister> {
         children: <Widget>[
           TextFormField(
             controller: _passwdCtr,
+            autovalidate: true,
             maxLength: 16,
-            obscureText: true,
+            obscureText: _obscureFlag,
             decoration: InputDecoration(
                 hintText: "请输入6-16位密码",
                 border: OutlineInputBorder(),
-                counterText: ""),
+                counterText: "",
+                suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye),onPressed: (){
+                  setState(() {
+                   _obscureFlag = !_obscureFlag; 
+                  });
+                },)
+                ),
             validator: (val) {
-              if (val == "" || val.length < 6 || val.length > 16) {
-                return "请输入6-16位密码";
+              if (!passwdExp.hasMatch(val)) {
+                return "请输入带字母或数字的6-16位密码";
               }
             },
           ),
@@ -145,14 +156,18 @@ class _UserRegisterState extends State<UserRegister> {
           ),
           TextFormField(
             maxLength: 16,
-            obscureText: true,
-            onEditingComplete: () {
-              print("onEditingComplete");
-            },
+            obscureText: _obscureFlag,
+            autovalidate: true,
             decoration: InputDecoration(
                 hintText: "请再次输入密码",
                 border: OutlineInputBorder(),
-                counterText: ""),
+                counterText: "",
+                suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye),onPressed: (){
+                  setState(() {
+                   _obscureFlag = !_obscureFlag; 
+                  });
+                }),
+                ),
             validator: (val) {
               if (val != _passwdCtr.text) {
                 return "两次密码不一致";
@@ -173,7 +188,15 @@ class _UserRegisterState extends State<UserRegister> {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                await register(_phoneVal, _passwdCtr.text);
+               var  _data=  await register(_phoneVal, _passwdCtr.text);
+               if (_data["Status"] as bool){
+                 Navigator.of(context).pop();
+               }else{
+                     _scaffoldkey.currentState.showSnackBar(SnackBar(
+                              content: Text("注册失败"+_data["Message"]),
+                              backgroundColor: Colors.red,
+                            ));
+               }
               }
             },
           ),
@@ -304,6 +327,7 @@ class _UserRegisterState extends State<UserRegister> {
             if (sms.length == 4 && await verificationSms(this._phoneVal,sms)) {
               setState(() {
                 _opType = 2;
+                _counter.cancel();
               });
             }else{
              _scaffoldkey.currentState.showSnackBar(SnackBar(
