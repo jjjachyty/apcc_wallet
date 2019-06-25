@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/center/index.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/dapp/app.dart';
 import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:apcc_wallet/src/main/coins.dart';
@@ -22,7 +23,11 @@ class _MainPageState extends State<MainPage> {
       _currentMain = Main;
     });
   }
-
+   void _list(){
+     eventBus.on<UserLoggedInEvent>().listen((event) {
+       Navigator.of(context).pushNamed("/login");
+    });
+   }
   List<Widget> pages = List<Widget>();
 
   @override
@@ -33,6 +38,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    _list();
     // TODO: implement build
     return Scaffold(
       bottomNavigationBar: new BottomNavigationBar(

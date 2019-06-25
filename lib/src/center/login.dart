@@ -24,11 +24,11 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   Timer _counter;
   var _leftCount = 0;
-  var _phoneVal,_passwordVal,_smsVal;
+  var _phoneVal,_passwordVal,_smsVal,_errText;
   bool _opType = true;
   GlobalKey<FormState> _loginForm = new GlobalKey<FormState>();
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
-    GlobalKey<FormFieldState> _smsKey = new GlobalKey<FormFieldState>();
+  GlobalKey<FormFieldState> _smsKey = new GlobalKey<FormFieldState>();
 
   TextEditingController _phoneCtr = new TextEditingController();
   @override
@@ -139,6 +139,7 @@ class _UserLoginState extends State<UserLogin> {
                     labelText: "密码",
                     hintText: "密码",
                     counterText: "",
+                    errorText: _errText,
                     prefixIcon: Icon(
                       Icons.lock,
                       color: Colors.green,
@@ -191,14 +192,18 @@ class _UserLoginState extends State<UserLogin> {
                           // // // // After [onPressed], it will trigger animation running backwards, from end to beginning
 
                           // return () async {
-                          var _response = await loginWithPW(_phoneVal,_passwordVal);
+                          var _data = await loginWithPW(_phoneVal,_passwordVal);
                           
-                          if (_response["Status"]) {
-                           
-                            Navigator.of(context).pop();
-                           
+                          if (_data.state) {
+                          print(_data.data["User"]);
+                          var _user = User.fromJson(_data.data["User"]);
+                            Navigator.of(context).pop(_user);
+                           store.dispatch(RefreshUserAction(_user));
                           }else{
-                            Scaffold.of(context).showSnackBar(SnackBar(content: _response["Message"]));
+                            setState(() {
+                             _errText = _data.messsage; 
+                            });
+                            //Scaffold.of(context).showSnackBar(SnackBar(content: Text(_data.messsage)));
                           }
                         }
                         

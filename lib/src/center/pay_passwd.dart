@@ -94,14 +94,19 @@ class _TradePassWdState extends State<TradePassWd> {
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.lightGreen)),
                         onPressed: () async {
-                          var data =
-                              await setTradePasswd(_passwd, _passwdConf, store);
+
+                          if (_passwdForm.currentState.validate()){
+                            _passwdForm.currentState.save();
+  var data =
+                              await setPayPasswd(_passwdConf, store);
                           if (data.state) {
                             SnackBar(
                               content: Text("设置成功"),
                             );
                             Navigator.of(context).pop();
                           }
+                          }
+                          
                         },
                       );
                     })

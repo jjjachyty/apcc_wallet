@@ -11,6 +11,8 @@ final appReducer = combineReducers<AppState>([
   TypedReducer<AppState, RefreshMnemonicAction>(_refresh),
   TypedReducer<AppState, RefreshWalletsAction>(_refreshWallets),
   TypedReducer<AppState, RefreshUserAction>(_refreshUser),
+
+  
 ]);
 
 AppState _refresh(AppState state, action) {
@@ -32,3 +34,5 @@ AppState _refreshUser(AppState state, action) {
   state.user = action.user;
   return state;
 }
+
+

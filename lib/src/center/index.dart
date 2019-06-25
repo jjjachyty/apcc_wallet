@@ -39,6 +39,7 @@ class _UserCenterState extends State<UserCenter> {
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, Store<AppState>>(
         onInit: (store) {
+          print(store.state.user);
           _user = _user == null ? store.state.user : _user;
         },
         converter: (store) => store,
@@ -130,9 +131,10 @@ class _UserCenterState extends State<UserCenter> {
                             height: 100,
                             width: 100,
                             child: CircleAvatar(
-                                backgroundImage: _user.avatar==null?AssetImage("assets/images/nologinavatar.png"):NetworkImage(_user.avatar))),
+                                backgroundColor: Colors.white,
+                                backgroundImage: _user.avatar==""?AssetImage("assets/images/money.png"):NetworkImage(_user.avatar))),
                         Text(
-                          _user.nickName,
+                        _user.nickName,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -164,13 +166,14 @@ class _UserCenterState extends State<UserCenter> {
                   children: <Widget>[
                     new GestureDetector(
                         onTap: () async {
-                          final _returnData = await Navigator.of(context)
+                          final _user = await Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (context) {
                             return UserLogin();
                           }));
-
+                          print("user");
+    print(_user);
                           setState(() {
-                            this._user = _returnData;
+                            this._user = _user;
                           });
                         },
                         child: Container(

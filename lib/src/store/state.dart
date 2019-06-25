@@ -6,6 +6,7 @@ class AppState {
   String mnemonic;
   Map<String, dynamic> wallets;
   User user;
+ 
 
   // void setwallets(Map<String, dynamic> wallets) {
   //   this._wallets = wallets;
