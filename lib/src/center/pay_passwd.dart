@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,13 @@ class TradePassWd extends StatefulWidget {
 }
 
 class _TradePassWdState extends State<TradePassWd> {
-  var hasPasswd;
+  var hasPasswd,_errText="";
   _TradePassWdState(this.hasPasswd);
   var _obscureFlag = true;
   GlobalKey<FormState> _passwdForm = GlobalKey<FormState>();
   TextEditingController _passwdCtr = new TextEditingController();
+    TextEditingController _orgPasswdCtr = new TextEditingController();
+
   String _orgPasswd, _passwd, _passwdConf;
 
   Widget _initWidget() {
@@ -38,8 +41,8 @@ class _TradePassWdState extends State<TradePassWd> {
                   obscureText: _obscureFlag,
                   maxLength: 16,
                   validator: (val) {
-                    if (val == null || val.length < 6 || val.length > 16) {
-                      return "密码为6-16位字母或数字";
+                   if (!passwdExp.hasMatch(val)) {
+                      return "密码为8-16位大小写字母及数字组合";
                     }
                   },
                   decoration: InputDecoration(
@@ -128,8 +131,10 @@ class _TradePassWdState extends State<TradePassWd> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  controller: _orgPasswdCtr,
                   obscureText: _obscureFlag,
                   autovalidate: true,
+                  maxLength: 16,
                   decoration: InputDecoration(
                       hintText: "原密码",
                       suffixIcon: IconButton(
@@ -141,7 +146,7 @@ class _TradePassWdState extends State<TradePassWd> {
                         },
                       )),
                   validator: (val) {
-                    if (val == null || val.length < 6 || val.length > 16) {
+                    if (val == null || val.length < 6 || val.length > 16 ) {
                       return "密码为6-16未字母或数字组成的数";
                     }
                   },
@@ -153,9 +158,13 @@ class _TradePassWdState extends State<TradePassWd> {
                   obscureText: _obscureFlag,
                   controller: _passwdCtr,
                   autovalidate: true,
+                  maxLength: 16,
                   validator: (val) {
-                    if (val == null || val.length < 6 || val.length > 16) {
-                      return "密码为6-16未字母或数字组成的数";
+                   if (!passwdExp.hasMatch(val)) {
+                      return "密码为8-16位大小写字母及数字组合";
+                    }
+                    if (val == _orgPasswdCtr.text){
+                      return "新密码与原密码一致";
                     }
                   },
                   decoration: InputDecoration(
@@ -175,6 +184,7 @@ class _TradePassWdState extends State<TradePassWd> {
                 TextFormField(
                   obscureText: _obscureFlag,
                   autovalidate: true,
+                  maxLength: 16,
                   decoration: InputDecoration(
                       hintText: "确认新密码",
                       suffixIcon: IconButton(
@@ -194,7 +204,9 @@ class _TradePassWdState extends State<TradePassWd> {
                     _passwdConf = val;
                   },
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 20,
+                child:Text(_errText,style: TextStyle(color: Colors.red),),),
+                
                 ProgressButton(
                 
                   color: Colors.green,
@@ -209,10 +221,15 @@ class _TradePassWdState extends State<TradePassWd> {
                   onPressed: () async {
                     if (_passwdForm.currentState.validate()){
                       _passwdForm.currentState.save();
-                      final _result= await modifiyTradePasswd(_orgPasswd, _passwd, _passwdConf);
+                      final _result= await modifiyTradePasswd(_orgPasswd, _passwdConf);
                       if (_result.state){
                         SnackBar(content: Text("修改成功"),);
                         Navigator.of(context).pop();
+                      }else{
+                        setState(() {
+                            _errText=_result.messsage;
+                        });
+                        
                       }
                     }
                   },
@@ -225,6 +242,7 @@ class _TradePassWdState extends State<TradePassWd> {
 
   @override
   Widget build(BuildContext context) {
+    
     if (this.hasPasswd) {
       return _modifyWidget();
     }
@@ -235,6 +253,7 @@ class _TradePassWdState extends State<TradePassWd> {
   @override
   void dispose() {
     _passwdCtr.dispose();
+    _orgPasswdCtr.dispose();
     super.dispose();
   }
 }

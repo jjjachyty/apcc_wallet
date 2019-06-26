@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
@@ -68,7 +69,7 @@ Future<Data> loginWithPW(String phone, passwd) async {
     var _data=await post("/auth/loginwithpw",data:{"phone":phone,"password":passwd});
     print(_data.data);
     if (_data.state){
-        api.options.headers["token"]=_data.data["Token"];
+        api.options.headers[HttpHeaders.authorizationHeader]=_data.data["Token"];
         setStorageString("_token", _data.data["Token"]);
         var user = User.fromJson(_data.data["User"]);
         print(user.toString());
@@ -78,11 +79,17 @@ Future<Data> loginWithPW(String phone, passwd) async {
 }
 
 
-Future<dynamic> loginWithSMS(String phone, sms) async {
- 
-    var response=await api.post("/auth/loginwithsms",data:new FormData.from({"phone":phone,"sms":sms}));
-   print(response.data);
-  return response.data;
+Future<Data> loginWithSMS(String phone, sms) async {
+ var _data=await post("/auth/loginwithsms",data:new FormData.from({"phone":phone,"sms":sms}));
+    print(_data.data);
+    if (_data.state){
+        api.options.headers[HttpHeaders.authorizationHeader]=_data.data["Token"];
+        setStorageString("_token", _data.data["Token"]);
+        var user = User.fromJson(_data.data["User"]);
+        print(user.toString());
+        setStorageString("_user",user.toString() );
+    }
+  return _data;
 }
 
 Future<dynamic> register(String phone, passwd) async {
@@ -104,9 +111,13 @@ Future<Data> setPayPasswd(
   return _data;
 }
 
-Future<Data> modifiyTradePasswd(String orgPasswd, passwd, passwdConf) async {
-  //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
-  await Future.delayed(Duration(seconds: 5));
-  print(getStorageString("_user"));
-  return Data(state: true);
+Future<Data> modifiyTradePasswd(String orgPasswd,  passwdConf) async {
+   
+
+  return await post("/user/paypasswd",data:new FormData.from({"orgPassword":orgPasswd,"password":passwdConf}));
+}
+Future<Data> modifiyLoginPasswd(String passwd) async {
+   
+
+  return await post("/user/loginpasswd",data:new FormData.from({"password":passwd}));
 }

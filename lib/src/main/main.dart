@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
       _currentMain = Main;
     });
   }
-   void _list(){
+   void _listener(){
      eventBus.on<UserLoggedInEvent>().listen((event) {
        Navigator.of(context).pushNamed("/login");
     });
@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _list();
+    _listener();
     // TODO: implement build
     return Scaffold(
       bottomNavigationBar: new BottomNavigationBar(

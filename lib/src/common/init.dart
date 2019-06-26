@@ -33,7 +33,7 @@ void init(BuildContext context,Store store) async{
      api = new Dio(BaseOptions(
     baseUrl: apiURL,
     connectTimeout: 5000,
-    receiveTimeout: 50000,
+    receiveTimeout: 5000,
     headers: {HttpHeaders.authorizationHeader:token}
    ));
 
@@ -49,7 +49,7 @@ void init(BuildContext context,Store store) async{
     if (err.response != null && err.response.statusCode == 401 && token != "") {
       print("api.interceptors");
       api.lock();
-      var token = await refreshToken(err.request.headers[HttpHeaders.authorizationHeader]); //获取新token
+      token = await refreshToken(err.request.headers[HttpHeaders.authorizationHeader]); //获取新token
       print(token);
       api.options.headers[HttpHeaders.authorizationHeader] = token;
       api.unlock();

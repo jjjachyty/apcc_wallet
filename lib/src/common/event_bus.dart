@@ -5,3 +5,6 @@ EventBus eventBus = EventBus();
 class UserLoggedInEvent{
   UserLoggedInEvent();
 }
+class UserLoggedOutEvent{
+  UserLoggedOutEvent();
+}

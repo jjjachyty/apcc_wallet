@@ -1,4 +1,6 @@
 import 'package:apcc_wallet/src/center/captcha.dart';
+import 'package:apcc_wallet/src/center/login_passwd.dart';
+import 'package:apcc_wallet/src/center/profile.dart';
 import 'package:apcc_wallet/src/center/register.dart';
 import 'package:apcc_wallet/src/coin/main/receive.dart';
 import 'package:apcc_wallet/src/coin/main/send.dart';
@@ -25,5 +27,8 @@ final Map<String, WidgetBuilder> routes = {
   "/aboutus": (BuildContext context) => new AboutUs(),
   "/contactus": (BuildContext context) => new ContactUs(),
   "/register": (BuildContext context) => new UserRegister(),
+  "/loginpasswd": (BuildContext context) => new LoginPasswd(),
+   
 
+    
 };

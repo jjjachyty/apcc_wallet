@@ -20,7 +20,12 @@ Future<Data> post(String path,{dynamic data, }) async{
    var  _response =   await api.post(path,data: data);
    _data = Data(state: _response.data["Status"],messsage: _response.data["Message"],data:_response.data["Data"]);
   }on DioError catch(e) {
+      print(e.type); 
+      if( e.type == DioErrorType.RECEIVE_TIMEOUT){
+        _data = Data(state:false,messsage: "请求超时,请重试");
+      }else{
       _data = Data(state:false,messsage: e.message);
+      }
   }
   print(_data.messsage);
   return _data;
@@ -39,10 +44,10 @@ Future<Data> post(String path,{dynamic data, }) async{
     headers: {HttpHeaders.authorizationHeader:token}
    )).post("/auth/refreshtoken");
 
-   
+
    if (response.data["Status"]){
       _token = response.data['Data']['Token']; //获取返回的新token
-      print('newToken:$token');
+      print('oldtoke=${token}   newToken:$_token');
    }
 
     } on DioError catch (e) {
@@ -56,7 +61,7 @@ Future<Data> post(String path,{dynamic data, }) async{
         }
       }
     }
-    return token;
+    return _token;
   }
 
 // class RefreshTokenInterceptor extends Interceptor {

@@ -1,5 +1,8 @@
 import 'package:apcc_wallet/src/center/pay_passwd.dart';
+import 'package:apcc_wallet/src/center/profile.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +32,22 @@ class _UserSettingState extends State<UserSetting> {
                 dense: true,
                 contentPadding: EdgeInsets.zero,
                 isThreeLine: false,
+                leading: Icon(Icons.account_box),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                title: Text("基本信息"),
+                onTap: (){
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return Profile(store.state.user);
+                  }));
+                },
+              ),
+              new ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                isThreeLine: false,
                 leading: Icon(Icons.verified_user),
                 trailing: Icon(Icons.keyboard_arrow_right),
-                title: Text("认证"),
+                title: Text("实名认证"),
               ),
                new ListTile(
                 dense: true,
@@ -50,10 +66,14 @@ class _UserSettingState extends State<UserSetting> {
                 dense: true,
                 contentPadding: EdgeInsets.zero,
                 isThreeLine: false,
-                leading: Icon(Icons.text_format),
+                leading: Icon(Icons.lock_outline),
                 trailing: Icon(Icons.keyboard_arrow_right),
-                title: Text("昵称"),
+                title: Text("登录密码"),
+                onTap: (){
+                  Navigator.of(context).pushNamed("/loginpasswd");
+                },
               ),
+              
               FlatButton(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 20),
@@ -65,7 +85,8 @@ class _UserSettingState extends State<UserSetting> {
                   store.dispatch(RefreshUserAction(null));
                   removeStorage("_user");
                   removeStorage("_token");
-                  Navigator.of(context).pop(null);
+                  Navigator.of(context).pop();
+                  eventBus.fire(UserLoggedOutEvent());
                 },
               ),
             ],

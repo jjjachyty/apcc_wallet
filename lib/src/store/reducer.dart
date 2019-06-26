@@ -30,7 +30,7 @@ AppState _refreshWallets(AppState state, action) {
 }
 
 AppState _refreshUser(AppState state, action) {
-  print("_refreshUser   _refresh");
+  print("_refreshUser   _refresh${action.user}");
   state.user = action.user;
   return state;
 }

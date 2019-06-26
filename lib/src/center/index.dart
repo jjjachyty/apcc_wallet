@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:apcc_wallet/src/center/login.dart';
 import 'package:apcc_wallet/src/center/setting.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
@@ -28,17 +29,19 @@ class _UserCenterState extends State<UserCenter> {
   User _user;
 
 
-  @override
-  void initState() {
-    
-    // TODO: implement initState
-    super.initState();
-  }
-
+   void _listener(){
+     eventBus.on<UserLoggedOutEvent>().listen((event) {
+      setState(() {
+       _user = null; 
+      });
+    });
+   }
   @override
   Widget build(BuildContext context) {
+    _listener();
     return new StoreConnector<AppState, Store<AppState>>(
         onInit: (store) {
+          print("user");
           print(store.state.user);
           _user = _user == null ? store.state.user : _user;
         },
@@ -113,13 +116,11 @@ class _UserCenterState extends State<UserCenter> {
                         IconButton(
                           icon: Icon(Icons.settings),
                           onPressed: () async{
-                          final _result=  await Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context){
                                   return UserSetting();
                             }));
-
-                          setState(() {
-                           _user =  _result as User;
-                          });
+                           
+                         
 
                           },
                         )

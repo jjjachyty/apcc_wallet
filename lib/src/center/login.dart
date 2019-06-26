@@ -329,7 +329,7 @@ class _UserLoginState extends State<UserLogin> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        _opType = false;
+                        _opType = true;
                       });
                     },
                     child: Text(
@@ -355,9 +355,9 @@ class _UserLoginState extends State<UserLogin> {
                       _formState.save();
 
                       
-                      var _response = await loginWithSMS(_phoneVal,_smsVal);
-                        if (_response["Status"]){
-                          Navigator.of(context).pop();
+                      var _data = await loginWithSMS(_phoneVal,_smsVal);
+                        if (_data.state){
+                          Navigator.of(context).pop(User.fromJson(_data.data["User"]));
                         }else{
                           _smsKey.currentState.reset();
                           _smsKey.currentState.validate();

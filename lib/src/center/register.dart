@@ -1,24 +1,19 @@
 import 'dart:async';
 
 import 'package:apcc_wallet/src/center/captcha.dart' as prefix0;
-import 'package:apcc_wallet/src/center/index.dart';
+
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
-import 'package:apcc_wallet/src/main/main.dart';
+
 import 'package:apcc_wallet/src/model/captcha.dart';
 import 'package:apcc_wallet/src/model/user.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:apcc_wallet/src/store/state.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
-RegExp phoneExp = RegExp(
-    r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
 
-RegExp passwdExp = RegExp(
-    r'^[a-z0-9_-]{6,16}');
+
 
 
 class UserRegister extends StatefulWidget {
