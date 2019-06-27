@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:shared_preferences/shared_preferences.dart';
     SharedPreferences prefs ;
 
@@ -40,4 +41,9 @@ import 'package:shared_preferences/shared_preferences.dart';
     });
 
     return _timer;
+  }
+
+
+  String getAvatarURL(String avatar){
+    return avatarURL+avatar+".webp?"+DateTime.now().minute.toString() ;
   }

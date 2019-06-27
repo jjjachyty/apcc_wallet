@@ -31,6 +31,25 @@ Future<Data> post(String path,{dynamic data, }) async{
   return _data;
 }
 
+
+Future<Data> get(String path,{dynamic parameters, }) async{
+  Data _data ;
+  try{
+   var  _response =   await api.get(path,queryParameters: parameters);
+   _data = Data(state: _response.data["Status"],messsage: _response.data["Message"],data:_response.data["Data"]);
+  }on DioError catch(e) {
+      print(e.type); 
+      if( e.type == DioErrorType.RECEIVE_TIMEOUT){
+        _data = Data(state:false,messsage: "请求超时,请重试");
+      }else{
+      _data = Data(state:false,messsage: e.message);
+      }
+  }
+  print(_data.messsage);
+  return _data;
+}
+
+
   ///获取新token
   Future<String> refreshToken(String token) async {
     String _token ; //获取当前token

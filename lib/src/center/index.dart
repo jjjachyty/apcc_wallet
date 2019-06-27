@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:apcc_wallet/src/center/login.dart';
 import 'package:apcc_wallet/src/center/setting.dart';
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
@@ -28,14 +31,20 @@ class UserCenter extends StatefulWidget {
 class _UserCenterState extends State<UserCenter> {
   User _user;
 
-
-   void _listener(){
-     eventBus.on<UserLoggedOutEvent>().listen((event) {
+  void _listener() {
+    eventBus.on<UserLoggedOutEvent>().listen((event) {
       setState(() {
-       _user = null; 
+        _user = null;
       });
     });
-   }
+
+    eventBus.on<UserInfoUpdate>().listen((event) {
+      setState(() {
+        _user = event.user;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _listener();
@@ -55,47 +64,68 @@ class _UserCenterState extends State<UserCenter> {
         });
   }
 
-  Widget _item (){
-  return  ListView(
-          children: <Widget>[
-            new ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              isThreeLine: false,
-              leading: Icon(Icons.info),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              title: Text("关于我们"),
-              onTap: (){
-                Navigator.of(context).pushNamed("/aboutus");
-              },
-            ),
-            new ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              isThreeLine: false,
-              leading: Icon(Icons.message),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              title: Text("联系我们"),
-              onTap: (){
-                Navigator.of(context).pushNamed("/contactus");
-              },
-            ),
-            new ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              isThreeLine: false,
-              leading: Icon(Icons.get_app),
-              trailing: Text("最新版本1.1.0"),
-              title: Text("APP版本(1.0.0)"),
-              onTap: (){
-                
-              },
-            )
-          ],
-        );
+  Widget _item() {
+    return ListView(
+      children: <Widget>[
+        new ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          isThreeLine: false,
+          leading: Icon(Icons.info),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          title: Text("关于我们"),
+          onTap: () {
+            Navigator.of(context).pushNamed("/aboutus");
+          },
+        ),
+        new ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          isThreeLine: false,
+          leading: Icon(Icons.message),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          title: Text("联系我们"),
+          onTap: () {
+            Navigator.of(context).pushNamed("/contactus");
+          },
+        ),
+        new ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          isThreeLine: false,
+          leading: Icon(Icons.get_app),
+          trailing: Text(
+            "最新版本${newestVersion.versionCode}",
+            style: TextStyle(
+                color: newestVersion.versionCode != currentVersion.versionCode
+                    ? Colors.red
+                    : null),
+          ),
+          title: Text("APP版本(${currentVersion.versionCode})"),
+          onTap: () async {
+
+            if (Platform.isIOS) {
+                              if (await canLaunch(
+                                  newestVersion.iosDownloadUrl)) {
+                                await launch(newestVersion.iosDownloadUrl);
+                              } else {
+                                throw 'Could not launch ${newestVersion.iosDownloadUrl}';
+                              }
+                              //ios相关代码
+                            } else if (Platform.isAndroid) {
+                              if (await canLaunch(newestVersion.androidDownloadUrl)) {
+                                await launch(newestVersion.androidDownloadUrl);
+                              } else {
+                                throw 'Could not launch ${newestVersion.androidDownloadUrl}';
+                              }
+                            }
+
+     
+          },
+        )
+      ],
+    );
   }
-
-
 
   Widget _logined(Store<AppState> store) {
     return Scaffold(
@@ -104,7 +134,7 @@ class _UserCenterState extends State<UserCenter> {
         new BackdropFilter(
             filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-                height: 200,
+                height: 250,
                 decoration: new BoxDecoration(
                     color: Colors.green.shade500.withOpacity(0.8)),
                 child: Column(
@@ -115,13 +145,11 @@ class _UserCenterState extends State<UserCenter> {
                       actions: <Widget>[
                         IconButton(
                           icon: Icon(Icons.settings),
-                          onPressed: () async{
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                                  return UserSetting();
+                          onPressed: () async {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return UserSetting();
                             }));
-                           
-                         
-
                           },
                         )
                       ],
@@ -129,13 +157,16 @@ class _UserCenterState extends State<UserCenter> {
                     Column(
                       children: <Widget>[
                         Container(
-                            height: 100,
-                            width: 100,
+                            height: 150,
+                            width: 150,
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
-                                backgroundImage: _user.avatar==""?AssetImage("assets/images/money.png"):NetworkImage(_user.avatar))),
+                                backgroundImage: _user.avatar == ""
+                                    ? AssetImage("assets/images/money.png")
+                                    : NetworkImage(
+                                        getAvatarURL(_user.avatar)))),
                         Text(
-                        _user.nickName,
+                          _user.nickName,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -145,11 +176,10 @@ class _UserCenterState extends State<UserCenter> {
                     ),
                   ],
                 ))),
-        Expanded(
-            child:  _item()),
+        Expanded(child: _item()),
       ],
-    )
-    );}
+    ));
+  }
 
   Widget _nologin() {
     return Scaffold(
@@ -172,7 +202,7 @@ class _UserCenterState extends State<UserCenter> {
                             return UserLogin();
                           }));
                           print("user");
-    print(_user);
+                          print(_user);
                           setState(() {
                             this._user = _user;
                           });
@@ -200,8 +230,7 @@ class _UserCenterState extends State<UserCenter> {
         SizedBox(
           height: 20,
         ),
-        Expanded(
-            child: _item())
+        Expanded(child: _item())
       ],
     ));
   }

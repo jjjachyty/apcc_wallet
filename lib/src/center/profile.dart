@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,12 +18,14 @@ class _ProfileState extends State<Profile> {
    User user;
   _ProfileState(this.user);
   File _image;
-  GlobalKey<FormState> _nickNamekey = new GlobalKey<FormState>();
+  String _nickName,_errText="";
+  GlobalKey<FormFieldState> _nickNamekey = new GlobalKey<FormFieldState>();
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
      
     setState(() {
+      
       _image = image;
     });
   }
@@ -46,7 +49,7 @@ class _ProfileState extends State<Profile> {
                             width: 150,
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
-                                backgroundImage: _image==null? user.avatar==""?AssetImage("assets/images/money.png"):NetworkImage(user.avatar):Image.file(_image).image)
+                                backgroundImage: _image==null? user.avatar==""?AssetImage("assets/images/money.png"):NetworkImage(getAvatarURL(user.avatar)):Image.file(_image).image)
                                 ),
                                 Positioned(
                                 
@@ -67,8 +70,13 @@ class _ProfileState extends State<Profile> {
                   return "昵称格式错误";
                 }
               },
+              onSaved: (val){
+                setState(() {
+                 _nickName = val; 
+                });
+              },
             ),
-            SizedBox(height: 10,),
+            SizedBox(child:  Text(_errText,style:TextStyle(color: Colors.red)),),
             ProgressButton(
                         color: Colors.green,
                         defaultWidget: Text(
@@ -82,11 +90,22 @@ class _ProfileState extends State<Profile> {
                         onPressed: () async {
 
                           if (_nickNamekey.currentState.validate()){
-                           
+                           _nickNamekey.currentState.save();
+                              var _data  =await modifiyProfile(_image,_nickName);
+                              if (_data.state){
+                                Navigator.of(context).pop();
+                              }else{
+setState(() {
+ _errText = _data.messsage; 
+});
+                              }
+                              
+                            
                           }
                           
                         },
-                      )
+                      ),
+                     
           ],
         ),
       ),

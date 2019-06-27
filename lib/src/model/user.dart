@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/store/state.dart';
@@ -10,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:redux/redux.dart';
 
 class User {
+  String uuid;
   String phone;
   String nickName;
   String avatar;
@@ -23,7 +25,8 @@ class User {
   List<Account> accounts; //账户
 
   User(
-      {this.phone,
+      {this.uuid,
+      this.phone,
       this.nickName,
       this.avatar,
       this.passWord,
@@ -36,13 +39,15 @@ class User {
       this.accounts});
 
   User.fromJson(Map<String, dynamic> json)
-      : phone = json["Phone"],
+      : uuid = json["UUID"],
+        phone = json["Phone"],
         nickName = json["NickName"],
         avatar = json["Avatar"],
         hasPayPasswd = json["HasPayPasswd"];
   @override
-  String toString() {
+  String toJson() {
     var _tmp = {
+      'UUID': this.uuid,
       'Phone': this.phone,
       'NickName': this.nickName,
       'Avatar': this.avatar,
@@ -66,58 +71,86 @@ class Account {
 }
 
 Future<Data> loginWithPW(String phone, passwd) async {
-    var _data=await post("/auth/loginwithpw",data:{"phone":phone,"password":passwd});
-    print(_data.data);
-    if (_data.state){
-        api.options.headers[HttpHeaders.authorizationHeader]=_data.data["Token"];
-        setStorageString("_token", _data.data["Token"]);
-        var user = User.fromJson(_data.data["User"]);
-        print(user.toString());
-        setStorageString("_user",user.toString() );
-    }
+  var _data = await post("/auth/loginwithpw",
+      data: {"phone": phone, "password": passwd});
+  print(_data.data);
+  if (_data.state) {
+    api.options.headers[HttpHeaders.authorizationHeader] = _data.data["Token"];
+    setStorageString("_token", _data.data["Token"]);
+    var user = User.fromJson(_data.data["User"]);
+    print(user.toJson());
+    setStorageString("_user", user.toJson());
+  }
   return _data;
 }
 
-
 Future<Data> loginWithSMS(String phone, sms) async {
- var _data=await post("/auth/loginwithsms",data:new FormData.from({"phone":phone,"sms":sms}));
-    print(_data.data);
-    if (_data.state){
-        api.options.headers[HttpHeaders.authorizationHeader]=_data.data["Token"];
-        setStorageString("_token", _data.data["Token"]);
-        var user = User.fromJson(_data.data["User"]);
-        print(user.toString());
-        setStorageString("_user",user.toString() );
-    }
+  var _data = await post("/auth/loginwithsms",
+      data: new FormData.from({"phone": phone, "sms": sms}));
+  print(_data.data);
+  if (_data.state) {
+    api.options.headers[HttpHeaders.authorizationHeader] = _data.data["Token"];
+    setStorageString("_token", _data.data["Token"]);
+    var user = User.fromJson(_data.data["User"]);
+    print(user.toJson());
+    setStorageString("_user", user.toJson());
+  }
   return _data;
 }
 
 Future<dynamic> register(String phone, passwd) async {
-  var response=await api.post("/auth/register",data:{"phone":phone,"password":passwd});
+  var response = await api
+      .post("/auth/register", data: {"phone": phone, "password": passwd});
   return response.data;
 }
 
-Future<Data> setPayPasswd(
-    String password, Store<AppState> store) async {
+Future<Data> setPayPasswd(String password, Store<AppState> store) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
-  var _data=await post("/user/paypasswd",data:new FormData.from({"password":password}));
+  var _data = await post("/user/paypasswd",
+      data: new FormData.from({"password": password}));
 
-  if (_data.state){
-      store.state.user.hasPayPasswd = true;
-      setStorageString("_user", store.state.user.toString());
-      print(getStorageString("_user"));
+  if (_data.state) {
+    store.state.user.hasPayPasswd = true;
+    setStorageString("_user", store.state.user.toJson());
+    print(getStorageString("_user"));
   }
 
   return _data;
 }
 
-Future<Data> modifiyTradePasswd(String orgPasswd,  passwdConf) async {
-   
-
-  return await post("/user/paypasswd",data:new FormData.from({"orgPassword":orgPasswd,"password":passwdConf}));
+Future<Data> modifiyTradePasswd(String orgPasswd, passwdConf) async {
+  return await post("/user/paypasswd",
+      data: new FormData.from(
+          {"orgPassword": orgPasswd, "password": passwdConf}));
 }
-Future<Data> modifiyLoginPasswd(String passwd) async {
-   
 
-  return await post("/user/loginpasswd",data:new FormData.from({"password":passwd}));
+Future<Data> modifiyLoginPasswd(String passwd) async {
+  return await post("/user/loginpasswd",
+      data: new FormData.from({"password": passwd}));
+}
+
+Future<Data> modifiyProfile(File image, String nickName) async {
+  var _forData = new FormData.from({"nickName": nickName});
+
+  if (image != null) {
+    String path = image.path;
+
+    print(await image.length());
+    List<int> bytes = await image.readAsBytes();
+    _forData.add("avatar", new UploadFileInfo(image, "avatar"));
+  }
+  var _data = await post("/user/profile", data: _forData);
+  if (_data.state) {
+    var _user = User.fromJson(json.decode(await getStorageString("_user")));
+    if (image != null) {
+      _user.avatar = _user.uuid;
+    }
+    if (nickName != _user.nickName) {
+      _user.nickName = nickName;
+    }
+    setStorageString("_user", _user.toJson());
+    eventBus.fire(UserInfoUpdate(_user));
+  }
+
+  return _data;
 }
