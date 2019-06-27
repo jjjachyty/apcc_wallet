@@ -103,24 +103,20 @@ class _UserCenterState extends State<UserCenter> {
           ),
           title: Text("APP版本(${currentVersion.versionCode})"),
           onTap: () async {
-
             if (Platform.isIOS) {
-                              if (await canLaunch(
-                                  newestVersion.iosDownloadUrl)) {
-                                await launch(newestVersion.iosDownloadUrl);
-                              } else {
-                                throw 'Could not launch ${newestVersion.iosDownloadUrl}';
-                              }
-                              //ios相关代码
-                            } else if (Platform.isAndroid) {
-                              if (await canLaunch(newestVersion.androidDownloadUrl)) {
-                                await launch(newestVersion.androidDownloadUrl);
-                              } else {
-                                throw 'Could not launch ${newestVersion.androidDownloadUrl}';
-                              }
-                            }
-
-     
+              if (await canLaunch(newestVersion.iosDownloadUrl)) {
+                await launch(newestVersion.iosDownloadUrl);
+              } else {
+                throw 'Could not launch ${newestVersion.iosDownloadUrl}';
+              }
+              //ios相关代码
+            } else if (Platform.isAndroid) {
+              if (await canLaunch(newestVersion.androidDownloadUrl)) {
+                await launch(newestVersion.androidDownloadUrl);
+              } else {
+                throw 'Could not launch ${newestVersion.androidDownloadUrl}';
+              }
+            }
           },
         )
       ],
