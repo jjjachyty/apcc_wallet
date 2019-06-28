@@ -19,5 +19,5 @@ RegExp nickNameExp = RegExp(
 
 
     var avatarURL = "http://avatar.apcchis.com/";
-    var newestVersion = Version(versionCode: "0.0.1");
-    var currentVersion=Version(versionCode: "0.0.1");
+    var newestVersion = Version(versionCode: "0.0.2");
+    var currentVersion=Version(versionCode: "0.0.2");

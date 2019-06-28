@@ -2,6 +2,7 @@
 import 'package:apcc_wallet/router.dart';
 
 import 'package:apcc_wallet/src/common/init.dart';
+import 'package:apcc_wallet/src/common/splashScreen.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import './src/store/state.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             primarySwatch: Colors.green,
           ),
-          // home: new UserCenter(),
+           home: new SplashScreen(),
           routes: routes,
         ));
   }

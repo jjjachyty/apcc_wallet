@@ -48,6 +48,10 @@ class _UserSettingState extends State<UserSetting> {
                 leading: Icon(Icons.verified_user),
                 trailing: Icon(Icons.keyboard_arrow_right),
                 title: Text("实名认证"),
+                onTap: (){
+                  
+                  Navigator.of(context).pushNamed("/user/idcard");
+                },
               ),
                new ListTile(
                 dense: true,

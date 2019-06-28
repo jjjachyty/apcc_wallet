@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/center/captcha.dart';
+import 'package:apcc_wallet/src/center/id_auth.dart';
 import 'package:apcc_wallet/src/center/login_passwd.dart';
 import 'package:apcc_wallet/src/center/profile.dart';
 import 'package:apcc_wallet/src/center/register.dart';
@@ -18,7 +19,7 @@ import 'package:redux/redux.dart';
 import 'src/store/state.dart';
 
 final Map<String, WidgetBuilder> routes = {
-  "/": (BuildContext context) => new MainPage(),
+  "/main": (BuildContext context) => new MainPage(),
   "/wallet/mmic": (BuildContext context) => new MnemonicPage(),
   "/wallet/mmicrepeat": (BuildContext context) => new MnemonicRepeatPage(),
   "/wallet/passwd": (BuildContext context) => new WalletPasswdPage(),
@@ -28,7 +29,8 @@ final Map<String, WidgetBuilder> routes = {
   "/contactus": (BuildContext context) => new ContactUs(),
   "/register": (BuildContext context) => new UserRegister(),
   "/loginpasswd": (BuildContext context) => new LoginPasswd(),
-   
+     "/user/idcard": (BuildContext context) => new IDCardAuth(),
+
 
     
 };

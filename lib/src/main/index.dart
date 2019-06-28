@@ -41,43 +41,46 @@ class _IndexState extends State<Index> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final price = snapshot.data as List<CoinPrice>;
+
               return ListView.separated(
                 itemCount: price.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                      leading: coinIcons[price[index].code],
-                      title: Text(price[index].code),
-                      trailing: Container(
-                        width: 130,
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "￥",
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            Text(
-                              price[index].priceCny.toStringAsFixed(2),
-                              style: TextStyle(
-                                  color: price[index].percent24h > 0
-                                      ? Colors.red
-                                      : Colors.green,
-                                  fontSize: 18),
-                            ),
-                            Text(
-                              price[index].percent24h > 0 ? "↑" : "↓",
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            Text(
-                                price[index].percent24h.toStringAsFixed(2) +
-                                    "%",
-                                style: TextStyle(
-                                    color: price[index].percent24h > 0
-                                        ? Colors.red
-                                        : Colors.green,
-                                    fontSize: 10)),
-                          ],
+                  return Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: coinIcons[price[index].code],
+                        flex: 1,
+                      ),
+                      Expanded(
+                        child: Text(price[index].code),
+                        flex: 2,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "￥" + price[index].priceCny.toStringAsFixed(2),
+                          style: TextStyle(
+                              color: price[index].percent24h > 0
+                                  ? Colors.red
+                                  : Colors.green,
+                              fontSize: 18),
                         ),
-                      ));
+                      ),
+                      Expanded(
+                        child: Text(
+                            price[index].percent24h > 0
+                                ? "↑"
+                                : "↓" +
+                                    price[index].percent24h.toStringAsFixed(2) +
+                                    "%",
+                            style: TextStyle(
+                                color: price[index].percent24h > 0
+                                    ? Colors.red
+                                    : Colors.green,
+                                fontSize: 10)),
+                      )
+                    ],
+                  );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     Divider(),

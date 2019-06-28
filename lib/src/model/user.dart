@@ -154,3 +154,7 @@ Future<Data> modifiyProfile(File image, String nickName) async {
 
   return _data;
 }
+
+idCardRecognition(File card1,File card2) async {
+var _data = await post("/user/idcard", data: new FormData.from({"card1": new UploadFileInfo(card1, "card1"),"card2": new UploadFileInfo(card2, "card2")}));
+}
