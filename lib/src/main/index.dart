@@ -68,11 +68,9 @@ class _IndexState extends State<Index> {
                       ),
                       Expanded(
                         child: Text(
-                            price[index].percent24h > 0
-                                ? "↑"
-                                : "↓" +
-                                    price[index].percent24h.toStringAsFixed(2) +
-                                    "%",
+                            (price[index].percent24h > 0 ? "↑" : "↓") +
+                                price[index].percent24h.toStringAsFixed(2) +
+                                "%",
                             style: TextStyle(
                                 color: price[index].percent24h > 0
                                     ? Colors.red

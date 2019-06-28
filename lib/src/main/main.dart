@@ -44,7 +44,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     _listener();
 
-    if (currentVersion.versionCode != newestVersion.versionCode) {
+    if (newestVersion.versionCode != "" &&
+        currentVersion.versionCode != newestVersion.versionCode) {
       return Version();
     } else {
       // TODO: implement build

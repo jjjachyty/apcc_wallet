@@ -29,8 +29,5 @@ final Map<String, WidgetBuilder> routes = {
   "/contactus": (BuildContext context) => new ContactUs(),
   "/register": (BuildContext context) => new UserRegister(),
   "/loginpasswd": (BuildContext context) => new LoginPasswd(),
-     "/user/idcard": (BuildContext context) => new IDCardAuth(),
-
-
-    
+  "/user/idcard": (BuildContext context) => new IDCardRecognition(),
 };

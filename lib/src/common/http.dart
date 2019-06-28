@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:apcc_wallet/src/common/define.dart';
@@ -9,85 +7,91 @@ import 'package:dio/dio.dart';
 
 import 'event_bus.dart';
 
-var apiURL = "http://192.168.1.11:9090/api/wallet/v1";
+var apiURL = "http://127.0.0.1:9090/api/wallet/v1";
 
-Dio  api ;
+Dio api;
 
-
-Future<Data> post(String path,{dynamic data, }) async{
-  Data _data ;
-  try{
-   var  _response =   await api.post(path,data: data);
-   _data = Data(state: _response.data["Status"],messsage: _response.data["Message"],data:_response.data["Data"]);
-  }on DioError catch(e) {
-      print(e.type); 
-      if( e.type == DioErrorType.RECEIVE_TIMEOUT){
-        _data = Data(state:false,messsage: "请求超时,请重试");
-      }else{
-      _data = Data(state:false,messsage: e.message);
-      }
+Future<Data> post(
+  String path, {
+  dynamic data,
+}) async {
+  Data _data;
+  try {
+    var _response = await api.post(path, data: data);
+    _data = Data(
+        state: _response.data["Status"],
+        messsage: _response.data["Message"],
+        data: _response.data["Data"]);
+  } on DioError catch (e) {
+    print(e.type);
+    if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      _data = Data(state: false, messsage: "请求超时,请重试");
+    } else {
+      _data = Data(state: false, messsage: e.message);
+    }
   }
   print(_data.messsage);
   return _data;
 }
 
-
-Future<Data> get(String path,{dynamic parameters, }) async{
-  Data _data ;
-  try{
-   var  _response =   await api.get(path,queryParameters: parameters);
-   _data = Data(state: _response.data["Status"],messsage: _response.data["Message"],data:_response.data["Data"]);
-  }on DioError catch(e) {
-      print(e.type); 
-      if( e.type == DioErrorType.RECEIVE_TIMEOUT){
-        _data = Data(state:false,messsage: "请求超时,请重试");
-      }else{
-      _data = Data(state:false,messsage: e.message);
-      }
+Future<Data> get(
+  String path, {
+  dynamic parameters,
+}) async {
+  Data _data;
+  try {
+    var _response = await api.get(path, queryParameters: parameters);
+    _data = Data(
+        state: _response.data["Status"],
+        messsage: _response.data["Message"],
+        data: _response.data["Data"]);
+  } on DioError catch (e) {
+    print(e.type);
+    if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      _data = Data(state: false, messsage: "请求超时,请重试");
+    } else {
+      _data = Data(state: false, messsage: e.message);
+    }
   }
   print(_data.messsage);
   return _data;
 }
 
+///获取新token
+Future<String> refreshToken(String token) async {
+  String _token; //获取当前token
 
-  ///获取新token
-  Future<String> refreshToken(String token) async {
-    String _token ; //获取当前token
-   
-  
-    try {
-      var response = await Dio(BaseOptions(
-    baseUrl: apiURL,
-    connectTimeout: 5000,
-    receiveTimeout: 50000,
-    headers: {HttpHeaders.authorizationHeader:token}
-   )).post("/auth/refreshtoken");
+  try {
+    var response = await Dio(BaseOptions(
+            baseUrl: apiURL,
+            connectTimeout: 5000,
+            receiveTimeout: 50000,
+            headers: {HttpHeaders.authorizationHeader: token}))
+        .post("/auth/refreshtoken");
 
-
-   if (response.data["Status"]){
+    if (response.data["Status"]) {
       _token = response.data['Data']['Token']; //获取返回的新token
       print('oldtoke=${token}   newToken:$_token');
-   }
-
-    } on DioError catch (e) {
-      if (e.response == null) {
-        print('DioError:${e.message}');
-      } else {
-        if (e.response.statusCode == 422) {
-          print('422Error:${e.response.data['msg']}');
-          //422状态码代表异地登录，token失效，发送登录失效事件，以便app弹出登录页面
-          eventBus.fire(UserLoggedInEvent());
-        }
+    }
+  } on DioError catch (e) {
+    if (e.response == null) {
+      print('DioError:${e.message}');
+    } else {
+      if (e.response.statusCode == 422) {
+        print('422Error:${e.response.data['msg']}');
+        //422状态码代表异地登录，token失效，发送登录失效事件，以便app弹出登录页面
+        eventBus.fire(UserLoggedInEvent());
       }
     }
-    return _token;
   }
+  return _token;
+}
 
 // class RefreshTokenInterceptor extends Interceptor {
 //   @override
 //   onError(DioError err) async {
 //     if (err.response != null && err.response.statusCode == 401 && token != "") {
-     
+
 //       api.lock();
 //       var token = await getToken(); //获取新token
 //       api.options.headers[HttpHeaders.authorizationHeader] = token;
@@ -114,8 +118,7 @@ Future<Data> get(String path,{dynamic parameters, }) async{
 //   ///获取新token
 //   Future<String> getToken() async {
 //     String _token = token; //获取当前token
-   
-  
+
 //     try {
 //       var response = await api.post("/refreshtoken");
 //       _token = response.data['Data']['Token']; //获取返回的新token

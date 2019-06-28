@@ -5,6 +5,7 @@ import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/model/id_card.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:dio/dio.dart';
 
@@ -22,6 +23,7 @@ class User {
   String lastLoginDevice;
   String state; //账户状态
   IDCard idCard;
+  bool idCardAuth;
   List<Account> accounts; //账户
 
   User(
@@ -36,33 +38,28 @@ class User {
       this.lastLoginDevice,
       this.state,
       this.idCard,
-      this.accounts});
+      this.accounts,
+      this.idCardAuth});
 
   User.fromJson(Map<String, dynamic> json)
       : uuid = json["UUID"],
         phone = json["Phone"],
         nickName = json["NickName"],
         avatar = json["Avatar"],
+        idCardAuth = json["IDCardAuth"],
         hasPayPasswd = json["HasPayPasswd"];
-  @override
+
   String toJson() {
     var _tmp = {
       'UUID': this.uuid,
       'Phone': this.phone,
       'NickName': this.nickName,
       'Avatar': this.avatar,
+      'IDCardAuth': this.idCardAuth,
       'HasPayPasswd': this.hasPayPasswd
     };
     return json.encode(_tmp);
   }
-}
-
-//身份证
-class IDCard {
-  String number; //身份证号
-  String sex; //性别
-  String birthday; //生日
-  String expirationDate; //失效日期
 }
 
 class Account {
@@ -155,6 +152,8 @@ Future<Data> modifiyProfile(File image, String nickName) async {
   return _data;
 }
 
-idCardRecognition(File card1,File card2) async {
-var _data = await post("/user/idcard", data: new FormData.from({"card1": new UploadFileInfo(card1, "card1"),"card2": new UploadFileInfo(card2, "card2")}));
+Future<Data> idCard(IDCard idCard) async {
+  print(idCard);
+  var _data = await post("/user/idcard", data: idCard.toJson());
+  return _data;
 }
