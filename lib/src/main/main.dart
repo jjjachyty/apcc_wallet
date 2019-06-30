@@ -4,7 +4,7 @@ import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/version.dart';
 import 'package:apcc_wallet/src/dapp/app.dart';
 import 'package:apcc_wallet/src/dapp/index.dart';
-import 'package:apcc_wallet/src/main/coins.dart';
+import 'package:apcc_wallet/src/main/assets.dart';
 import 'package:flutter/material.dart';
 
 import 'dapp.dart';
@@ -36,7 +36,11 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    pages..add(Index())..add(Coins())..add(WebViewExample())..add(UserCenter());
+    pages
+      ..add(Index())
+      ..add(AssetsPage())
+      ..add(WebViewExample())
+      ..add(UserCenter());
     super.initState();
   }
 

@@ -1,4 +1,4 @@
-import 'package:apcc_wallet/src/coin/main/send.dart';
+import 'package:apcc_wallet/src/assets/main/send.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:flutter/material.dart';

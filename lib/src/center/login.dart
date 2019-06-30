@@ -24,8 +24,9 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   Timer _counter;
   var _leftCount = 0;
-  var _phoneVal,_passwordVal,_smsVal,_errText;
-  bool _opType = true;
+  var _phoneVal, _passwordVal, _smsVal, _errText;
+  bool _opType = true, _obscureFlag = true;
+
   GlobalKey<FormState> _loginForm = new GlobalKey<FormState>();
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
   GlobalKey<FormFieldState> _smsKey = new GlobalKey<FormFieldState>();
@@ -40,18 +41,16 @@ class _UserLoginState extends State<UserLogin> {
     _phoneCtr.dispose();
   }
 
-
-
-    void _startTimer(){
+  void _startTimer() {
     setState(() {
-        _leftCount= 60; 
-      });
-    _counter = countDown(59, (int left){
+      _leftCount = 60;
+    });
+    _counter = countDown(59, (int left) {
       setState(() {
-        _leftCount= left; 
+        _leftCount = left;
       });
     });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,18 +115,17 @@ class _UserLoginState extends State<UserLogin> {
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
-                    onSaved: (val){
-                      setState(() {
-                                              _phoneVal = val;
-
-                      });
-                    },
+                onSaved: (val) {
+                  setState(() {
+                    _phoneVal = val;
+                  });
+                },
               ),
               SizedBox(
                 height: 10,
               ),
               TextFormField(
-                obscureText: true,
+                obscureText: _obscureFlag,
                 maxLength: 16,
                 validator: (val) {
                   if (val.length < 6) {
@@ -140,17 +138,24 @@ class _UserLoginState extends State<UserLogin> {
                     hintText: "密码",
                     counterText: "",
                     errorText: _errText,
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.remove_red_eye),
+                      onPressed: () {
+                        setState(() {
+                          this._obscureFlag = !this._obscureFlag;
+                        });
+                      },
+                    ),
                     prefixIcon: Icon(
                       Icons.lock,
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
-                    onSaved: (val){
-                      setState(() {
-                                              _passwordVal = val;
-
-                      });
-                    },
+                onSaved: (val) {
+                  setState(() {
+                    _passwordVal = val;
+                  });
+                },
               ),
               SizedBox(
                   height: 30,
@@ -192,21 +197,22 @@ class _UserLoginState extends State<UserLogin> {
                           // // // // After [onPressed], it will trigger animation running backwards, from end to beginning
 
                           // return () async {
-                          var _data = await loginWithPW(_phoneVal,_passwordVal);
-                          
+                          var _data =
+                              await loginWithPW(_phoneVal, _passwordVal);
+
                           if (_data.state) {
-                          print(_data.data["User"]);
-                          var _user = User.fromJson(_data.data["User"]);
+                            print(_data.data["User"]);
+                            var _user = User.fromJson(_data.data["User"]);
                             Navigator.of(context).pop(_user);
-                           store.dispatch(RefreshUserAction(_user));
-                          }else{
+                            store.dispatch(RefreshUserAction(_user));
+                          } else {
                             setState(() {
-                             _errText = _data.messsage; 
+                              _errText = _data.messsage;
                             });
                             //Scaffold.of(context).showSnackBar(SnackBar(content: Text(_data.messsage)));
                           }
                         }
-                        
+
                         // }
                       },
                     );
@@ -247,11 +253,11 @@ class _UserLoginState extends State<UserLogin> {
                       color: Colors.green,
                     ),
                     border: OutlineInputBorder()),
-                    onSaved: (val){
-                      setState(() {
-                       _phoneVal = val; 
-                      });
-                    },
+                onSaved: (val) {
+                  setState(() {
+                    _phoneVal = val;
+                  });
+                },
               ),
               SizedBox(
                 height: 10,
@@ -270,7 +276,7 @@ class _UserLoginState extends State<UserLogin> {
                       child: TextFormField(
                         key: _smsKey,
                         keyboardType: TextInputType.number,
-                        maxLength:4,
+                        maxLength: 4,
                         validator: (sms) {
                           if (sms == null || sms.length != 4) {
                             return "请输入正确的验证码";
@@ -286,11 +292,11 @@ class _UserLoginState extends State<UserLogin> {
                               color: Colors.green,
                             ),
                             border: OutlineInputBorder()),
-                            onSaved: (val){
-                              setState(() {
-                               _smsVal = val; 
-                              });
-                            },
+                        onSaved: (val) {
+                          setState(() {
+                            _smsVal = val;
+                          });
+                        },
                       )),
 
                   FlatButton(
@@ -302,23 +308,21 @@ class _UserLoginState extends State<UserLogin> {
                     onPressed: _leftCount == 0
                         ? () async {
                             if (phoneExp.hasMatch(_phoneCtr.text)) {
-                             
-                             if (_phoneKey.currentState.validate()) {
-                          _phoneKey.currentState.save();
-                         final _result = await Navigator.of(context).push(
-                           PageRouteBuilder(pageBuilder: (context,animation1,animation2){
-                             return Captcha(this._phoneVal);
-                             })
-                         );
-                         if (_result !=null && _result){
-                           _startTimer();
-                         
-                         }
-
-                            } else {
-                              _phoneKey.currentState.validate();
+                              if (_phoneKey.currentState.validate()) {
+                                _phoneKey.currentState.save();
+                                final _result = await Navigator.of(context)
+                                    .push(PageRouteBuilder(pageBuilder:
+                                        (context, animation1, animation2) {
+                                  return Captcha(this._phoneVal);
+                                }));
+                                if (_result != null && _result) {
+                                  _startTimer();
+                                }
+                              } else {
+                                _phoneKey.currentState.validate();
+                              }
                             }
-                          }}
+                          }
                         : null,
                   )
                 ],
@@ -341,30 +345,29 @@ class _UserLoginState extends State<UserLogin> {
               SizedBox(
                 width: double.infinity,
                 child: new ProgressButton(
-            color: Colors.green,
-            defaultWidget: Text(
-              "登录",
-              style: TextStyle(color: Colors.white),
-            ),
-            progressWidget: CircularProgressIndicator(
-                backgroundColor: Colors.white,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
-            onPressed: () async {
+                  color: Colors.green,
+                  defaultWidget: Text(
+                    "登录",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  progressWidget: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+                  onPressed: () async {
                     var _formState = _loginForm.currentState;
                     if (_formState.validate()) {
                       _formState.save();
 
-                      
-                      var _data = await loginWithSMS(_phoneVal,_smsVal);
-                        if (_data.state){
-                          Navigator.of(context).pop(User.fromJson(_data.data["User"]));
-                        }else{
-                          _smsKey.currentState.reset();
-                          _smsKey.currentState.validate();
-                        
-                        }
-                   
-                     }
+                      var _data = await loginWithSMS(_phoneVal, _smsVal);
+                      if (_data.state) {
+                        Navigator.of(context)
+                            .pop(User.fromJson(_data.data["User"]));
+                      } else {
+                        _smsKey.currentState.reset();
+                        _smsKey.currentState.validate();
+                      }
+                    }
                   },
                 ),
               ),

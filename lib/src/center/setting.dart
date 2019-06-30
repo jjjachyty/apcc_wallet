@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class UserSetting extends StatefulWidget {
-  @override
-  _UserSettingState createState() => _UserSettingState();
-}
+// class UserSetting extends StatefulWidget {
+//   @override
+//   _UserSettingState createState() => _UserSettingState();
+// }
 
-class _UserSettingState extends State<UserSetting> {
+class UserSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, Store<AppState>>(
@@ -54,7 +54,8 @@ class _UserSettingState extends State<UserSetting> {
                         Icons.verified_user,
                         color: Colors.green,
                       ),
-                      trailing: store.state.user.idCardAuth
+                      trailing: (store.state.user != null &&
+                              store.state.user.idCardAuth)
                           ? Text(
                               "已认证",
                               style: TextStyle(color: Colors.green),
@@ -107,11 +108,13 @@ class _UserSettingState extends State<UserSetting> {
                         style: TextStyle(color: Colors.green),
                       ),
                       onPressed: () {
-                        store.dispatch(RefreshUserAction(null));
-                        removeStorage("_user");
-                        removeStorage("_token");
-                        Navigator.of(context).pop();
-                        eventBus.fire(UserLoggedOutEvent());
+                        Navigator.of(context).maybePop().whenComplete(() {
+                          eventBus.fire(UserLoggedOutEvent());
+                          store.dispatch(RefreshUserAction(null));
+
+                          removeStorage("_user");
+                          removeStorage("_token");
+                        });
                       },
                     ),
                   ],

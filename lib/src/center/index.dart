@@ -31,23 +31,38 @@ class UserCenter extends StatefulWidget {
 class _UserCenterState extends State<UserCenter> {
   User _user;
 
+  @override
+  void dispose() {
+    print("dispose dispose----------");
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   void _listener() {
     eventBus.on<UserLoggedOutEvent>().listen((event) {
+      print("UserLoggedOutEvent listen----------");
       setState(() {
-        _user = null;
+        this._user = null;
       });
     });
 
     eventBus.on<UserInfoUpdate>().listen((event) {
       setState(() {
-        _user = event.user;
+        this._user = event.user;
       });
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     _listener();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return new StoreConnector<AppState, Store<AppState>>(
         onInit: (store) {
           print("user");
@@ -89,7 +104,6 @@ class _UserCenterState extends State<UserCenter> {
             Navigator.of(context).pushNamed("/contactus");
           },
         ),
-    
       ],
     );
   }
@@ -103,7 +117,13 @@ class _UserCenterState extends State<UserCenter> {
             child: Container(
                 height: 250,
                 decoration: new BoxDecoration(
-                    color: Colors.green.shade500.withOpacity(0.8)),
+                  // image: DecorationImage(
+                  //     colorFilter: ColorFilter.linearToSrgbGamma(),
+                  //     fit: BoxFit.fill,
+                  //     image: NetworkImage(getAvatarURL(_user.avatar))),
+
+                  color: Colors.green.shade500.withOpacity(0.8),
+                ),
                 child: Column(
                   children: <Widget>[
                     AppBar(
@@ -111,7 +131,10 @@ class _UserCenterState extends State<UserCenter> {
                       elevation: 0,
                       actions: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.settings),
+                          icon: Icon(
+                            Icons.settings,
+                            // color: Colors.green,
+                          ),
                           onPressed: () async {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
@@ -153,11 +176,18 @@ class _UserCenterState extends State<UserCenter> {
         body: Column(
       children: <Widget>[
         Container(
-          color: Colors.grey,
           child: Column(
             children: <Widget>[
               Container(
-                color: Colors.green,
+                // color: Colors.green,
+                decoration: new BoxDecoration(
+                  color: Colors.green.shade500.withOpacity(0.8),
+                  gradient: RadialGradient(colors: [
+                    Colors.green.shade300,
+                    Colors.green.shade400,
+                    Colors.green
+                  ], radius: 1, tileMode: TileMode.mirror),
+                ),
                 padding: EdgeInsets.symmetric(vertical: 40),
                 alignment: Alignment.center,
                 child: Column(
