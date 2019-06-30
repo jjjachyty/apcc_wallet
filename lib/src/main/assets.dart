@@ -193,9 +193,18 @@ class AssetsPage extends StatelessWidget {
                               TextSpan(
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
+                                      String mainSymbol, exchangeSymbol;
+                                      mainSymbol = "HMC";
+                                      exchangeSymbol = "USDT";
+                                      if (assets[index].symbol != "USDT") {
+                                        mainSymbol = "USDT";
+                                        exchangeSymbol = "HMC";
+                                      }
+
                                       Navigator.of(context).push(
                                           MaterialPageRoute(builder: (context) {
-                                        return ExchangePage(assets[index]);
+                                        return ExchangePage(
+                                            mainSymbol, exchangeSymbol);
                                       }));
                                     },
                                   text: "兑换",
