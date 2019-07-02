@@ -20,6 +20,7 @@ class UserSetting extends StatelessWidget {
     return new StoreConnector<AppState, Store<AppState>>(
         converter: (store) => store,
         builder: (context, store) {
+          print(store.state.user.idCardAuth);
           return Scaffold(
               appBar: AppBar(
                 title: Text("设置"),
@@ -54,8 +55,8 @@ class UserSetting extends StatelessWidget {
                         Icons.verified_user,
                         color: Colors.green,
                       ),
-                      trailing: (store.state.user != null &&
-                              store.state.user.idCardAuth)
+                      trailing: (store.state.user.idCardAuth != null 
+                              )
                           ? Text(
                               "已认证",
                               style: TextStyle(color: Colors.green),

@@ -96,8 +96,7 @@ Future<Data> loginWithSMS(String phone, sms) async {
 }
 
 Future<dynamic> register(String phone, passwd) async {
-  var response = await api
-      .post("/auth/register", data: {"phone": phone, "password": passwd});
+  var response = await post("/auth/register", data: {"phone": phone, "password": passwd});
   return response.data;
 }
 

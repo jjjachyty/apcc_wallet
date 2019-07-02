@@ -23,7 +23,7 @@ List<Assets> getAssets() {
   assets.add(Assets(
       code: "MedicalHealthCoin",
       name: "健康医疗币",
-      symbol: "HMC",
+      symbol: "MHC",
       address: "0x9d6d492bD500DA5B33cf95A5d610a73360FcaAa0",
       blance: 20000,
       freezingBlance: 200,
