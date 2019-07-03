@@ -1,6 +1,8 @@
 import 'package:apcc_wallet/src/assets/exchange.dart';
 import 'package:apcc_wallet/src/assets/recharge.dart';
 import 'package:apcc_wallet/src/assets/transfer.dart';
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,35 @@ class AssetsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var assets = getAssets();
 
     return Scaffold(
       appBar: AppBar(
         title: Text("资产"),
       ),
-      body: RefreshIndicator(
+      body: FutureBuilder(
+        future: getAssets(),
+        builder: (context,asyncSnapshot){
+          if (asyncSnapshot.hasData){
+           var _data = asyncSnapshot.data as Data;
+           if (_data.state){
+             return _assetsCard(_data.data);
+           }else{
+             return Text(_data.messsage);
+           }
+            
+          }else{
+            return Loading();
+          }
+        },
+      )
+      
+      
+      
+    );
+  }
+
+  Widget _assetsCard(List<Assets> assets){
+    return  RefreshIndicator(
           onRefresh: _onRefresh,
           child: ListView.separated(
             itemCount: assets.length,
@@ -59,12 +83,12 @@ class AssetsPage extends StatelessWidget {
                           //     style: TextStyle(color: Colors.white),
                           //   ),
                           // ),
-                          Expanded(
-                            child: Text(
-                              assets[index].name,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
+                          // Expanded(
+                          //   child: Text(
+                          //     assets[index].symbol,
+                          //     style: TextStyle(color: Colors.white),
+                          //   ),
+                          // )
                         ],
                       ),
                       Divider(
@@ -250,7 +274,6 @@ class AssetsPage extends StatelessWidget {
                 ),
               );
             },
-          )),
-    );
+          ));
   }
 }

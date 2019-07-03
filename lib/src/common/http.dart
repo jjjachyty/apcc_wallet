@@ -47,7 +47,7 @@ Future<Data> get(
         data: _response.data["Data"]);
   } on DioError catch (e) {
     print(e.type);
-    if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+    if (e.type == DioErrorType.RECEIVE_TIMEOUT || e.type == DioErrorType.CONNECT_TIMEOUT) {
       _data = Data(state: false, messsage: "请求超时,请重试");
     } else {
       _data = Data(state: false, messsage: e.message);

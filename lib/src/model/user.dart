@@ -23,7 +23,7 @@ class User {
   String lastLoginDevice;
   String state; //账户状态
   IDCard idCard;
-  bool idCardAuth;
+  int idCardAuth;
   List<Account> accounts; //账户
 
   User(

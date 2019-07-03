@@ -55,7 +55,7 @@ class UserSetting extends StatelessWidget {
                         Icons.verified_user,
                         color: Colors.green,
                       ),
-                      trailing: (store.state.user.idCardAuth != null 
+                      trailing: (store.state.user.idCardAuth != 0 
                               )
                           ? Text(
                               "已认证",
@@ -64,7 +64,7 @@ class UserSetting extends StatelessWidget {
                           : Icon(Icons.keyboard_arrow_right),
                       title: Text("实名认证"),
                       onTap: () {
-                        if (store.state.user.idCardAuth) {
+                        if (store.state.user.idCardAuth == 1) {
                         } else {
                           Navigator.of(context).pushNamed("/user/idcard");
                         }
