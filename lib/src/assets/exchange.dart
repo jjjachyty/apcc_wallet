@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/assets/usdt_buy.dart';
 import 'package:apcc_wallet/src/assets/usdt_sell.dart';
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/material.dart';
@@ -20,33 +21,50 @@ class _ExchangePageState extends State<ExchangePage> {
   double _amount;
   _ExchangePageState(this.mainSymbol, this.exchangeSymbol);
   double _exchangeOutput = 0;
+  GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
+  var _futureBuilderFuture;
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
 
+ @override
+  void initState() {
+    _futureBuilderFuture = getExchange(mainSymbol, exchangeSymbol);
+    // TODO: implement initState
+    super.initState();
+  }
+ 
+ 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("$mainSymbol 兑换 $exchangeSymbol"),
+          title: Text("$exchangeSymbol 兑换 $mainSymbol"),
         ),
         body: Container(
             padding: EdgeInsets.all(8),
             child: FutureBuilder(
-              future: getExchange(mainSymbol, exchangeSymbol),
+              future: _futureBuilderFuture,
               builder: (context, exchanges) {
                 if (exchanges.hasData) {
-                  Assets _mainCoin = exchanges.data[0];
-                  Assets _exchangeCoin = exchanges.data[1];
+                  var _data = exchanges.data as Data;
+                  if (_data.state){
+                  Assets _mainCoin = _data.data [0];
+                  Assets _exchangeCoin = _data.data[1];
                   double _exchangeRate =
-                      _exchangeCoin.cnyPrice / _mainCoin.cnyPrice;
+                     _mainCoin.priceCny / _exchangeCoin.priceCny ;
 
                   return Form(
                       child: Column(
                     children: <Widget>[
                       TextField(
+                        key: _amountKey,
+                        autocorrect: true,
+                        // autovalidate: true,
                         maxLength: _mainCoin.blance.toString().length,
                         onChanged: (val) {
                           _amount = double.tryParse(val);
@@ -57,10 +75,18 @@ class _ExchangePageState extends State<ExchangePage> {
                             });
                           } else {
                             setState(() {
+                              _amount= _amount;
                               _exchangeOutput = _amount * _exchangeRate;
                             });
                           }
                         },
+                        // validator: (val){
+                        //   var _val = double.tryParse(val);
+                        //   if (_val==null || _val > _mainCoin.blance){
+                        //     return "金额必须大于0且小于可用金额";
+                        //   }
+                
+                        // },
                         keyboardType: TextInputType.number,
                         autofocus: true,
                         decoration: InputDecoration(
@@ -76,7 +102,7 @@ class _ExchangePageState extends State<ExchangePage> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              "汇率=$_exchangeRate",
+                              "汇率=1:${_exchangeRate.toStringAsFixed(6)}",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             ),
@@ -84,7 +110,7 @@ class _ExchangePageState extends State<ExchangePage> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              "可兑换 ${_exchangeOutput} ${_mainCoin.symbol}",
+                              "可兑换 ${_exchangeOutput.toStringAsFixed(6)} ${mainSymbol}",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.right,
@@ -106,18 +132,30 @@ class _ExchangePageState extends State<ExchangePage> {
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.lightGreen)),
                         onPressed: () async {
-                          if (_amount > 0 && _amount <= _mainCoin.blance) {
-                          } else {
+                         
+                          if (_amount <0||_amount>_exchangeCoin.blance) {
                             setState(() {
-                              _errText = "金额为0至${_mainCoin.blance}";
+                             _errText = "金额必须大于0且小于可用金额";
                             });
+                          } else {
+                          
+                           setState(() {
+                             _errText = null;
+                            });
+                             var _data = await exchange(exchangeSymbol,mainSymbol,_amount);
+                             if (!_data.state){
+                               _errText = _data.messsage;
+                             }
+                             Navigator.of(context).pop();
                           }
                           // }
                         },
                       )
                     ],
                   ));
-                } else {
+                }else{
+                  return Text(_data.messsage);
+                }} else {
                   return Loading();
                 }
               },

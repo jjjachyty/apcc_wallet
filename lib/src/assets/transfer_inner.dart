@@ -2,19 +2,38 @@ import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
+import 'package:qrcode_reader/qrcode_reader.dart';
 
-class TransferPage extends StatefulWidget {
+class TransferInnerPage extends StatefulWidget {
   Assets assets;
-  TransferPage(this.assets);
+  TransferInnerPage(this.assets);
   @override
-  _TransferPageState createState() => _TransferPageState(this.assets);
+  _TransferInnerPageState createState() => _TransferInnerPageState(this.assets);
 }
 
-class _TransferPageState extends State<TransferPage> {
+class _TransferInnerPageState extends State<TransferInnerPage> {
   GlobalKey<FormState> _formkey = new GlobalKey();
   Assets assets;
   String _errText = "";
-  _TransferPageState(this.assets);
+  _TransferInnerPageState(this.assets);
+  TextEditingController _addressCtl = new TextEditingController();
+  bool _type= false;
+    scan2() {
+    Future<String> futureString = new QRCodeReader()
+        .setAutoFocusIntervalInMs(200) // default 5000
+        .setForceAutoFocus(true) // default false
+        .setTorchEnabled(true) // default false
+        .setHandlePermissions(true) // default true
+        .setExecuteAfterPermissionGranted(true) // default true
+        // .setFrontCamera(false) // default false
+        .scan().then((onValue){
+              setState(() {
+               _addressCtl.text = onValue;
+              });
+        });
+  }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +47,15 @@ class _TransferPageState extends State<TransferPage> {
           key: _formkey,
           child: Column(
             children: <Widget>[
+              
               TextFormField(
+                controller: _addressCtl,
                 decoration: InputDecoration(
                     hintText: "转出地址",
                     border: OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.camera_alt),
-                      onPressed: () {},
+                      onPressed: scan2,
                     )),
                 validator: (val) {
                   if (val == null || val == "") {
@@ -46,9 +67,11 @@ class _TransferPageState extends State<TransferPage> {
                 height: 10,
               ),
               TextFormField(
+                maxLength: assets.blance.toString().length,
                 decoration: InputDecoration(
                     hintText: "可转出" + assets.blance.toString(),
                     border: OutlineInputBorder()),
+                    autovalidate: true,
                 validator: (val) {
                   if (val == null ||
                       val == "" ||

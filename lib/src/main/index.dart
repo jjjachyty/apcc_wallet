@@ -15,13 +15,6 @@ class _IndexState extends State<Index> {
 
   @override
   void initState() {
-    getNews().then((val) {
-      setState(() {
-        _news = val;
-      });
-    });
-    print("initState");
-
     // TODO: implement initState
     super.initState();
   }
@@ -137,50 +130,60 @@ class _IndexState extends State<Index> {
       );
     }
 
-    return Container(
-      height: 250,
-      width: MediaQuery.of(context).size.width,
-      child: Swiper(
-        pagination: SwiperPagination(
-            alignment: Alignment.bottomRight,
-            builder: DotSwiperPaginationBuilder(
-                color: Colors.white70, // 其他点的颜色
-                activeColor: Colors.white, // 当前点的颜色
-                space: 2, // 点与点之间的距离
-                activeSize: 10 // 当前点的大小
-                )),
-        onTap: (index) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return NewsDeatil(_news[index].id);
-          }));
-        },
-        itemCount: _news.length,
-        autoplay: true,
-        autoplayDelay: 5000,
-        // duration: 50000,
-        itemBuilder: (context, index) {
-          var _imgUr = _news[index].imgUrl;
-          return Stack(
-            children: <Widget>[
-              ConstrainedBox(
-                child: Image.network(
-                  _imgUr,
-                  fit: BoxFit.fill,
-                ),
-                constraints: new BoxConstraints.expand(),
+    return FutureBuilder(
+        future: getNews(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var _news = snapshot.data;
+            return Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: Swiper(
+                pagination: SwiperPagination(
+                    alignment: Alignment.bottomRight,
+                    builder: DotSwiperPaginationBuilder(
+                        color: Colors.white70, // 其他点的颜色
+                        activeColor: Colors.white, // 当前点的颜色
+                        space: 2, // 点与点之间的距离
+                        activeSize: 10 // 当前点的大小
+                        )),
+                onTap: (index) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return NewsDeatil(_news[index].id);
+                  }));
+                },
+                itemCount: _news.length,
+                autoplay: true,
+                autoplayDelay: 5000,
+                // duration: 50000,
+                itemBuilder: (context, index) {
+                  var _imgUr = _news[index].imgUrl;
+                  return Stack(
+                    children: <Widget>[
+                      ConstrainedBox(
+                        child: Image.network(
+                          _imgUr,
+                          fit: BoxFit.fill,
+                        ),
+                        constraints: new BoxConstraints.expand(),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: Text(
+                          _news[index].title,
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-              Positioned(
-                bottom: 0,
-                child: Text(
-                  _news[index].title,
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+            );
+          } else {
+            Loading();
+          }
+        });
   }
 
   @override
