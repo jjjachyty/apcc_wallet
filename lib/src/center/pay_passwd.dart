@@ -27,7 +27,7 @@ class _TradePassWdState extends State<TradePassWd> {
   Widget _initWidget() {
     return Scaffold(
         appBar: AppBar(
-          title: Text("设置交易密码"),
+          title: Text("设置支付密码"),
         ),
         body: Container(
           padding: EdgeInsets.all(8),
@@ -46,7 +46,7 @@ class _TradePassWdState extends State<TradePassWd> {
                     }
                   },
                   decoration: InputDecoration(
-                      hintText: "交易密码",
+                      hintText: "支付密码",
                       counterText: "",
                       suffixIcon: IconButton(
                         icon: Icon(Icons.remove_red_eye),
@@ -69,7 +69,7 @@ class _TradePassWdState extends State<TradePassWd> {
                   obscureText: _obscureFlag,
                   maxLength: 16,
                   decoration: InputDecoration(
-                      hintText: "确认交易密码",
+                      hintText: "确认支付密码",
                       counterText: "",
                       suffixIcon: IconButton(
                         icon: Icon(Icons.remove_red_eye),
@@ -122,7 +122,7 @@ class _TradePassWdState extends State<TradePassWd> {
   Widget _modifyWidget() {
     return Scaffold(
         appBar: AppBar(
-          title: Text("修改交易密码"),
+          title: Text("修改支付密码"),
         ),
         body: Container(
           padding: EdgeInsets.all(8),

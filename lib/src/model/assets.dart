@@ -92,6 +92,11 @@ Future<Data> exchange(String from, to,double amount) async {
 
 Future<Data> transferFree(String coin) async {
   var _data = await get("/assets/free",parameters :{"coin":coin} );
-  print(_data);
+  return _data;
+}
+
+
+Future<Data> transfer(String fromAddress,toAddress,symbol,transferType,payPasswd, double amount) async {
+  var _data = await post("/assets/transfer",data :new FormData.from({"transferType":transferType,"fromAddress":fromAddress,"toAddress":toAddress,"symbol":symbol,"amount":amount,"payPasswd":payPasswd}) );
   return _data;
 }

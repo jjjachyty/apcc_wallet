@@ -11,6 +11,8 @@ import 'package:dio/dio.dart';
 
 import 'package:redux/redux.dart';
 
+
+
 class User {
   String uuid;
   String phone;
@@ -66,6 +68,11 @@ class Account {
   String coinType; //币类型
   String address; //地址
 }
+
+   Future<User> getLocalUser() async {
+    return User.fromJson(json.decode(await getStorageString("_user")));
+   }
+
 
 Future<Data> loginWithPW(String phone, passwd) async {
   var _data = await post("/auth/loginwithpw",

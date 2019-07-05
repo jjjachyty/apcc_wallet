@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/assets/transfer_success.dart';
 import 'package:apcc_wallet/src/center/captcha.dart';
 import 'package:apcc_wallet/src/center/id_auth.dart';
 import 'package:apcc_wallet/src/center/login_passwd.dart';
@@ -28,4 +29,5 @@ final Map<String, WidgetBuilder> routes = {
   "/register": (BuildContext context) => new UserRegister(),
   "/loginpasswd": (BuildContext context) => new LoginPasswd(),
   "/user/idcard": (BuildContext context) => new IDCardRecognition(),
+  "/transfersuccess":(BuildContext context) => new TransferSuccessPage(),
 };

@@ -79,7 +79,7 @@ class UserSetting extends StatelessWidget {
                         color: Colors.green,
                       ),
                       trailing: Icon(Icons.keyboard_arrow_right),
-                      title: Text("交易密码"),
+                      title: Text("支付密码"),
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {

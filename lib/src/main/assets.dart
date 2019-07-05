@@ -1,9 +1,11 @@
 import 'package:apcc_wallet/src/assets/exchange.dart';
 import 'package:apcc_wallet/src/assets/recharge.dart';
-import 'package:apcc_wallet/src/assets/transfer_outer.dart';
+import 'package:apcc_wallet/src/assets/transfer.dart';
+import 'package:apcc_wallet/src/center/pay_passwd.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,7 @@ class AssetsPage extends StatefulWidget {
 
 class _AssetsPageState extends State<AssetsPage> {
   List<Assets> _assets = new List();
+  User _user;
   Future<void> _onRefresh() async {
     var _data = await getAssets();
     if (_data.state) {
@@ -21,6 +24,17 @@ class _AssetsPageState extends State<AssetsPage> {
         _assets = _data.data;
       });
     }
+  }
+
+
+  @override
+  void initState() {
+   getLocalUser().then((user){
+    
+_user = user;
+   });
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -81,80 +95,12 @@ class _AssetsPageState extends State<AssetsPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        // Expanded(
-                        //   flex: 2,
-                        //   child: Text(
-                        //     assets[index].code,
-                        //     style: TextStyle(color: Colors.white),
-                        //   ),
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     assets[index].symbol,
-                        //     style: TextStyle(color: Colors.white),
-                        //   ),
-                        // )
                       ],
                     ),
                     Divider(
                       color: Colors.white,
                     ),
-                    // Container(
-                    //     height: 70,
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       children: <Widget>[
-                    //         Row(
-                    //           children: <Widget>[
-                    //             Expanded(
-                    //               flex: 2,
-                    //               child: Text(
-                    //                 "可用",
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 2,
-                    //               child: Text(
-                    //                 "冻结",
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               child: Text(
-                    //                 "价格",
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             )
-                    //           ],
-                    //         ),
-                    //         Divider(),
-                    //         Row(
-                    //           children: <Widget>[
-                    //             Expanded(
-                    //               flex: 2,
-                    //               child: Text(
-                    //                 assets[index].blance.toString(),
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 2,
-                    //               child: Text(
-                    //                 assets[index].freezingBlance.toString(),
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               child: Text(
-                    //                 "¥" + assets[index].cnyPrice.toString(),
-                    //                 style: TextStyle(color: Colors.white),
-                    //               ),
-                    //             )
-                    //           ],
-                    //         ),
-                    //       ],
-                    //     )),
+                   
                     new Table(children: <TableRow>[
                       new TableRow(children: <Widget>[
                         new TableCell(
@@ -264,6 +210,9 @@ class _AssetsPageState extends State<AssetsPage> {
                                 style: TextStyle(color: Colors.white),
                                 recognizer: new TapGestureRecognizer()
                                   ..onTap = () {
+                                    if (_user.hasPayPasswd){
+
+                                   
                                     showModalBottomSheet(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -275,7 +224,12 @@ class _AssetsPageState extends State<AssetsPage> {
                                                     Icons.border_inner),
                                                 title: new Text("平台内转账(无手续费)"),
                                                 onTap: () async {
-                                                  Navigator.pop(context);
+                                                  Navigator.of(context).pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return TransferPage(
+                                                        _assets[index],"in");
+                                                  }));
                                                 },
                                               ),
                                               new ListTile(
@@ -283,17 +237,36 @@ class _AssetsPageState extends State<AssetsPage> {
                                                     Icons.send),
                                                 title: new Text("转出平台外(需手续费)"),
                                                 onTap: () async {
-                                                  Navigator.of(context).push(
+                                                  Navigator.of(context).pushReplacement(
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return TransferPage(
-                                                        _assets[index]);
+                                                        _assets[index],"out");
                                                   }));
                                                 },
                                               ),
                                             ],
                                           );
                                         });
+                                         }else{
+                                           //没有设置支付密码
+                                        showDialog(context: context,builder: (context){
+                                          return AlertDialog(
+                    title: new Text('尚未设置支付密码,请先设置支付密码'),
+                    actions: <Widget>[
+                        new FlatButton(
+                            child: new Text('去设置'),
+                            onPressed: () {
+                                Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (context) {
+                          return TradePassWd(false);
+                        }));
+                            },
+                        ),
+                    ],
+                    );
+                                        });
+                                         }
                                   }),
                             textAlign: TextAlign.center,
                           ),

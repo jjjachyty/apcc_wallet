@@ -65,7 +65,7 @@ Future<String> refreshToken(String token) async {
     var response = await Dio(BaseOptions(
             baseUrl: apiURL,
             connectTimeout: 5000,
-            receiveTimeout: 50000,
+            // receiveTimeout: 50000,
             headers: {HttpHeaders.authorizationHeader: token}))
         .post("/auth/refreshtoken");
 

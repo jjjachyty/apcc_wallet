@@ -22,6 +22,7 @@ class _ExchangePageState extends State<ExchangePage> {
   _ExchangePageState(this.mainSymbol, this.exchangeSymbol);
   double _exchangeOutput = 0;
   GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
+  GlobalKey<ScaffoldState> _scoffoldKey = GlobalKey<ScaffoldState>();
   var _futureBuilderFuture;
   @override
   void dispose() {
@@ -42,6 +43,7 @@ class _ExchangePageState extends State<ExchangePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scoffoldKey,
         appBar: AppBar(
           title: Text("$exchangeSymbol 兑换 $mainSymbol"),
         ),
@@ -65,7 +67,7 @@ class _ExchangePageState extends State<ExchangePage> {
                         key: _amountKey,
                         autocorrect: true,
                         // autovalidate: true,
-                        maxLength: _mainCoin.blance.toString().length,
+                        maxLength: _exchangeCoin.blance.toString().length,
                         onChanged: (val) {
                           _amount = double.tryParse(val);
 
@@ -89,11 +91,13 @@ class _ExchangePageState extends State<ExchangePage> {
                         // },
                         keyboardType: TextInputType.number,
                         autofocus: true,
+                        
                         decoration: InputDecoration(
+                          
                             border: OutlineInputBorder(),
-                            labelText: "${_mainCoin.symbol}",
+                            labelText: "${_exchangeCoin.symbol}",
                             errorText: _errText,
-                            hintText: "可用" + _mainCoin.blance.toString()),
+                            hintText: "可用" + _exchangeCoin.blance.toString()),
                       ),
                       SizedBox(
                         height: 10,
@@ -132,7 +136,7 @@ class _ExchangePageState extends State<ExchangePage> {
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.lightGreen)),
                         onPressed: () async {
-                         
+                         print("$_amount  ${_exchangeCoin.blance} ");
                           if (_amount <0||_amount>_exchangeCoin.blance) {
                             setState(() {
                              _errText = "金额必须大于0且小于可用金额";
@@ -143,10 +147,15 @@ class _ExchangePageState extends State<ExchangePage> {
                              _errText = null;
                             });
                              var _data = await exchange(exchangeSymbol,mainSymbol,_amount);
-                             if (!_data.state){
-                               _errText = _data.messsage;
-                             }
-                             Navigator.of(context).pop();
+                             if (_data.state){
+                                 Navigator.of(context).pop();
+                                  
+                             }else{
+                               setState(() {
+                             _errText = _data.messsage;
+                            });
+                           
+                            }
                           }
                           // }
                         },
@@ -154,6 +163,7 @@ class _ExchangePageState extends State<ExchangePage> {
                     ],
                   ));
                 }else{
+                 
                   return Text(_data.messsage);
                 }} else {
                   return Loading();
