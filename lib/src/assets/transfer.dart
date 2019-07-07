@@ -1,3 +1,5 @@
+import 'package:apcc_wallet/src/assets/transfer_list.dart';
+import 'package:apcc_wallet/src/assets/transfer_success.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +17,11 @@ class TransferPage extends StatefulWidget {
 
 class _TransferPageState extends State<TransferPage> {
   GlobalKey<FormState> _formkey = new GlobalKey();
-  GlobalKey<FormFieldState> _payPasswdKey = new GlobalKey<FormFieldState>();
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Assets assets;
   String transferType;
   double _amount;
-  // String _errText = "";
+  String _errText;
   String _free, _payPasswd;
   _TransferPageState(this.assets, this.transferType);
   TextEditingController _addressCtl = new TextEditingController();
@@ -58,9 +58,19 @@ class _TransferPageState extends State<TransferPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("${assets.symbol} 转账"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (buildContext) {
+                return TransferListPage();
+              }));
+            },
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(8),
@@ -72,15 +82,19 @@ class _TransferPageState extends State<TransferPage> {
                 controller: _addressCtl,
                 style: TextStyle(fontSize: 13),
                 decoration: InputDecoration(
+                    labelText: "地址",
                     hintText: "转出地址",
                     border: OutlineInputBorder(),
                     suffixIcon: IconButton(
-                      icon: Icon(Icons.camera_alt),
+                      icon: Icon(Icons.filter_center_focus),
                       onPressed: scan2,
                     )),
                 validator: (val) {
                   if (val == null || val == "") {
                     return "地址不能为空";
+                  }
+                  if (val == assets.address) {
+                    return "转出地址与待转地址相同";
                   }
                 },
               ),
@@ -88,19 +102,21 @@ class _TransferPageState extends State<TransferPage> {
                 height: 10,
               ),
               TextFormField(
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 maxLength: assets.blance.toString().length,
                 decoration: InputDecoration(
-                    hintText: "可转出" + assets.blance.toString(),
+                    labelText: "金额 可转出" + assets.blance.toString(),
+                    // hintText: "可转出" + assets.blance.toString(),
+                    counterText: "",
                     border: OutlineInputBorder()),
-                autovalidate: true,
                 validator: (val) {
                   if (val == null ||
                       val == "" ||
                       double.tryParse(val) == null ||
-                      double.tryParse(val) < 0 ||
-                      double.tryParse(val) > assets.blance) {
-                    return "金额为0至${assets.blance}之间";
+                      double.tryParse(val) <= 0 ||
+                      double.tryParse(val) + double.tryParse(_free) >
+                          assets.blance) {
+                    return "转出金额(含手续费)为0至${assets.blance}之间";
                   }
                 },
                 onSaved: (val) {
@@ -120,104 +136,67 @@ class _TransferPageState extends State<TransferPage> {
               // SizedBox(
               //   child: Text(_errText),
               // ),
-              MaterialButton(
-                minWidth: double.infinity,
-                color: Colors.green,
-                child: Text(
-                  "转账",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  var _formState = _formkey.currentState;
-                  if (_formState.validate()) {
-                    _formState.save();
-
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          var _errText ;
-                          return StatefulBuilder(builder: (context, state) {
-                            return Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5,
-                                    bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom +
-                                        2),
-                                child: TextFormField(
-                                  key: _payPasswdKey,
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.next,
-                                  autofocus: true,
-                                  obscureText: true,
-                                  maxLength: 16,
-                                  validator: (val) {
-                                    if (val == null ||
-                                        val == "" ||
-                                        val.length < 8 ||
-                                        val.length > 16) {
-                                      return "密码为8-16位数";
-                                    }
-                                  },
-                                  onSaved: (val) {
-                                    setState(() {
-                                      _payPasswd = val;
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: "支付密码",
-                                      hintText: "请输入支付密码",
-                                      counterText: "",
-                                      errorText: _errText,
-                                      border: OutlineInputBorder(),
-                                      suffixIcon: ProgressButton(
-                                        width: 60,
-                                        height: 60,
-                                        color: Colors.green,
-                                        defaultWidget: Text(
-                                          "确认",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        progressWidget:
-                                            CircularProgressIndicator(
-                                                backgroundColor: Colors.white,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                            Color>(
-                                                        Colors.lightGreen)),
-                                        onPressed: () async {
-                                          if (_payPasswdKey.currentState
-                                              .validate()) {
-                                            _payPasswdKey.currentState.save();
-
-                                            var _data = await transfer(
-                                                assets.address,
-                                                _addressCtl.text,
-                                                assets.symbol,
-                                                transferType,
-                                                _payPasswd,
-                                                _amount);
-                                            if (_data.state) {
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pushReplacementNamed("/transfersuccess");
-                                              
-                                            } else {
-                                               
-                                               state(() {
-                                              _errText = _data.messsage;
-                                               }); 
-                                             
-                                            }
-                                          }
-                                          // }
-                                        },
-                                      )),
-                                ));
-                          });
-                        });
-                  }
-                },
+              Divider(),
+              TextFormField(
+                  keyboardType: TextInputType.text,
+                  // textInputAction: TextInputAction.next,
+                  obscureText: true,
+                  maxLength: 16,
+                  validator: (val) {
+                    if (val == null ||
+                        val == "" ||
+                        val.length < 8 ||
+                        val.length > 16) {
+                      return "支付密码为8-16位数";
+                    }
+                  },
+                  onSaved: (val) {
+                    setState(() {
+                      _payPasswd = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      labelText: "支付密码",
+                      hintText: "请输入支付密码",
+                      counterText: "",
+                      errorText: _errText,
+                      border: OutlineInputBorder())),
+              SizedBox(
+                height: 10,
               ),
+              ProgressButton(
+                  color: Colors.green,
+                  defaultWidget: Text(
+                    "转账",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  progressWidget: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+                  onPressed: () async {
+                    if (_formkey.currentState.validate()) {
+                      _formkey.currentState.save();
+
+                      var _data = await transfer(
+                          assets.address,
+                          _addressCtl.text,
+                          assets.symbol,
+                          transferType,
+                          _payPasswd,
+                          _amount);
+                      if (_data.state) {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (build) {
+                          return TransferSuccessPage(this.transferType);
+                        }));
+                      } else {
+                        setState(() {
+                          _errText = _data.messsage;
+                        });
+                      }
+                    }
+                  }),
             ],
           ),
         ),

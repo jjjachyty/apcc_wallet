@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:apcc_wallet/src/center/captcha.dart';
 import 'package:apcc_wallet/src/center/index.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/main/main.dart';
 import 'package:apcc_wallet/src/model/user.dart';
@@ -201,10 +202,8 @@ class _UserLoginState extends State<UserLogin> {
                               await loginWithPW(_phoneVal, _passwordVal);
 
                           if (_data.state) {
-                            print(_data.data["User"]);
-                            var _user = User.fromJson(_data.data["User"]);
-                            Navigator.of(context).pop(_user);
-                            store.dispatch(RefreshUserAction(_user));
+                            // eventBus.fire(UserInfoUpdate(null));
+                            Navigator.of(context).pop();
                           } else {
                             setState(() {
                               _errText = _data.messsage;
@@ -307,20 +306,18 @@ class _UserLoginState extends State<UserLogin> {
                     ),
                     onPressed: _leftCount == 0
                         ? () async {
-                            if (phoneExp.hasMatch(_phoneCtr.text)) {
-                              if (_phoneKey.currentState.validate()) {
-                                _phoneKey.currentState.save();
-                                final _result = await Navigator.of(context)
-                                    .push(PageRouteBuilder(pageBuilder:
-                                        (context, animation1, animation2) {
-                                  return Captcha(this._phoneVal);
-                                }));
-                                if (_result != null && _result) {
-                                  _startTimer();
-                                }
-                              } else {
-                                _phoneKey.currentState.validate();
+                            if (_phoneKey.currentState.validate()) {
+                              _phoneKey.currentState.save();
+                              final _result = await Navigator.of(context).push(
+                                  PageRouteBuilder(pageBuilder:
+                                      (context, animation1, animation2) {
+                                return Captcha(this._phoneVal);
+                              }));
+                              if (_result != null && _result) {
+                                _startTimer();
                               }
+                            } else {
+                              _phoneKey.currentState.validate();
                             }
                           }
                         : null,

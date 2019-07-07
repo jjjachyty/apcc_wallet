@@ -20,7 +20,6 @@ class UserSetting extends StatelessWidget {
     return new StoreConnector<AppState, Store<AppState>>(
         converter: (store) => store,
         builder: (context, store) {
-          print(store.state.user.idCardAuth);
           return Scaffold(
               appBar: AppBar(
                 title: Text("设置"),
@@ -55,8 +54,7 @@ class UserSetting extends StatelessWidget {
                         Icons.verified_user,
                         color: Colors.green,
                       ),
-                      trailing: (store.state.user.idCardAuth != 0 
-                              )
+                      trailing: (user != null && user.idCardAuth != 0)
                           ? Text(
                               "已认证",
                               style: TextStyle(color: Colors.green),
@@ -109,13 +107,11 @@ class UserSetting extends StatelessWidget {
                         style: TextStyle(color: Colors.green),
                       ),
                       onPressed: () {
-                        Navigator.of(context).maybePop().whenComplete(() {
-                          eventBus.fire(UserLoggedOutEvent());
-                          store.dispatch(RefreshUserAction(null));
-
-                          removeStorage("_user");
-                          removeStorage("_token");
-                        });
+                        // eventBus.fire(UserInfoUpdate(null));
+                        loginOut();
+                        // print("1111111111111111111");
+                        Navigator.of(context).pop();
+                        // print("222222222222222222222");
                       },
                     ),
                   ],

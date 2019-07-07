@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import 'event_bus.dart';
 
-var apiURL = "http://192.168.1.11:9090/api/wallet/v1";
+var apiURL = "http://192.168.0.100:9090/api/wallet/v1";
 
 Dio api;
 
@@ -47,7 +47,8 @@ Future<Data> get(
         data: _response.data["Data"]);
   } on DioError catch (e) {
     print(e.type);
-    if (e.type == DioErrorType.RECEIVE_TIMEOUT || e.type == DioErrorType.CONNECT_TIMEOUT) {
+    if (e.type == DioErrorType.RECEIVE_TIMEOUT ||
+        e.type == DioErrorType.CONNECT_TIMEOUT) {
       _data = Data(state: false, messsage: "请求超时,请重试");
     } else {
       _data = Data(state: false, messsage: e.message);
@@ -62,9 +63,7 @@ Future<String> refreshToken(String token) async {
   String _token; //获取当前token
 
   try {
-    var response = await Dio(BaseOptions(
-            baseUrl: apiURL,
-            connectTimeout: 5000,
+    var response = await Dio(BaseOptions(baseUrl: apiURL, connectTimeout: 5000,
             // receiveTimeout: 50000,
             headers: {HttpHeaders.authorizationHeader: token}))
         .post("/auth/refreshtoken");

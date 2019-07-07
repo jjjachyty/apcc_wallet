@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 
 import 'package:redux/redux.dart';
 
-
+User user;
 
 class User {
   String uuid;
@@ -69,21 +69,35 @@ class Account {
   String address; //地址
 }
 
-   Future<User> getLocalUser() async {
-    return User.fromJson(json.decode(await getStorageString("_user")));
-   }
+void setUser(User newUser) async {
+  user = newUser;
+  await setStorageString("_user", user.toJson());
+}
 
+Future<User> getUser() async {
+  var _userStr = await getStorageString("_user");
+  if (_userStr == null) {
+    return null;
+  }
+  user = User.fromJson(json.decode(_userStr));
+  return user;
+}
+
+void loginOut() {
+  user = null;
+  removeStorage("_user");
+  removeStorage("_token");
+}
 
 Future<Data> loginWithPW(String phone, passwd) async {
   var _data = await post("/auth/loginwithpw",
       data: {"phone": phone, "password": passwd});
-  print(_data.data);
   if (_data.state) {
     api.options.headers[HttpHeaders.authorizationHeader] = _data.data["Token"];
     setStorageString("_token", _data.data["Token"]);
-    var user = User.fromJson(_data.data["User"]);
-    print(user.toJson());
-    setStorageString("_user", user.toJson());
+    var _user = User.fromJson(_data.data["User"]);
+    _data.data = _user;
+    setUser(_user);
   }
   return _data;
 }
@@ -97,13 +111,14 @@ Future<Data> loginWithSMS(String phone, sms) async {
     setStorageString("_token", _data.data["Token"]);
     var user = User.fromJson(_data.data["User"]);
     print(user.toJson());
-    setStorageString("_user", user.toJson());
+    setUser(User.fromJson(_data.data["User"]));
   }
   return _data;
 }
 
 Future<dynamic> register(String phone, passwd) async {
-  var response = await post("/auth/register", data: {"phone": phone, "password": passwd});
+  var response =
+      await post("/auth/register", data: {"phone": phone, "password": passwd});
   return response.data;
 }
 

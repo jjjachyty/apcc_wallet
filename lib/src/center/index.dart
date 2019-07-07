@@ -29,54 +29,13 @@ class UserCenter extends StatefulWidget {
 }
 
 class _UserCenterState extends State<UserCenter> {
-  User _user;
-
-  @override
-  void dispose() {
-    print("dispose dispose----------");
-
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  void _listener() {
-    eventBus.on<UserLoggedOutEvent>().listen((event) {
-      print("UserLoggedOutEvent listen----------");
-      setState(() {
-        this._user = null;
-      });
-    });
-
-    eventBus.on<UserInfoUpdate>().listen((event) {
-      setState(() {
-        this._user = event.user;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    _listener();
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, Store<AppState>>(
-        onInit: (store) {
-          print("user");
-          print(store.state.user);
-          _user = _user == null ? store.state.user : _user;
-        },
-        converter: (store) => store,
-        builder: (context, store) {
-          if (_user != null) {
-            return _logined(store);
-          } else {
-            return _nologin();
-          }
-        });
+    if (user != null) {
+      return _logined();
+    } else {
+      return _nologin();
+    }
   }
 
   Widget _item() {
@@ -108,7 +67,7 @@ class _UserCenterState extends State<UserCenter> {
     );
   }
 
-  Widget _logined(Store<AppState> store) {
+  Widget _logined() {
     return Scaffold(
         body: Column(
       children: <Widget>[
@@ -120,7 +79,7 @@ class _UserCenterState extends State<UserCenter> {
                   // image: DecorationImage(
                   //     colorFilter: ColorFilter.linearToSrgbGamma(),
                   //     fit: BoxFit.fill,
-                  //     image: NetworkImage(getAvatarURL(_user.avatar))),
+                  //     image: NetworkImage(getAvatarURL(user.avatar))),
 
                   color: Colors.green.shade500.withOpacity(0.8),
                 ),
@@ -151,12 +110,11 @@ class _UserCenterState extends State<UserCenter> {
                             width: 150,
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
-                                backgroundImage: _user.avatar == ""
+                                backgroundImage: user.avatar == ""
                                     ? AssetImage("assets/images/money.png")
-                                    : NetworkImage(
-                                        getAvatarURL(_user.avatar)))),
+                                    : NetworkImage(getAvatarURL(user.avatar)))),
                         Text(
-                          _user.nickName,
+                          user.nickName,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -194,15 +152,7 @@ class _UserCenterState extends State<UserCenter> {
                   children: <Widget>[
                     new GestureDetector(
                         onTap: () async {
-                          final _user = await Navigator.of(context)
-                              .push(new MaterialPageRoute(builder: (context) {
-                            return UserLogin();
-                          }));
-                          print("user");
-                          print(_user);
-                          setState(() {
-                            this._user = _user;
-                          });
+                          Navigator.of(context).pushNamed("/login");
                         },
                         child: Container(
                             margin: EdgeInsets.only(top: 30),

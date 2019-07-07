@@ -26,10 +26,8 @@ void init(BuildContext context, Store store) async {
   var token = await getStorageString("_token");
   print("toke=${token}");
 
-  api = new Dio(BaseOptions(
-      baseUrl: apiURL,
-      connectTimeout: 5000,
-      receiveTimeout: 5000,
+  api = new Dio(BaseOptions(baseUrl: apiURL, connectTimeout: 5000,
+      // receiveTimeout: 5000,
       headers: {HttpHeaders.authorizationHeader: token}));
 
   api.interceptors
@@ -69,4 +67,6 @@ void init(BuildContext context, Store store) async {
 
   //获取版本号
   newestVersion = await getVersion();
+  //初始化用户
+  user = await getUser();
 }

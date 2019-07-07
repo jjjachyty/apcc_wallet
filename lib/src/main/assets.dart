@@ -3,7 +3,9 @@ import 'package:apcc_wallet/src/assets/recharge.dart';
 import 'package:apcc_wallet/src/assets/transfer.dart';
 import 'package:apcc_wallet/src/center/pay_passwd.dart';
 import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/loding.dart';
+import 'package:apcc_wallet/src/common/nologin.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/gestures.dart';
@@ -16,7 +18,6 @@ class AssetsPage extends StatefulWidget {
 
 class _AssetsPageState extends State<AssetsPage> {
   List<Assets> _assets = new List();
-  User _user;
   Future<void> _onRefresh() async {
     var _data = await getAssets();
     if (_data.state) {
@@ -26,19 +27,11 @@ class _AssetsPageState extends State<AssetsPage> {
     }
   }
 
-
-  @override
-  void initState() {
-   getLocalUser().then((user){
-    
-_user = user;
-   });
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return NoLoginPage();
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text("资产"),
@@ -100,7 +93,6 @@ _user = user;
                     Divider(
                       color: Colors.white,
                     ),
-                   
                     new Table(children: <TableRow>[
                       new TableRow(children: <Widget>[
                         new TableCell(
@@ -210,63 +202,73 @@ _user = user;
                                 style: TextStyle(color: Colors.white),
                                 recognizer: new TapGestureRecognizer()
                                   ..onTap = () {
-                                    if (_user.hasPayPasswd){
-
-                                   
-                                    showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return new Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              new ListTile(
-                                                leading: new Icon(
-                                                    Icons.border_inner),
-                                                title: new Text("平台内转账(无手续费)"),
-                                                onTap: () async {
-                                                  Navigator.of(context).pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return TransferPage(
-                                                        _assets[index],"in");
-                                                  }));
-                                                },
-                                              ),
-                                              new ListTile(
-                                                leading: new Icon(
-                                                    Icons.send),
-                                                title: new Text("转出平台外(需手续费)"),
-                                                onTap: () async {
-                                                  Navigator.of(context).pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return TransferPage(
-                                                        _assets[index],"out");
-                                                  }));
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        });
-                                         }else{
-                                           //没有设置支付密码
-                                        showDialog(context: context,builder: (context){
-                                          return AlertDialog(
-                    title: new Text('尚未设置支付密码,请先设置支付密码'),
-                    actions: <Widget>[
-                        new FlatButton(
-                            child: new Text('去设置'),
-                            onPressed: () {
-                                Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(builder: (context) {
-                          return TradePassWd(false);
-                        }));
-                            },
-                        ),
-                    ],
-                    );
-                                        });
-                                         }
+                                    if (user.hasPayPasswd) {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return new Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                new ListTile(
+                                                  leading: new Icon(Icons.loop),
+                                                  title:
+                                                      new Text("平台内转账(无手续费)"),
+                                                  onTap: () async {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                      return TransferPage(
+                                                          _assets[index], "in");
+                                                    }));
+                                                  },
+                                                ),
+                                                new ListTile(
+                                                  leading: new Icon(
+                                                      Icons.swap_horiz),
+                                                  title:
+                                                      new Text("转出平台外(需手续费)"),
+                                                  onTap: () async {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                      return TransferPage(
+                                                          _assets[index],
+                                                          "out");
+                                                    }));
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    } else {
+                                      //没有设置支付密码
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title:
+                                                  new Text('尚未设置支付密码,请先设置支付密码'),
+                                              actions: <Widget>[
+                                                new FlatButton(
+                                                  child: new Text('去设置'),
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                      return TradePassWd(false);
+                                                    }));
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    }
                                   }),
                             textAlign: TextAlign.center,
                           ),

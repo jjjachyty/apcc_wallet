@@ -5,6 +5,7 @@ import 'package:apcc_wallet/src/common/version.dart';
 import 'package:apcc_wallet/src/dapp/app.dart';
 import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:apcc_wallet/src/main/assets.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/material.dart';
 
 import 'dapp.dart';
