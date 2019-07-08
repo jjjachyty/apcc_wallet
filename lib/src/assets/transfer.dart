@@ -66,7 +66,8 @@ class _TransferPageState extends State<TransferPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (buildContext) {
-                return TransferListPage();
+                   var payType = transferType=="in"?"1001":"1002";
+                return TransferListPage(assets.symbol,payType);
               }));
             },
           )

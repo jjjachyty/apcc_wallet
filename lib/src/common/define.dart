@@ -8,6 +8,17 @@ class Data {
   Data({this.state,this.messsage,this.data});
 }
 
+class PageData {
+  String orderBy;
+  String sort;
+  int totalRows;
+  int pageSize;
+  int pageCount;
+  int currentPage;
+  dynamic rows;
+  PageData({this.orderBy,this.sort,this.totalRows,this.pageSize,this.pageCount,this.currentPage,this.rows});
+  PageData.fromJson(Map<String,dynamic> json):this.orderBy=json["Page"]["OrderBy"],this.sort=json["Page"]["Sort"],this.totalRows=json["Page"]["TotalRows"],this.pageSize=json["Page"]["PageSize"],this.pageCount=json["Page"]["PageCount"],this.currentPage=json["Page"]["CurrentPage"],this.rows=json["Rows"];
+}
 
 RegExp phoneExp = RegExp(
     r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');

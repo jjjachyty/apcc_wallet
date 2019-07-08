@@ -32,5 +32,5 @@ final Map<String, WidgetBuilder> routes = {
   "/login": (BuildContext context) => new UserLogin(),
 
   "/user/idcard": (BuildContext context) => new IDCardRecognition(),
-  "/transfersuccess": (BuildContext context) => new TransferSuccessPage(),
+  // "/transfersuccess": (BuildContext context) => new TransferSuccessPage(),
 };
