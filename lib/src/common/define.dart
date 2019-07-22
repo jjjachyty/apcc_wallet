@@ -1,4 +1,5 @@
 
+import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/model/version.dart';
 
 class Data {
@@ -32,3 +33,13 @@ RegExp nickNameExp = RegExp(
     var avatarURL = "http://avatar.apcchis.com/";
     var newestVersion = Version(versionCode: "0.0.2");
     var currentVersion=Version(versionCode: "0.0.2");
+
+
+    var payType = {1000:"货币兑换",1001:"平台内部转账",1002:"转出平台",1003:"金额解冻"};
+
+var mnemonic = "";
+//本地钱包所以的地址
+List<Address> address;
+ // 
+ //USDT价格
+Map<String,String> coinPrice = new Map();

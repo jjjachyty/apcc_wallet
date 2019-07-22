@@ -17,6 +17,11 @@ class _IndexState extends State<Index> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getNews().then((_data){
+   setState(() {
+      _news = _data;
+   });
+    });
   }
 
   @override
@@ -123,18 +128,18 @@ class _IndexState extends State<Index> {
   }
 
   Widget _newsSwiper() {
+      
     if (_news.length == 0) {
-      return new Center(
-        heightFactor: 6,
-        child: new Text('加载中...'),
-      );
+      return  Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: new Center(
+        heightFactor: 250,
+        child: Loading(),
+      ));
     }
 
-    return FutureBuilder(
-        future: getNews(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var _news = snapshot.data;
+
             return Container(
               height: 250,
               width: MediaQuery.of(context).size.width,
@@ -180,10 +185,8 @@ class _IndexState extends State<Index> {
                 },
               ),
             );
-          } else {
-            Loading();
-          }
-        });
+         
+      
   }
 
   @override

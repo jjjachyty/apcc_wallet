@@ -55,10 +55,10 @@ class _ExchangePageState extends State<ExchangePage> {
                 if (exchanges.hasData) {
                   var _data = exchanges.data as Data;
                   if (_data.state){
-                  Assets _mainCoin = _data.data [0];
-                  Assets _exchangeCoin = _data.data[1];
-                  double _exchangeRate =
-                     _mainCoin.priceCny / _exchangeCoin.priceCny ;
+                  // Assets _mainCoin = _data.data [0];
+                  // Assets _exchangeCoin = _data.data[1];
+                  double _exchangeRate = getExchangeRate(mainSymbol,exchangeSymbol);
+                    //  _mainCoin.priceCny / _exchangeCoin.priceCny ;
 
                   return Form(
                       child: Column(

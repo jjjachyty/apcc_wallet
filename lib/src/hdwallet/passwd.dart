@@ -1,3 +1,5 @@
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/hdwallet/private_key.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-ProgressDialog pr;
 
 class WalletPasswdPage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
 
   void _onSubmit(Store<AppState> store) {
     
-  
+     var _pk = "";
 
     //测试
  
@@ -37,38 +38,13 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
       form.save();
 
       new Future.delayed(Duration(seconds: 1), () {
-             createMain(store.state.mnemonic, _passwdConf).then((mp) {
-        store.dispatch(RefreshWalletsAction(mp));
+             createMain(mnemonic, _passwdConf).then((privateKey) {
+               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+                 return PrivateKeyPage(privateKey);
+               }),(route)=>false);
       });
   
-                  showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (ctx) => new AlertDialog(
-                content: Container(
-                  height: 150,
-                  child: Column(children: <Widget>[
-                    Row(
-                      mainAxisAlignment:MainAxisAlignment.center ,
-                      
-                      children: <Widget>[
-                      Icon(Icons.sentiment_very_satisfied,color: Colors.green,),
-                        new Text('创建成功')
-                    ]),
-                   
-                    new Text("地址:"+store.state.wallets.keys.first,style: Theme.of(context).textTheme.caption,)
-                ],
-                ) ) ,
-                actions: <Widget>[
-                  RaisedButton(
-                    textColor: Colors.white,
-                    onPressed: () { 
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushNamedAndRemoveUntil("/index", (Route<dynamic> route) => false);},
-                    child: Text("确认"),
-                  )
-                ],
-              ));
+              
 
       });
  
@@ -168,9 +144,6 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     // TODO: implement build
     return new Scaffold(
       appBar: AppBar(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -15,15 +16,20 @@ class MnemonicPage extends StatefulWidget {
 }
 
 class _MnemonicPageState extends State<MnemonicPage> {
-  var _left = 0;
+  var _left = 20;
+  bool _next = false;
   Timer _timer;
   @override
   void initState() {
-    // _timer = countDown(_left, (int count) {
-    //   setState(() {
-    //     _left = count;
-    //   });
-    // });
+    _getRoundMnemonic();
+    _timer = countDown(20, (int count) {
+      setState(() {
+        _left = count;
+        if (_left==0){
+          _next = true;
+        }
+      });
+    });
 
     // TODO: implement initState
     super.initState();
@@ -38,19 +44,6 @@ class _MnemonicPageState extends State<MnemonicPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return new StoreConnector<AppState, Store<AppState>>(
-        converter: (store) => store,
-        onInit: (store) {
-          store.dispatch(RefreshMnemonicAction(_getRoundMnemonic()));
-        },
-        // {store.dispatch(RefreshMnemonicAction(_getRoundMnemonic()))},
-        builder: (context, store) {
-          print("mnemonic====================");
-
-          print(store);
-          print("mnemonic====================");
-
           return new Scaffold(
               appBar: AppBar(
                 title: Text("助记词"),
@@ -83,14 +76,14 @@ class _MnemonicPageState extends State<MnemonicPage> {
                           childAspectRatio: 2.0,
                           //子Widget列表
                           children: _getRoundMnemonicWidget(
-                              store.state.mnemonic.split(" ")),
+                              mnemonic.split(" ")),
                         ),
                       )),
                   new MaterialButton(
                     minWidth: 200,
                     color: Colors.green,
                     textColor: Colors.white,
-                    child: new Text(_left == 0 ? '已记录' : _left.toString()),
+                    child: new Text(_next ? '已记录' : _left.toString()),
                     onPressed: _left == 0
                         ? () {
                             Navigator.of(context)
@@ -100,18 +93,21 @@ class _MnemonicPageState extends State<MnemonicPage> {
                   )
                 ],
               )));
-        });
+      
   }
 }
 
 String _getRoundMnemonic() {
-  return bip39.generateMnemonic(lang: 'zh_cn');
-
+  if (mnemonic==""){
+   mnemonic = bip39.generateMnemonic(lang: 'zh_cn');
+   }
   // return mmic.split(" ");
 }
 
 List<Widget> _getRoundMnemonicWidget(List<String> mmics) {
+  if (mmics.length > 0 ){
   return mmics.map((item) => _getItemWidget(item)).toList();
+  }
 }
 
 Widget _getItemWidget(String item) {

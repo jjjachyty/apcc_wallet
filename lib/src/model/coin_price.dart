@@ -1,3 +1,5 @@
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/http.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +20,11 @@ Map<String,Widget> coinIcons = {"ethereum":Icon(IconData(0xe60c,fontFamily: 'myI
 
 
 
-var apiURL ="https://www.hqz.com/api/index/get_index_refresh/?type=&sortby=&sort=desc&filter=&p=1"; 
+var hqzapiURL ="https://www.hqz.com/api/index/get_index_refresh/?type=&sortby=&sort=desc&filter=&p=1"; 
 Future<List<CoinPrice>> getPrice() async {
   List<CoinPrice>   _coinPrice = new List();
 
-   final _data =  await Dio().get(apiURL);
+   final _data =  await Dio().get(hqzapiURL);
 
    var  coins = _data.data["coin"]["data"];
 
@@ -30,9 +32,23 @@ Future<List<CoinPrice>> getPrice() async {
 
    for (var item in coins) {
      if (item["coincode"] =='ethereum' || item["coincode"] =='tether' || item["coincode"]=='bitcoin'){
+
        _coinPrice.add(CoinPrice(code: item["coincode"],priceCny: item["price_cny"],percent24h: item["percent_24h"]));
        }
    }
 
   return _coinPrice;
+}
+
+
+void getDimCoin() async {
+  var _response = await get("/dim/coins");
+  if (_response.state){
+    print(_response.data);
+   var coins =  _response.data as List;
+   print(coins);
+   coins.forEach((coin){
+     coinPrice[coin["Symbol"]] = coin["PriceCny"];
+   });
+  }
 }

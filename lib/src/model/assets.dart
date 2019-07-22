@@ -1,5 +1,7 @@
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
+import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:dio/dio.dart';
 
 class Assets {
@@ -61,55 +63,24 @@ class AssetLog {
       });
 }
 
-Future<Data> getAssets() async {
+Future<List<Assets>> getAssets() async {
   List<Assets> assets = new List();
-  // assets.add(Assets(
-  //     code: "MedicalHealthCoin",
-  //     name: "健康医疗币",
-  //     symbol: "MHC",
-  //     address: "0x9d6d492bD500DA5B33cf95A5d610a73360FcaAa0",
-  //     blance: 20000,
-  //     freezingBlance: 200,
-  //     cnyPrice: 6.85));
-  // assets.add(Assets(
-  //     code: "USTD",
-  //     name: "泰达币",
-  //     symbol: "USDT",
-  //     blance: 20000,
-  //     address: "0x9d6d492bD500DA5B33cf95A5d610a73360FcaAa0",
-  //     freezingBlance: 0,
-  //     cnyPrice: 6.85));
-  // assets.add(Assets(
-  //     code: "Ethereum",
-  //     name: "以太坊",
-  //     symbol: "ETH",
-  //     blance: 20000,
-  //     freezingBlance: 0,
-  //     cnyPrice: 6.85));
-  var _data = await get("/assets/all");
-  print(_data);
-  if (_data.state) {
-    var _list = _data.data as List;
-    _list.forEach((asset) {
-      var _blance = double.tryParse(asset["Blance"]) == null
-          ? 0.0
-          : double.tryParse(asset["Blance"]);
-      var _freezingBlance = double.tryParse(asset["FreezingBlance"]) == null
-          ? 0.0
-          : double.tryParse(asset["FreezingBlance"]);
+  for (var addr in address) {
+      double _blacnce = 0;
+     switch (addr.coin) {
+       case "MHC":
+        var _amount =  await getMHCblance(addr.val);
+        _blacnce = _amount.getInEther.toDouble();
+         break;
+      case "USDT":
+        _blacnce = 100;
+  
+     }
+          assets.add(Assets(address: addr.val,symbol: addr.coin,blance: _blacnce,priceCny: 6.8));
 
-      assets.add(Assets(
-          code: asset["UUID"],
-          symbol: asset["Symbol"],
-          address: asset["Address"],
-          blance: _blance,
-          freezingBlance: _freezingBlance,
-          nameEn: asset["NameEn"],
-          priceCny: double.tryParse(asset["PriceCny"])));
-    });
-    _data.data = assets;
   }
-  return _data;
+
+  return assets;
 }
 
 Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
@@ -141,6 +112,11 @@ Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
   }
   return _data;
 }
+
+ double getExchangeRate(String mainSymbol, exchangeSymbol) {
+   return toDouble(coinPrice[mainSymbol]) / toDouble(coinPrice[exchangeSymbol]);
+}
+
 
 Future<Data> exchange(String from, to, double amount) async {
   var _data = await post("/assets/exchange",
@@ -178,7 +154,7 @@ Future<PageData> orders(String coin,payType,page) async {
   var _pageData = PageData.fromJson(_data.data);
   var _rows = _pageData.rows as List;
   _rows.forEach((item) {
-    _orders.add(AssetLog(fromUser: item["UUID"],fromCoin: item["FromCoin"],fromAddress: item["FromAddress"],fromPreblance: item["FromPreblance"].toString(),fromBlance: item["FromBlance"].toString(),
+    _orders.add(AssetLog(uuid: item["UUID"], fromUser:item["FromUser"] ,fromCoin: item["FromCoin"],fromAddress: item["FromAddress"],fromPreblance: item["FromPreblance"].toString(),fromBlance: item["FromBlance"].toString(),
     fromPriceCny: item["FromPriceCny"].toString(),toUser: item["ToUser"],toCoin: item["ToCoin"],toAddress: item["ToAddress"],toPreblance: item["ToPreblance"].toString(),toBlance: item["ToBlance"].toString(),toPriceCny: item["ToPriceCny"].toString(),payType: item["PayType"],createAt: item["CreateAt"], state: item["State"]));
   });
   _pageData.rows = _orders;

@@ -46,7 +46,7 @@ class _WebViewExampleState extends State<WebViewExample> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: 'https://www.baidu.com',
+          initialUrl: 'http://www.apcchis.com',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
@@ -57,7 +57,7 @@ class _WebViewExampleState extends State<WebViewExample> {
             _toasterJavascriptChannel(context),
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('http://www.baidu.com')) {
+            if (request.url.startsWith('http://www.apcchis.com')) {
               print('blocking navigation to $request}');
               return NavigationDecision.prevent;
             }

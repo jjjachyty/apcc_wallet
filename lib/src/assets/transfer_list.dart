@@ -1,19 +1,21 @@
+import 'package:apcc_wallet/src/assets/transfer_detail.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
 class TransferListPage extends StatefulWidget {
-  String coin,payType;
- 
-  TransferListPage(this.coin,this.payType);
+  String coin, payType;
+
+  TransferListPage(this.coin, this.payType);
   @override
-  _TransferListPageState createState() => _TransferListPageState(this.coin,this.payType);
+  _TransferListPageState createState() =>
+      _TransferListPageState(this.coin, this.payType);
 }
 
 class _TransferListPageState extends State<TransferListPage> {
-  var coin,payType;
-  _TransferListPageState(this.coin,this.payType);
+  var coin, payType;
+  _TransferListPageState(this.coin, this.payType);
   List<AssetLog> _orders = new List();
   ScrollController _scrollController = new ScrollController();
   int currentPage = 1;
@@ -21,7 +23,7 @@ class _TransferListPageState extends State<TransferListPage> {
   @override
   void initState() {
     super.initState();
-    orders(coin,payType, currentPage).then((_pageData) {
+    orders(coin, payType, currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);
@@ -39,13 +41,11 @@ class _TransferListPageState extends State<TransferListPage> {
   _getMoreData() async {
     if (!isPerformingRequest) {
       setState(() {
-       
         isPerformingRequest = true;
         currentPage++;
       });
-      var _pageData = await orders(coin,payType, currentPage);
+      var _pageData = await orders(coin, payType, currentPage);
       setState(() {
-       
         _orders.addAll(_pageData.rows);
         isPerformingRequest = false;
       });
@@ -64,16 +64,31 @@ class _TransferListPageState extends State<TransferListPage> {
           controller: _scrollController,
           itemCount: _orders.length,
           itemBuilder: (buildContext, index) {
+            var _state = _orders[index].state == 1 ? "完成" : "转账中";
+             var _log = _orders[index];
+        
             return ListTile(
-              leading: Text(formatDate(
-                  DateTime.parse(_orders[index].createAt).toLocal(),
-                  [mm, "/", dd, " ", HH, ":", nn, ":", ss]),style: TextStyle(fontSize: 15),),
-              trailing: Text("-" +
-                  (toDouble(_orders[index].fromPreblance) -
-                          toDouble(_orders[index].fromBlance))
-                      .toString()),
-            );
+                leading: Text(
+                  formatDate(DateTime.parse(_log.createAt).toLocal(),
+                      [mm, "/", dd, " ", HH, ":", nn, ":", ss]),
+                  style: TextStyle(fontSize: 15),
+                ),
+          
+                trailing: Text.rich(TextSpan(
+                    text: "-" +
+                        (toDouble(_log.fromPreblance) -
+                                toDouble(_log.fromBlance))
+                            .toString(),children: <TextSpan>[
+                              TextSpan(text: _state,style: TextStyle(color: Colors.green))
+                            ])),
+                            onTap: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (buildContext){
+                              
+                                return TransferDetailPage(_log);
+                              }));
+                            },);
           },
+          
         ),
       ),
     );

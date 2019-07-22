@@ -33,7 +33,7 @@ class NoWalletPage extends StatelessWidget {
           ),
           BigMenu(
             icon: Icon(
-              Icons.import_export,
+              Icons.input,
               color: Colors.white,
               size: 50,
             ),

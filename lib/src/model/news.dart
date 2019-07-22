@@ -17,7 +17,7 @@ class News{
 
 Future<List<News>> getNews() async{
     List<News> _news = new List();
-   final response = await Dio().get(newsURL);
+   var response = await Dio().get(newsURL);
    print("getNews");
   final _list = json.decode(response.data)["data"]["data"];
   for (var item in _list) {

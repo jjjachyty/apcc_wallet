@@ -1,34 +1,41 @@
-import 'package:apcc_wallet/src/dapp/app.dart';
+import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class Dapps extends StatelessWidget {
-  final flutterWebviewPlugin = new FlutterWebviewPlugin();
+class DappPage extends StatefulWidget {
+  Dapp app;
+  DappPage(this.app);
+  @override
+  _DappPageState createState() => _DappPageState(this.app);
+}
 
+class _DappPageState extends State<DappPage> {
+   Dapp app;
+  _DappPageState(this.app);
   @override
   Widget build(BuildContext context) {
-    return new WebviewScaffold(
-      url: 'https://www.baidu.com',
-      appBar: new AppBar(
-        title: const Text('Widget webview'),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(app.name),
+        centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.chevron_left),onPressed: (){
-            
-          }),
-          IconButton(icon: Icon(Icons.close),onPressed: (){
-
-          },)
-        ],
-      ),
-      withZoom: true,
-      withLocalStorage: true,
-      hidden: true,
-      initialChild: Container(
-        color: Colors.redAccent,
-        child: const Center(
-          child: Text('Waiting.....'),
-        ),
+        IconButton(icon: Icon(Icons.close),onPressed: (){
+          Navigator.of(context).pop();
+        },)
+      ],),
+      body: Container(
+        child: _context(),
       ),
     );
+  }
+
+  Widget _context(){
+    if (app.homePage.length >0){
+      return WebView(
+          initialUrl: app.homePage,);
+    }else{
+ return Center(child:Text( "开发中"));
+    }
   }
 }

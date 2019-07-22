@@ -6,6 +6,7 @@ import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/common/nologin.dart';
+import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/gestures.dart';
@@ -18,40 +19,32 @@ class AssetsPage extends StatefulWidget {
 
 class _AssetsPageState extends State<AssetsPage> {
   List<Assets> _assets = new List();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _onRefresh();
+  }
+
   Future<void> _onRefresh() async {
     var _data = await getAssets();
-    if (_data.state) {
       setState(() {
-        _assets = _data.data;
+        _assets = _data;
       });
-    }
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
-      return NoLoginPage();
+    if (address.length == 0) {
+      return NoWalletPage();
     }
     return Scaffold(
         appBar: AppBar(
           title: Text("资产"),
         ),
-        body: FutureBuilder(
-          future: getAssets(),
-          builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.hasData) {
-              var _data = asyncSnapshot.data as Data;
-              if (_data.state) {
-                _assets = _data.data;
-                return _assetsCard();
-              } else {
-                return Text(_data.messsage);
-              }
-            } else {
-              return Loading();
-            }
-          },
-        ));
+        body:  _assetsCard());
   }
 
   Widget _assetsCard() {
@@ -88,71 +81,22 @@ class _AssetsPageState extends State<AssetsPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            _assets[index].blance.toString(),
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ],
                     ),
                     Divider(
                       color: Colors.white,
                     ),
-                    new Table(children: <TableRow>[
-                      new TableRow(children: <Widget>[
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              _assets[index].blance.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              _assets[index].freezingBlance.toString(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              _assets[index].priceCny.toStringAsFixed(2),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ]),
-                      new TableRow(children: <Widget>[
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              '可用',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              '冻结',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        new TableCell(
-                          child: new Center(
-                            child: new Text(
-                              '价格¥',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ]),
-                    ]),
-                    Divider(),
                     Row(
                       children: <Widget>[
                         Expanded(

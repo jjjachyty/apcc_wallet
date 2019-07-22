@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
+import 'package:apcc_wallet/src/model/coin_price.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/model/version.dart';
@@ -15,14 +16,14 @@ import 'package:redux/redux.dart';
 
 void init(BuildContext context, Store store) async {
   await initSharedPreferences();
-  initWallet().then((val) {
-    store.dispatch(RefreshWalletsAction(val));
-  });
-  getStorageString("_user").then((val) {
-    if (val != null) {
-      store.dispatch(RefreshUserAction(User.fromJson(json.decode(val))));
-    }
-  });
+  // initWallet().then((val) {
+  //   store.dispatch(RefreshWalletsAction(val));
+  // });
+  // getStorageString("_user").then((val) {
+  //   if (val != null) {
+  //     store.dispatch(RefreshUserAction(User.fromJson(json.decode(val))));
+  //   }
+  // });
   var token = await getStorageString("_token");
   print("toke=${token}");
 
@@ -69,4 +70,10 @@ void init(BuildContext context, Store store) async {
   newestVersion = await getVersion();
   //初始化用户
   user = await getUser();
+  //获取MHC和USDT价格
+  getDimCoin();
+  //地址
+  address = await getAllAddress();
+  
+  initMHCClient();
 }
