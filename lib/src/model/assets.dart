@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
@@ -63,6 +65,28 @@ class AssetLog {
       });
 }
 
+class Exchange{
+  String     	uuid;          
+	String user;           
+	String fromCoin;       
+	String fromAddress;   
+	String receiveAddress;
+  String receiveTxs;
+	String toCoin;   
+	String toAddress; 
+  String sendTxs;     
+	double amount;    
+	String free;           
+	String rate;           
+	String createAt;      
+	int  state;   
+  Exchange({this.uuid,this.user,this.fromCoin,this.fromAddress,this.receiveAddress,this.toCoin,this.toAddress,this.amount,this.free,this.rate,this.createAt,this.state});       
+  Map<String,dynamic> toJson(){
+    return {"uuid":this.uuid,"user":this.user,"fromCoin":this.fromCoin,"fromAddress":this.fromAddress,"receiveAddress":this.receiveAddress,"receiveTxs":this.receiveTxs,
+   "toCoin": this.toCoin,"toAddress":this.toAddress,"sendTxs":this.sendTxs,"free":this.free,"amount":this.amount, "rate":this.rate,"createAt":this.createAt,"state":this.state};
+  }
+}
+
 Future<List<Assets>> getAssets() async {
   List<Assets> assets = new List();
   for (var addr in address) {
@@ -117,32 +141,33 @@ Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
    return toDouble(coinPrice[mainSymbol]) / toDouble(coinPrice[exchangeSymbol]);
 }
 
-
-Future<Data> exchange(String from, to, double amount) async {
-  var _data = await post("/assets/exchange",
-      data: new FormData.from(
-          {"mainCoin": to, "exchangeCoin": from, "amount": amount}));
+//exchange货币兑换
+Future<Data> exchange(Assets from, Assets to,String password ,num amount) async {
+  Exchange exchange = Exchange(fromCoin: from.symbol,fromAddress: from.address,receiveAddress:  coinReceiveAddress[from.symbol] , toCoin: to.symbol,toAddress: to.address,amount: amount);
+  var _data = await sendMHC(from.address, exchange.receiveAddress, password, amount );
+  if (_data.state){
+    print("txs======${_data.data}");
+    exchange.receiveTxs = _data.data;
+   _data = await post("/assets/exchange",
+      data: exchange.toJson());
+  }
+  
 
   return _data;
 }
+
+
+
 
 Future<Data> transferFree(String coin) async {
   var _data = await get("/assets/free", parameters: {"coin": coin});
   return _data;
 }
+//同币种转账
+Future<Data> transfer(String fromAddress, String toAddress,String password,num amount) async {
 
-Future<Data> transfer(String fromAddress, toAddress, symbol, transferType,
-    payPasswd, double amount) async {
-  var _data = await post("/assets/transfer",
-      data: new FormData.from({
-        "transferType": transferType,
-        "fromAddress": fromAddress,
-        "toAddress": toAddress,
-        "symbol": symbol,
-        "amount": amount,
-        "payPasswd": payPasswd
-      }));
-  return _data;
+
+  return await sendMHC(fromAddress,toAddress,password,amount);;
 }
 
 Future<PageData> orders(String coin,payType,page) async {

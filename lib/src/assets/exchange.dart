@@ -7,22 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 class ExchangePage extends StatefulWidget {
-  String mainSymbol, exchangeSymbol;
-  ExchangePage(this.mainSymbol, this.exchangeSymbol);
+  Assets mainCoin, exchangeCoin;
+  ExchangePage(this.mainCoin, this.exchangeCoin);
 
   @override
   _ExchangePageState createState() =>
-      _ExchangePageState(this.mainSymbol, this.exchangeSymbol);
+      _ExchangePageState(this.mainCoin, this.exchangeCoin);
 }
 
 class _ExchangePageState extends State<ExchangePage> {
-  String mainSymbol, exchangeSymbol;
+  Assets mainCoin, exchangeCoin;
   String _errText;
+  String _payPasswd;
   double _amount;
-  _ExchangePageState(this.mainSymbol, this.exchangeSymbol);
+  _ExchangePageState(this.mainCoin, this.exchangeCoin);
   double _exchangeOutput = 0;
   GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
   GlobalKey<ScaffoldState> _scoffoldKey = GlobalKey<ScaffoldState>();
+    GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   var _futureBuilderFuture;
   @override
   void dispose() {
@@ -32,42 +35,28 @@ class _ExchangePageState extends State<ExchangePage> {
 
  @override
   void initState() {
-    _futureBuilderFuture = getExchange(mainSymbol, exchangeSymbol);
+    // _futureBuilderFuture = getExchange(mainCoin.symbol, exchangeCoin.symbol);
     // TODO: implement initState
     super.initState();
   }
  
  
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scoffoldKey,
-        appBar: AppBar(
-          title: Text("$exchangeSymbol 兑换 $mainSymbol"),
-        ),
-        body: Container(
-            padding: EdgeInsets.all(8),
-            child: FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, exchanges) {
-                if (exchanges.hasData) {
-                  var _data = exchanges.data as Data;
-                  if (_data.state){
+Widget _form(){
+             
                   // Assets _mainCoin = _data.data [0];
                   // Assets _exchangeCoin = _data.data[1];
-                  double _exchangeRate = getExchangeRate(mainSymbol,exchangeSymbol);
+                  double _exchangeRate = getExchangeRate(mainCoin.symbol,exchangeCoin.symbol);
                     //  _mainCoin.priceCny / _exchangeCoin.priceCny ;
 
                   return Form(
+                    key: _formKey,
                       child: Column(
                     children: <Widget>[
                       TextField(
                         key: _amountKey,
                         autocorrect: true,
                         // autovalidate: true,
-                        maxLength: _exchangeCoin.blance.toString().length,
+                        maxLength: mainCoin.blance.toString().length,
                         onChanged: (val) {
                           _amount = double.tryParse(val);
 
@@ -95,9 +84,9 @@ class _ExchangePageState extends State<ExchangePage> {
                         decoration: InputDecoration(
                           
                             border: OutlineInputBorder(),
-                            labelText: "${_exchangeCoin.symbol}",
+                            labelText: "${mainCoin.symbol}",
                             errorText: _errText,
-                            hintText: "可用" + _exchangeCoin.blance.toString()),
+                            hintText: "可用" + mainCoin.blance.toString()),
                       ),
                       SizedBox(
                         height: 10,
@@ -114,7 +103,7 @@ class _ExchangePageState extends State<ExchangePage> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              "可兑换 ${_exchangeOutput.toStringAsFixed(6)} ${mainSymbol}",
+                              "可兑换 ${_exchangeOutput.toStringAsFixed(6)} ${exchangeCoin.symbol}",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.right,
@@ -122,6 +111,30 @@ class _ExchangePageState extends State<ExchangePage> {
                           )
                         ],
                       ),
+                      TextFormField(
+                  keyboardType: TextInputType.text,
+                  // textInputAction: TextInputAction.next,
+                  obscureText: true,
+                  maxLength: 16,
+                  validator: (val) {
+                    if (val == null ||
+                        val == "" ||
+                        val.length < 8 ||
+                        val.length > 16) {
+                      return "支付密码为8-16位数";
+                    }
+                  },
+                  onSaved: (val) {
+                    setState(() {
+                      _payPasswd = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      labelText: "钱包密码",
+                      hintText: "请输入钱包密码",
+                      counterText: "",
+                      errorText: _errText,
+                      border: OutlineInputBorder())),
                       SizedBox(
                         height: 10,
                       ),
@@ -136,8 +149,11 @@ class _ExchangePageState extends State<ExchangePage> {
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.lightGreen)),
                         onPressed: () async {
-                         print("$_amount  ${_exchangeCoin.blance} ");
-                          if (_amount <0||_amount>_exchangeCoin.blance) {
+                         print("$_amount  ${mainCoin.blance} ");
+                         if (_formKey.currentState.validate()){
+                           _formKey.currentState.save();
+                        
+                          if ( _amount==null|| _amount <0||_amount> mainCoin.blance) {
                             setState(() {
                              _errText = "金额必须大于0且小于可用金额";
                             });
@@ -146,7 +162,7 @@ class _ExchangePageState extends State<ExchangePage> {
                            setState(() {
                              _errText = null;
                             });
-                             var _data = await exchange(exchangeSymbol,mainSymbol,_amount);
+                             var _data = await exchange(mainCoin,exchangeCoin,_payPasswd,_amount);
                              if (_data.state){
                                  Navigator.of(context).pop();
                                   
@@ -156,19 +172,31 @@ class _ExchangePageState extends State<ExchangePage> {
                             });
                            
                             }
-                          }
+                          } }
                           // }
                         },
                       )
                     ],
                   ));
-                }else{
-                 
-                  return Text(_data.messsage);
-                }} else {
-                  return Loading();
                 }
-              },
-            )));
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scoffoldKey,
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.menu),onPressed: (){
+              
+            },)
+          ],
+          title: Text("${mainCoin.symbol} 兑换 ${exchangeCoin.symbol}"),
+        ),
+        body: Container(
+            padding: EdgeInsets.all(8),
+            child: _form(),
+             
+            ));
   }
 }

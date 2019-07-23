@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:http/http.dart';
@@ -47,37 +48,56 @@ class HDWallet {
 }
 
 Web3Client _mhcClient;
-
+EtherAmount  _gasPrice;
 Web3Client getEthClint() {
   print("getEthClint");
   print(_mhcClient);
   return _mhcClient;
 }
 
-initMHCClient() {
+initMHCClient() async {
   _mhcClient = new Web3Client(apiUrl, new Client());
-  _mhcClient.getGasPrice().catchError((onError) {
-    print("服务器连接失败");
-    _mhcClient = null;
-  });
-
-  return _readWallets();
+ _gasPrice = await _mhcClient.getGasPrice();
+ print("价格===$_gasPrice");
 }
 
-// Future<String> sendETH(dynamic fromJson, to, passwd, value) async {
-//   Wallet wallet = Wallet.fromJson(fromJson, passwd);
-//   print("---------");
-//   print(wallet.privateKey.toString());
-//   return new Web3Client(apiUrl, new Client()).sendTransaction(
-//       wallet.privateKey,
-//       Transaction(
-//         to: EthereumAddress.fromHex(to),
-//         gasPrice: EtherAmount.inWei(BigInt.one),
-//         maxGas: 2100000,
-//         value: EtherAmount.fromUnitAndValue(EtherUnit.ether, value),
-//       ),
-//       chainId: 3333);
-// }
+Future<Data> sendMHC(String from, String to,String password, num value,{Uint8List data}) async {
+ Data _result ;
+  final String key = await cryptor.generateKeyFromPassword(password, "salt");
+
+ Address _fromAddress ;
+    address.forEach((addr){
+      if (addr.val == from){
+        _fromAddress = addr;
+      }
+    });
+
+   try {
+     
+  
+  var _privateKeyOrg = await cryptor.decrypt(_fromAddress.privateKey, key);
+   var _key= bip32.BIP32.fromBase58(_privateKeyOrg);
+  
+  print("pk===${_key.privateKey.toString()}");
+
+     String _tx =  await _mhcClient.sendTransaction(
+      EthPrivateKey.fromHex(bytesToHex(_key.privateKey, include0x: false, forcePadLength: 64)),
+      Transaction(
+        to: EthereumAddress.fromHex(to),
+        gasPrice: _gasPrice,
+        maxGas: 21000,
+        value: EtherAmount.inWei(BigInt.from(10).pow(18) * BigInt.from(value)),
+        data: data,
+      ),
+      chainId: 3333);
+       _result=Data(state: true,messsage: "转账申请成功",data: _tx);
+  } on ArgumentError catch (e) {
+     _result=Data(state: false,messsage: "地址错误",);
+   } on MacMismatchException catch(e){
+_result=Data(state: false,messsage: "钱包密码错误",);
+   }
+  return _result;
+}
 
 Future<EtherAmount> getMHCblance(String address) async {
   return await  _mhcClient.getBalance(EthereumAddress.fromHex(address));

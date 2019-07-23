@@ -12,7 +12,6 @@ class MnemonicRepeatPage extends StatefulWidget {
 }
 
 class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
-  List<List<dynamic>> _controllers;
   int _currentIndex = 0;
   var _mmics;
   List<String> _inputsVal = new List(12);

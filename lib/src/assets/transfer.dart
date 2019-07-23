@@ -58,6 +58,7 @@ class _TransferPageState extends State<TransferPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("${assets.symbol} 转账"),
         actions: <Widget>[
@@ -115,9 +116,9 @@ class _TransferPageState extends State<TransferPage> {
                       val == "" ||
                       double.tryParse(val) == null ||
                       double.tryParse(val) <= 0 ||
-                      double.tryParse(val) + double.tryParse(_free) >
+                      double.tryParse(val)  >
                           assets.blance) {
-                    return "转出金额(含手续费)为0至${assets.blance}之间";
+                    return "转出金额为0至${assets.blance}之间";
                   }
                 },
                 onSaved: (val) {
@@ -157,8 +158,8 @@ class _TransferPageState extends State<TransferPage> {
                     });
                   },
                   decoration: InputDecoration(
-                      labelText: "支付密码",
-                      hintText: "请输入支付密码",
+                      labelText: "钱包密码",
+                      hintText: "请输入钱包密码",
                       counterText: "",
                       errorText: _errText,
                       border: OutlineInputBorder())),
@@ -182,14 +183,12 @@ class _TransferPageState extends State<TransferPage> {
                       var _data = await transfer(
                           assets.address,
                           _addressCtl.text,
-                          assets.symbol,
-                          transferType,
                           _payPasswd,
                           _amount);
                       if (_data.state) {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (build) {
-                          return TransferSuccessPage(this.transferType);
+                          return TransferSuccessPage(_data.data);
                         }));
                       } else {
                         setState(() {

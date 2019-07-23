@@ -43,3 +43,4 @@ List<Address> address;
  // 
  //USDT价格
 Map<String,String> coinPrice = new Map();
+Map<String,String> coinReceiveAddress = new Map();
