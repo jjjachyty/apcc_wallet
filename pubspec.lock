@@ -215,7 +215,7 @@ packages:
     source: hosted
     version: "2.0.2"
   json_rpc_2:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_rpc_2
       url: "https://pub.flutter-io.cn"

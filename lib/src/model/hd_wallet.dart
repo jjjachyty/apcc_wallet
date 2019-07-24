@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/json_rpc.dart';
 import 'package:http/http.dart';
 import "package:flutter_string_encryption/flutter_string_encryption.dart";
 import 'package:web3dart/crypto.dart';
@@ -16,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart' as btc;
 
 final String apiUrl = "http://119.3.108.19:8110";
+final String usdtRPCUrl = "http://119.3.108.19:8333";
 final cryptor = new PlatformStringCryptor();
 
 class Address {
@@ -49,6 +51,8 @@ class HDWallet {
 
 Web3Client _mhcClient;
 EtherAmount  _gasPrice;
+JsonRPC _usdtclient;
+
 Web3Client getEthClint() {
   print("getEthClint");
   print(_mhcClient);
@@ -57,8 +61,14 @@ Web3Client getEthClint() {
 
 initMHCClient() async {
   _mhcClient = new Web3Client(apiUrl, new Client());
+  
  _gasPrice = await _mhcClient.getGasPrice();
  print("价格===$_gasPrice");
+
+
+String basicAuth = 
+'Basic '+ base64Encode(utf8.encode('mhcusdt:mhcusdtpasswd'));
+ _usdtclient = new JsonRPC(usdtRPCUrl,new Client(),headers:{"authorization":basicAuth} );
 }
 
 Future<Data> sendMHC(String from, String to,String password, num value,{Uint8List data}) async {
@@ -102,6 +112,11 @@ _result=Data(state: false,messsage: "钱包密码错误",);
 Future<EtherAmount> getMHCblance(String address) async {
   return await  _mhcClient.getBalance(EthereumAddress.fromHex(address));
 }
+Future<Data> getUSDTblance(String address) async {
+  return   _usdtclient.call("omni_getbalance",[address,31]);
+}
+
+
 
 Future<String> createMain(String mnemonic, String password) async {
 

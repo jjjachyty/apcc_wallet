@@ -1,29 +1,30 @@
+import 'package:apcc_wallet/src/assets/exchange_detail.dart';
 import 'package:apcc_wallet/src/assets/transfer_detail.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
-class TransferListPage extends StatefulWidget {
-  String coin, payType;
+class ExchangeListPage extends StatefulWidget {
+  String mainCoin, exchangeCoin;
 
-  TransferListPage(this.coin, this.payType);
+  ExchangeListPage(this.mainCoin, this.exchangeCoin);
   @override
-  _TransferListPageState createState() =>
-      _TransferListPageState(this.coin, this.payType);
+  _ExchangeListPageState createState() =>
+      _ExchangeListPageState(this.mainCoin, this.exchangeCoin);
 }
 
-class _TransferListPageState extends State<TransferListPage> {
-  var coin, payType;
-  _TransferListPageState(this.coin, this.payType);
-  List<AssetLog> _orders = new List();
+class _ExchangeListPageState extends State<ExchangeListPage> {
+  String mainCoin, exchangeCoin;
+  _ExchangeListPageState(this.mainCoin, this.exchangeCoin);
+  List<Exchange> _orders = new List();
   ScrollController _scrollController = new ScrollController();
   int currentPage = 1;
   bool isPerformingRequest = false;
   @override
   void initState() {
     super.initState();
-    orders(coin, payType, currentPage).then((_pageData) {
+    exchangeList(mainCoin, exchangeCoin, currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);
@@ -44,7 +45,7 @@ class _TransferListPageState extends State<TransferListPage> {
         isPerformingRequest = true;
         currentPage++;
       });
-      var _pageData = await orders(coin, payType, currentPage);
+      var _pageData = await exchangeList(mainCoin, exchangeCoin, currentPage);
       setState(() {
         _orders.addAll(_pageData.rows);
         isPerformingRequest = false;
@@ -56,7 +57,7 @@ class _TransferListPageState extends State<TransferListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("转账记录"),
+        title: Text("兑换记录"),
       ),
       body: Container(
         padding: EdgeInsets.all(8),
@@ -64,7 +65,7 @@ class _TransferListPageState extends State<TransferListPage> {
           controller: _scrollController,
           itemCount: _orders.length,
           itemBuilder: (buildContext, index) {
-            var _state = _orders[index].state == 1 ? "完成" : "转账中";
+            var _state = _orders[index].state == 1 ? "完成" : "兑换中";
              var _log = _orders[index];
         
             return ListTile(
@@ -73,18 +74,16 @@ class _TransferListPageState extends State<TransferListPage> {
                       [mm, "/", dd, " ", HH, ":", nn, ":", ss]),
                   style: TextStyle(fontSize: 15),
                 ),
-          
+                
                 trailing: Text.rich(TextSpan(
-                    text: "-" +
-                        (toDouble(_log.fromPreblance) -
-                                toDouble(_log.fromBlance))
-                            .toString(),children: <TextSpan>[
-                              TextSpan(text: _state,style: TextStyle(color: Colors.green))
+                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                    text: _log.amount.toStringAsFixed(6),children: <TextSpan>[
+                              TextSpan(text: _state,style: TextStyle(color: Colors.green,fontSize: 12))
                             ])),
                             onTap: (){
                               Navigator.of(context).push(MaterialPageRoute(builder: (buildContext){
                               
-                                return TransferDetailPage(_log);
+                                 return ExchangeDetailPage(_log);
                               }));
                             },);
           },

@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/assets/exchange_list.dart';
 import 'package:apcc_wallet/src/assets/usdt_buy.dart';
 import 'package:apcc_wallet/src/assets/usdt_sell.dart';
 import 'package:apcc_wallet/src/common/define.dart';
@@ -5,6 +6,8 @@ import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
+
+import 'transfer_success.dart';
 
 class ExchangePage extends StatefulWidget {
   Assets mainCoin, exchangeCoin;
@@ -17,27 +20,35 @@ class ExchangePage extends StatefulWidget {
 
 class _ExchangePageState extends State<ExchangePage> {
   Assets mainCoin, exchangeCoin;
-  String _errText;
+  String _errText="";
   String _payPasswd;
   double _amount;
+  num _exchangeFree=0,_exchangeRate=0;
   _ExchangePageState(this.mainCoin, this.exchangeCoin);
   double _exchangeOutput = 0;
   GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
   GlobalKey<ScaffoldState> _scoffoldKey = GlobalKey<ScaffoldState>();
     GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-
-  var _futureBuilderFuture;
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
+  
 
  @override
   void initState() {
     // _futureBuilderFuture = getExchange(mainCoin.symbol, exchangeCoin.symbol);
     // TODO: implement initState
     super.initState();
+    exchangeFree(mainCoin.symbol).then((data){
+      if (data.state){
+        setState(() {
+                  _exchangeFree = data.data;
+
+        });
+      }
+    });
+    exchangerate(mainCoin.symbol,exchangeCoin.symbol).then((data){
+      if (data.state){
+        _exchangeRate = data.data;
+      }
+    });
   }
  
  
@@ -45,13 +56,14 @@ Widget _form(){
              
                   // Assets _mainCoin = _data.data [0];
                   // Assets _exchangeCoin = _data.data[1];
-                  double _exchangeRate = getExchangeRate(mainCoin.symbol,exchangeCoin.symbol);
+                  // double _exchangeRate = getExchangeRate(mainCoin.symbol,exchangeCoin.symbol);
                     //  _mainCoin.priceCny / _exchangeCoin.priceCny ;
-
+                  
                   return Form(
                     key: _formKey,
                       child: Column(
                     children: <Widget>[
+                      
                       TextField(
                         key: _amountKey,
                         autocorrect: true,
@@ -60,14 +72,14 @@ Widget _form(){
                         onChanged: (val) {
                           _amount = double.tryParse(val);
 
-                          if (_amount == null) {
+                          if (_amount == null || _amount < _exchangeFree ) {
                             setState(() {
                               _exchangeOutput = 0;
                             });
                           } else {
                             setState(() {
                               _amount= _amount;
-                              _exchangeOutput = _amount * _exchangeRate;
+                              _exchangeOutput = (_amount-_exchangeFree) * _exchangeRate;
                             });
                           }
                         },
@@ -82,10 +94,9 @@ Widget _form(){
                         autofocus: true,
                         
                         decoration: InputDecoration(
-                          
+                            helperText: "手续费:["+_exchangeFree.toString()+"]${mainCoin.symbol}",
                             border: OutlineInputBorder(),
                             labelText: "${mainCoin.symbol}",
-                            errorText: _errText,
                             hintText: "可用" + mainCoin.blance.toString()),
                       ),
                       SizedBox(
@@ -133,11 +144,11 @@ Widget _form(){
                       labelText: "钱包密码",
                       hintText: "请输入钱包密码",
                       counterText: "",
-                      errorText: _errText,
                       border: OutlineInputBorder())),
                       SizedBox(
                         height: 10,
                       ),
+                      Text(_errText,style: TextStyle(color: Colors.red),),
                       ProgressButton(
                         color: Colors.green,
                         defaultWidget: Text(
@@ -149,22 +160,26 @@ Widget _form(){
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.lightGreen)),
                         onPressed: () async {
-                         print("$_amount  ${mainCoin.blance} ");
                          if (_formKey.currentState.validate()){
                            _formKey.currentState.save();
                         
-                          if ( _amount==null|| _amount <0||_amount> mainCoin.blance) {
+                          if ( _amount==null|| _amount < _exchangeFree||_amount> mainCoin.blance) {
                             setState(() {
-                             _errText = "金额必须大于0且小于可用金额";
+                             _errText = "金额必须大于手续费且小于可用金额";
                             });
-                          } else {
+                          }else {
                           
                            setState(() {
-                             _errText = null;
+                             _errText = "";
                             });
                              var _data = await exchange(mainCoin,exchangeCoin,_payPasswd,_amount);
+                             
                              if (_data.state){
-                                 Navigator.of(context).pop();
+                                Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (build) {
+                              
+                          return TransferSuccessPage(_data.data["ReceiveTxs"]);
+                        }));
                                   
                              }else{
                                setState(() {
@@ -188,7 +203,9 @@ Widget _form(){
         appBar: AppBar(
           actions: <Widget>[
             IconButton(icon: Icon(Icons.menu),onPressed: (){
-              
+              Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                return ExchangeListPage(mainCoin.symbol, exchangeCoin.symbol);
+              }));
             },)
           ],
           title: Text("${mainCoin.symbol} 兑换 ${exchangeCoin.symbol}"),

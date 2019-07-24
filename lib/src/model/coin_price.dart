@@ -25,7 +25,7 @@ Future<List<CoinPrice>> getPrice() async {
   List<CoinPrice>   _coinPrice = new List();
 
    final _data =  await Dio().get(hqzapiURL);
-
+  
    var  coins = _data.data["coin"]["data"];
 
   _coinPrice.add(CoinPrice(code: "apcc",priceCny: 1.05,percent24h: 0));
