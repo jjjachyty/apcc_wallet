@@ -6,6 +6,8 @@ import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/coin_price.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
+import 'package:apcc_wallet/src/model/usdt.dart';
+import 'package:apcc_wallet/src/model/usdt_eth.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/model/version.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
@@ -76,8 +78,11 @@ void init(BuildContext context, Store store) async {
   address = await getAllAddress();
   
   initMHCClient();
-
+  initUSDTClient();
   //初始化货币兑换接收地址
   coinReceiveAddress["USDT"]="1MmRUa7RPpRZzU3TksnWAgZjXWWbP2jUuv";
 coinReceiveAddress["MHC"]="0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
+
+
+getUSDTBlance("0x0048a68160a8E814a5Dc56a4D3525cF7b5d671eC");
 }

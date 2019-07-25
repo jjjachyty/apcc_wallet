@@ -4,6 +4,7 @@ import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
+import 'package:apcc_wallet/src/model/usdt.dart';
 import 'package:dio/dio.dart';
 
 class Assets {
@@ -98,7 +99,7 @@ Future<List<Assets>> getAssets() async {
         _blacnce = _amount.getInEther.toDouble();
          break;
       case "USDT":
-        var _blance = await getUSDTblance("1GkvYVDCY6Lsbt25gYjzeb8TSNVHXEwaVc");
+        var _blance = await getUSDTblance(addr.val);
         print("_blance======${_blance.data}");
   
      }
