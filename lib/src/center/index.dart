@@ -63,18 +63,7 @@ class _UserCenterState extends State<UserCenter> {
             Navigator.of(context).pushNamed("/contactus");
           },
         ),
-        Divider(),
-        new ListTile(
-          dense: true,
-          contentPadding: EdgeInsets.zero,
-          isThreeLine: false,
-          leading: Icon(Icons.account_balance_wallet),
-          trailing: Icon(Icons.keyboard_arrow_right),
-          title: Text("钱包"),
-          onTap: () {
-            Navigator.of(context).pushNamed("/wallet/new");
-          },
-        ),
+        Divider()
       ],
     );
   }

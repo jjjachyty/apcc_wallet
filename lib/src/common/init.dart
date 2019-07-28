@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:apcc_wallet/src/model/coins.dart';
+import 'package:cipher2/cipher2.dart';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
-import 'package:apcc_wallet/src/model/coin_price.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/model/usdt.dart';
 import 'package:apcc_wallet/src/model/usdt_eth.dart';
@@ -76,13 +77,10 @@ void init(BuildContext context, Store store) async {
   getDimCoin();
   //地址
   address = await getAllAddress();
-  
+
   initMHCClient();
   initUSDTClient();
   //初始化货币兑换接收地址
-  coinReceiveAddress["USDT"]="1MmRUa7RPpRZzU3TksnWAgZjXWWbP2jUuv";
-coinReceiveAddress["MHC"]="0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
-
-
-getUSDTBlance("0x0048a68160a8E814a5Dc56a4D3525cF7b5d671eC");
+  coinReceiveAddress["USDT"] = "1MmRUa7RPpRZzU3TksnWAgZjXWWbP2jUuv";
+  coinReceiveAddress["MHC"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
 }

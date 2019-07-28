@@ -20,200 +20,202 @@ class ExchangePage extends StatefulWidget {
 
 class _ExchangePageState extends State<ExchangePage> {
   Assets mainCoin, exchangeCoin;
-  String _errText="";
+  String _errText = "";
+  bool _tomhc = true;
   String _payPasswd;
   double _amount;
-  num _exchangeFree=0,_exchangeRate=0;
+  num _exchangeFree = 0, _exchangeRate = 0;
   _ExchangePageState(this.mainCoin, this.exchangeCoin);
   double _exchangeOutput = 0;
   GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
   GlobalKey<ScaffoldState> _scoffoldKey = GlobalKey<ScaffoldState>();
-    GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
- @override
+  @override
   void initState() {
     // _futureBuilderFuture = getExchange(mainCoin.symbol, exchangeCoin.symbol);
     // TODO: implement initState
     super.initState();
-    exchangeFree(mainCoin.symbol).then((data){
-      if (data.state){
+    var _symbol = mainCoin.symbol;
+    if (_symbol == "MHC") {
+      _symbol = exchangeCoin.symbol;
+    }
+    exchangeFree(_symbol).then((data) {
+      if (data.state) {
         setState(() {
-                  _exchangeFree = data.data;
-
+          _exchangeFree = data.data;
         });
       }
     });
-    exchangerate(mainCoin.symbol,exchangeCoin.symbol).then((data){
-      if (data.state){
+    exchangerate(mainCoin.symbol, exchangeCoin.symbol).then((data) {
+      if (data.state) {
         _exchangeRate = data.data;
       }
     });
   }
- 
- 
-Widget _form(){
-             
-                  // Assets _mainCoin = _data.data [0];
-                  // Assets _exchangeCoin = _data.data[1];
-                  // double _exchangeRate = getExchangeRate(mainCoin.symbol,exchangeCoin.symbol);
-                    //  _mainCoin.priceCny / _exchangeCoin.priceCny ;
-                  
-                  return Form(
-                    key: _formKey,
-                      child: Column(
-                    children: <Widget>[
-                      
-                      TextField(
-                        key: _amountKey,
-                        autocorrect: true,
-                        // autovalidate: true,
-                        maxLength: mainCoin.blance.toString().length,
-                        onChanged: (val) {
-                          _amount = double.tryParse(val);
 
-                          if (_amount == null || _amount < _exchangeFree ) {
-                            setState(() {
-                              _exchangeOutput = 0;
-                            });
-                          } else {
-                            setState(() {
-                              _amount= _amount;
-                              _exchangeOutput = (_amount-_exchangeFree) * _exchangeRate;
-                            });
-                          }
-                        },
-                        // validator: (val){
-                        //   var _val = double.tryParse(val);
-                        //   if (_val==null || _val > _mainCoin.blance){
-                        //     return "金额必须大于0且小于可用金额";
-                        //   }
-                
-                        // },
-                        keyboardType: TextInputType.number,
-                        autofocus: true,
-                        
-                        decoration: InputDecoration(
-                            helperText: "手续费:["+_exchangeFree.toString()+"]${mainCoin.symbol}",
-                            border: OutlineInputBorder(),
-                            labelText: "${mainCoin.symbol}",
-                            hintText: "可用" + mainCoin.blance.toString()),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "汇率=1:${_exchangeRate.toStringAsFixed(6)}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              "可兑换 ${_exchangeOutput.toStringAsFixed(6)} ${exchangeCoin.symbol}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.right,
-                            ),
-                          )
-                        ],
-                      ),
-                      TextFormField(
-                  keyboardType: TextInputType.text,
-                  // textInputAction: TextInputAction.next,
-                  obscureText: true,
-                  maxLength: 16,
-                  validator: (val) {
-                    if (val == null ||
-                        val == "" ||
-                        val.length < 8 ||
-                        val.length > 16) {
-                      return "支付密码为8-16位数";
-                    }
-                  },
-                  onSaved: (val) {
-                    setState(() {
-                      _payPasswd = val;
-                    });
-                  },
-                  decoration: InputDecoration(
-                      labelText: "钱包密码",
-                      hintText: "请输入钱包密码",
-                      counterText: "",
-                      border: OutlineInputBorder())),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(_errText,style: TextStyle(color: Colors.red),),
-                      ProgressButton(
-                        color: Colors.green,
-                        defaultWidget: Text(
-                          "兑换",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        progressWidget: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.lightGreen)),
-                        onPressed: () async {
-                         if (_formKey.currentState.validate()){
-                           _formKey.currentState.save();
-                        
-                          if ( _amount==null|| _amount < _exchangeFree||_amount> mainCoin.blance) {
-                            setState(() {
-                             _errText = "金额必须大于手续费且小于可用金额";
-                            });
-                          }else {
-                          
-                           setState(() {
-                             _errText = "";
-                            });
-                             var _data = await exchange(mainCoin,exchangeCoin,_payPasswd,_amount);
-                             
-                             if (_data.state){
-                                Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (build) {
-                              
-                          return TransferSuccessPage(_data.data["ReceiveTxs"]);
-                        }));
-                                  
-                             }else{
-                               setState(() {
-                             _errText = _data.messsage;
-                            });
-                           
-                            }
-                          } }
-                          // }
-                        },
-                      )
-                    ],
-                  ));
+  Widget _form() {
+    // Assets _mainCoin = _data.data [0];
+    // Assets _exchangeCoin = _data.data[1];
+    // double _exchangeRate = getExchangeRate(mainCoin.symbol,exchangeCoin.symbol);
+    //  _mainCoin.priceCny / _exchangeCoin.priceCny ;
+
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextField(
+              key: _amountKey,
+              autocorrect: true,
+              // autovalidate: true,
+              maxLength: mainCoin.blance.toString().length,
+              onChanged: (val) {
+                _amount = double.tryParse(val);
+
+                if (_amount == null || _amount < _exchangeFree) {
+                  setState(() {
+                    _exchangeOutput = 0;
+                  });
+                } else {
+                  setState(() {
+                    _amount = _amount;
+                    _exchangeOutput = (_amount - _exchangeFree) * _exchangeRate;
+                  });
                 }
+              },
+              // validator: (val){
+              //   var _val = double.tryParse(val);
+              //   if (_val==null || _val > _mainCoin.blance){
+              //     return "金额必须大于0且小于可用金额";
+              //   }
 
+              // },
+              keyboardType: TextInputType.number,
+              autofocus: true,
+
+              decoration: InputDecoration(
+                  helperText: "手续费:[" + _exchangeFree.toString() + "] MHC",
+                  border: OutlineInputBorder(),
+                  labelText: "${mainCoin.symbol}",
+                  hintText: "可用" + mainCoin.blance.toString()),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    "汇率=1:${_exchangeRate.toStringAsFixed(6)}",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    "可兑换 ${_exchangeOutput.toStringAsFixed(6)} ${exchangeCoin.symbol}",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.right,
+                  ),
+                )
+              ],
+            ),
+            TextFormField(
+                keyboardType: TextInputType.text,
+                // textInputAction: TextInputAction.next,
+                obscureText: true,
+                maxLength: 16,
+                validator: (val) {
+                  if (val == null ||
+                      val == "" ||
+                      val.length < 8 ||
+                      val.length > 16) {
+                    return "支付密码为8-16位数";
+                  }
+                },
+                onSaved: (val) {
+                  setState(() {
+                    _payPasswd = val;
+                  });
+                },
+                decoration: InputDecoration(
+                    labelText: "钱包密码",
+                    hintText: "请输入钱包密码",
+                    counterText: "",
+                    border: OutlineInputBorder())),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              _errText,
+              style: TextStyle(color: Colors.red),
+            ),
+            ProgressButton(
+              color: Colors.green,
+              defaultWidget: Text(
+                "兑换",
+                style: TextStyle(color: Colors.white),
+              ),
+              progressWidget: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+
+                  if (_amount == null ||
+                      _amount < _exchangeFree ||
+                      _amount > mainCoin.blance) {
+                    setState(() {
+                      _errText = "金额必须大于手续费且小于可用金额";
+                    });
+                  } else {
+                    setState(() {
+                      _errText = "";
+                    });
+                    var _data = await exchange(
+                        mainCoin, exchangeCoin, _payPasswd, _amount);
+
+                    if (_data.state) {
+                      Navigator.of(context)
+                          .pushReplacement(MaterialPageRoute(builder: (build) {
+                        return TransferSuccessPage(_data.data["ReceiveTxs"]);
+                      }));
+                    } else {
+                      setState(() {
+                        _errText = _data.messsage;
+                      });
+                    }
+                  }
+                }
+                // }
+              },
+            )
+          ],
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scoffoldKey,
+        key: _scoffoldKey,
         appBar: AppBar(
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.menu),onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                return ExchangeListPage(mainCoin.symbol, exchangeCoin.symbol);
-              }));
-            },)
+            IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return ExchangeListPage(mainCoin.symbol, exchangeCoin.symbol);
+                }));
+              },
+            )
           ],
           title: Text("${mainCoin.symbol} 兑换 ${exchangeCoin.symbol}"),
         ),
         body: Container(
-            padding: EdgeInsets.all(8),
-            child: _form(),
-             
-            ));
+          padding: EdgeInsets.all(8),
+          child: _form(),
+        ));
   }
 }

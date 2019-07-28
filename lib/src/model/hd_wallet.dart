@@ -5,9 +5,10 @@ import 'dart:typed_data';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/json_rpc.dart';
+import 'package:cipher2/cipher2.dart';
 import 'package:http/http.dart';
-import "package:flutter_string_encryption/flutter_string_encryption.dart";
 import 'package:web3dart/crypto.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../bip39/src/bip39_base.dart' as bip39;
 import 'package:bip32/bip32.dart' as bip32;
@@ -17,7 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart' as btc;
 
 final String apiUrl = "http://119.3.108.19:8110";
-final cryptor = new PlatformStringCryptor();
+final storage = new FlutterSecureStorage();
 
 class Address {
   String coin;
@@ -69,20 +70,21 @@ initMHCClient() async {
   _gasPrice = await _mhcClient.getGasPrice();
   print("价格===$_gasPrice");
 }
+
 //获取地址的私钥
 Future<String> getAddressPrivateKey(String addr, password) async {
   var _key = "";
-  try{
-  final String key = await cryptor.generateKeyFromPassword(password, "salt");
-  Address _fromAddress;
-  address.forEach((addr) {
-    if (addr.val == addr) {
-      _fromAddress = addr;
-    }
-  });
+  try {
+    Address _fromAddress;
+    address.forEach((addr) {
+      if (addr.val == addr) {
+        _fromAddress = addr;
+      }
+    });
 
-  return await cryptor.decrypt(_fromAddress.privateKey, key);
-  }catch(e){
+    return await Cipher2.decryptAesCbc128Padding7(
+        _fromAddress.privateKey, password, password);
+  } catch (e) {
     throw Exception("钱包密码错误");
   }
   return _key;
@@ -93,7 +95,7 @@ Future<Data> sendMHC(String from, String to, String password, num value,
   Data _result;
 
   try {
-    var _privateKey = await getAddressPrivateKey(from,password);
+    var _privateKey = await getAddressPrivateKey(from, password);
 
     var _key = bip32.BIP32.fromBase58(_privateKey);
 
@@ -117,11 +119,6 @@ Future<Data> sendMHC(String from, String to, String password, num value,
       state: false,
       messsage: "地址错误",
     );
-  } on MacMismatchException catch (e) {
-    _result = Data(
-      state: false,
-      messsage: "钱包密码错误",
-    );
   }
   return _result;
 }
@@ -129,8 +126,6 @@ Future<Data> sendMHC(String from, String to, String password, num value,
 Future<EtherAmount> getMHCblance(String address) async {
   return await _mhcClient.getBalance(EthereumAddress.fromHex(address));
 }
-
-sendUSDTERC20() {}
 
 Future<String> createMain(String mnemonic, String password) async {
   // mnemonic =
@@ -143,28 +138,26 @@ Future<String> createMain(String mnemonic, String password) async {
   print(root.toBase58());
   print(root.privateKey);
 
-  final String salt = await cryptor.generateSalt();
-  print("salt=$salt");
-  final String key = await cryptor.generateKeyFromPassword(password, "salt");
-  print("key=$key");
+  final encrypted = await Cipher2.encryptAesCbc128Padding7(
+      root.toBase58(), password, password);
+  // _saveJsonFile(encrypted, "rootkey.key");
+  await storage.write(key: "rootPrivateKey", value: root.toBase58());
 
-  final encrypted = await cryptor.encrypt(root.toBase58(), key);
-  _saveJsonFile(encrypted, "rootkey.key");
-  var _addrs = await getAddress(root.toBase58(), key);
+  var _addrs = await getAddress(root.toBase58());
 
   var list2json = Address.list2Json(_addrs);
   var _jsonStr = json.encode(list2json);
-  print("_jsonStr=${_jsonStr}");
-  _saveJsonFile(_jsonStr, "wallet.dat");
+
+  // _saveJsonFile(_jsonStr, "wallet.dat");
   address = _addrs;
   return root.toBase58();
 }
 
 //MHC USDT 地址
-Future<List<Address>> getAddress(String privateKeyBase58, key) async {
+Future<List<Address>> getAddress(String privateKeyBase58) async {
   List<Address> _adds = new List();
   var mhcPath = "m/44'/3333'/0'/0/0";
-  var usdtPath = "m/44'/0'/0'/0/0";
+  // var usdtPath = "m/44'/3333'/0'/0/0";
 
   var rootkey = bip32.BIP32.fromBase58(privateKeyBase58);
   //获取MHC
@@ -180,20 +173,20 @@ Future<List<Address>> getAddress(String privateKeyBase58, key) async {
       coin: "MHC",
       val: mhcAddress.hex,
       path: mhcPath,
-      privateKey: await cryptor.encrypt(mhc.toBase58(), key)));
+      privateKey: mhc.toBase58()));
 
   //获取USDT地址
-  var usdt = rootkey.derivePath(usdtPath);
-  var wif = usdt.toWIF();
+  // var usdt = rootkey.derivePath(usdtPath);
+  // var wif = usdt.toWIF();
 
-  var usdtWallet = btc.Wallet.fromWIF(wif);
-  print("usdtAddress=${usdtWallet.address}");
+  // var usdtWallet = btc.Wallet.fromWIF(wif);
+  // print("usdtAddress=${usdtWallet.address}");
 
   _adds.add(Address(
       coin: "USDT",
-      val: usdtWallet.address,
-      path: usdtPath,
-      privateKey: await cryptor.encrypt(usdt.toBase58(), key)));
+      val: mhcAddress.hex,
+      path: mhcPath,
+      privateKey: mhc.toBase58()));
   return _adds;
 }
 
@@ -222,17 +215,13 @@ Future<Map<String, dynamic>> _readWallets() async {
 
 Future<List<Address>> getAllAddress() async {
   List<Address> _adds = new List();
-  var directory = await getApplicationDocumentsDirectory();
-  var _walletJson = await _getWallets(directory.path + "/wallet.dat") as List;
-
-  ///data/user/0/com.example.apcc_wallet/app_flutter/wallet.dat
-  print("_walletJson=${_walletJson}");
-  if (_walletJson != null) {
-    _walletJson.forEach((v) {
-      _adds.add(Address.fromJson(v));
-    });
+  String _rootPrivateKey = await storage.read(key: "rootPrivateKey");
+  print("pk=======$_rootPrivateKey");
+  if (_rootPrivateKey != null) {
+    ///data/user/0/com.example.apcc_wallet/app_flutter/wallet.dat
+    return await getAddress(_rootPrivateKey);
   }
-  return _adds;
+  return null;
 }
 
 Future<List<dynamic>> _getWallets(String walletsFile) async {

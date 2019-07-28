@@ -8,6 +8,7 @@ import 'package:apcc_wallet/src/center/register.dart';
 
 import 'package:apcc_wallet/src/common/about.dart';
 import 'package:apcc_wallet/src/common/contact.dart';
+import 'package:apcc_wallet/src/hdwallet/import_mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';
 import 'package:apcc_wallet/src/hdwallet/mnemonic.dart';
@@ -24,6 +25,8 @@ final Map<String, WidgetBuilder> routes = {
   "/main": (BuildContext context) => new MainPage(),
   "/wallet/new": (BuildContext context) => new NoWalletPage(),
   "/wallet/mmic": (BuildContext context) => new MnemonicPage(),
+  "/wallet/importmmic": (BuildContext context) => new ImportMnemonicPage(),
+
   "/wallet/mmicrepeat": (BuildContext context) => new MnemonicRepeatPage(),
   "/wallet/passwd": (BuildContext context) => new WalletPasswdPage(),
   // "/news/detail": (BuildContext context) => new NewsDeatil(),

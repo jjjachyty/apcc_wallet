@@ -41,6 +41,9 @@ class NoWalletPage extends StatelessWidget {
               "导入钱包",
               style: TextStyle(fontSize: 28, color: Colors.white),
             ),
+            tap: () {
+              Navigator.of(context).pushNamed('/wallet/importmmic');
+            },
           )
         ],
       ),

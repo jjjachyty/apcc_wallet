@@ -8,22 +8,19 @@ import 'package:qrcode_reader/qrcode_reader.dart';
 
 class TransferPage extends StatefulWidget {
   Assets assets;
-  String transferType;
-  TransferPage(this.assets, this.transferType);
+  TransferPage(this.assets);
   @override
-  _TransferPageState createState() =>
-      _TransferPageState(this.assets, this.transferType);
+  _TransferPageState createState() => _TransferPageState(this.assets);
 }
 
 class _TransferPageState extends State<TransferPage> {
   GlobalKey<FormState> _formkey = new GlobalKey();
 
   Assets assets;
-  String transferType;
   double _amount;
   String _errText;
   String _free, _payPasswd;
-  _TransferPageState(this.assets, this.transferType);
+  _TransferPageState(this.assets);
   TextEditingController _addressCtl = new TextEditingController();
   bool _type = false;
   scan2() {
@@ -67,8 +64,7 @@ class _TransferPageState extends State<TransferPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (buildContext) {
-                   var payType = transferType=="in"?"1001":"1002";
-                return TransferListPage(assets.symbol,payType);
+                return TransferListPage(assets.symbol, "1002");
               }));
             },
           )
@@ -116,8 +112,7 @@ class _TransferPageState extends State<TransferPage> {
                       val == "" ||
                       double.tryParse(val) == null ||
                       double.tryParse(val) <= 0 ||
-                      double.tryParse(val)  >
-                          assets.blance) {
+                      double.tryParse(val) > assets.blance) {
                     return "转出金额为0至${assets.blance}之间";
                   }
                 },
@@ -130,7 +125,7 @@ class _TransferPageState extends State<TransferPage> {
               SizedBox(
                 width: double.infinity,
                 child: Text(
-                  transferType == "out" ? "预计手续费 $_free ${assets.symbol}" : "",
+                  "预计手续费 $_free ${assets.symbol}",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                   textAlign: TextAlign.left,
                 ),
@@ -180,11 +175,8 @@ class _TransferPageState extends State<TransferPage> {
                     if (_formkey.currentState.validate()) {
                       _formkey.currentState.save();
 
-                      var _data = await transfer(
-                          assets.address,
-                          _addressCtl.text,
-                          _payPasswd,
-                          _amount);
+                      var _data = await transfer(assets.address,
+                          _addressCtl.text, _payPasswd, _amount);
                       if (_data.state) {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (build) {
