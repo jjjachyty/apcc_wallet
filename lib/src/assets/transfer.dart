@@ -19,7 +19,8 @@ class _TransferPageState extends State<TransferPage> {
   Assets assets;
   double _amount;
   String _errText;
-  String _free, _payPasswd;
+  String  _payPasswd;
+  num _free;
   _TransferPageState(this.assets);
   TextEditingController _addressCtl = new TextEditingController();
   bool _type = false;
@@ -42,11 +43,12 @@ class _TransferPageState extends State<TransferPage> {
   @override
   void initState() {
     transferFree(assets.symbol).then((data) {
-      if (data.state) {
-        setState(() {
-          _free = data.data.toString();
-        });
-      }
+          setState(() {
+                      _free = data;
+
+          });
+       
+      
     });
     // TODO: implement initState
     super.initState();
@@ -112,8 +114,8 @@ class _TransferPageState extends State<TransferPage> {
                       val == "" ||
                       double.tryParse(val) == null ||
                       double.tryParse(val) <= 0 ||
-                      double.tryParse(val) > assets.blance) {
-                    return "转出金额为0至${assets.blance}之间";
+                      double.tryParse(val)+_free > assets.blance) {
+                    return "转出金额为0至${assets.blance}(含手续费)之间";
                   }
                 },
                 onSaved: (val) {
@@ -175,7 +177,7 @@ class _TransferPageState extends State<TransferPage> {
                     if (_formkey.currentState.validate()) {
                       _formkey.currentState.save();
 
-                      var _data = await transfer(assets.address,
+                      var _data = await transfer(assets,
                           _addressCtl.text, _payPasswd, _amount);
                       if (_data.state) {
                         Navigator.of(context).pushReplacement(

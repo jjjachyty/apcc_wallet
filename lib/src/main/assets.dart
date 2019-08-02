@@ -19,14 +19,14 @@ class AssetsPage extends StatefulWidget {
 }
 
 class _AssetsPageState extends State<AssetsPage> {
-  Map<String, Assets> _assets = new Map();
-  List<Coin> _coins = new List();
+  List<Assets> _assets = new List();
+  // List<Coin> _coins = new List();
 
   @override
   void initState() {
-    coins.forEach((k, v) {
-      _coins.add(v);
-    });
+    // coins.forEach((k, v) {
+    //   _coins.add(v);
+    // });
     // TODO: implement initState
     super.initState();
     if (address != null) {
@@ -35,9 +35,14 @@ class _AssetsPageState extends State<AssetsPage> {
   }
 
   Future<void> _onRefresh() async {
-    var _data = await getAssets();
+    var _data = await getLocalAssets();
     setState(() {
       _assets = _data;
+    });
+    getDBAssets().then((assets){
+       setState(() {
+      _assets.addAll(assets);
+       });
     });
   }
 
@@ -46,7 +51,7 @@ class _AssetsPageState extends State<AssetsPage> {
     if (user == null) {
       return NoLoginPage();
     }
-    if (address.length == 0) {
+    if (address.length ==0) {
       return NoWalletPage();
     }
 
@@ -58,7 +63,7 @@ class _AssetsPageState extends State<AssetsPage> {
             onRefresh: _onRefresh,
             child: ListView.separated(
                 separatorBuilder: (context, index) => Divider(),
-                itemCount: coins.length,
+                itemCount: _assets.length,
                 itemBuilder: (context, index) {
                   return Card(
                     color: Colors.green,
@@ -82,7 +87,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                   child: Stack(
                                     children: <Widget>[
                                       Text(
-                                        _coins[index].symbol,
+                                        _assets[index].symbol,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 25,
@@ -94,8 +99,8 @@ class _AssetsPageState extends State<AssetsPage> {
                                         child: Text(
                                           _assets.length == 0
                                               ? ""
-                                              : _assets[_coins[index].symbol]
-                                                  .overview,
+                                              : _assets[index]
+                                                  .baseOn,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 10),
@@ -108,7 +113,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                 child: Text(
                                   _assets.length == 0
                                       ? "--"
-                                      : _assets[_coins[index].symbol]
+                                      : _assets[index]
                                           .blance
                                           .toString(),
                                   textAlign: TextAlign.end,
@@ -130,18 +135,16 @@ class _AssetsPageState extends State<AssetsPage> {
                                   TextSpan(
                                       recognizer: new TapGestureRecognizer()
                                         ..onTap = () {
-                                          var _exchangeSymbol = "";
-                                          if (_coins[index].symbol == "USDT") {
-                                            _exchangeSymbol = "MHC";
-                                          } else {
-                                            _exchangeSymbol = "USDT";
+                                          var _exchangeIndex = 0;
+                                          if (_assets[index].symbol != "USDT") {
+                                            _exchangeIndex = 1;
                                           }
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return ExchangePage(
-                                                _assets[_coins[index].symbol],
-                                                _assets[_exchangeSymbol]);
+                                                _assets[index],
+                                                _assets[_exchangeIndex]);
                                           }));
                                         },
                                       text: "兑换",
@@ -158,7 +161,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return RechargePage(
-                                                _assets[_coins[index].symbol]);
+                                                _assets[index]);
                                           }));
                                         },
                                       text: "充值",
@@ -177,7 +180,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return TransferPage(
-                                                _assets[_coins[index].symbol]);
+                                                _assets[index]);
                                           }));
                                         }),
                                   textAlign: TextAlign.center,

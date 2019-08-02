@@ -24,7 +24,7 @@ class _ExchangeListPageState extends State<ExchangeListPage> {
   @override
   void initState() {
     super.initState();
-    exchangeList(mainCoin, exchangeCoin, currentPage).then((_pageData) {
+     orders(mainCoin, 1000, currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);

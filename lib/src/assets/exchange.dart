@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/assets/exchange_list.dart';
+import 'package:apcc_wallet/src/assets/transfer_list.dart';
 import 'package:apcc_wallet/src/assets/usdt_buy.dart';
 import 'package:apcc_wallet/src/assets/usdt_sell.dart';
 import 'package:apcc_wallet/src/common/define.dart';
@@ -77,9 +78,16 @@ class _ExchangePageState extends State<ExchangePage> {
                     _exchangeOutput = 0;
                   });
                 } else {
+                  num _output = 0;
+                  if (mainCoin.symbol == "MHC") {
+                    _output = (_amount - _exchangeFree) * _exchangeRate;
+                  } else {
+                    _output = (_amount * _exchangeRate) - _exchangeFree;
+                  }
+
                   setState(() {
                     _amount = _amount;
-                    _exchangeOutput = (_amount - _exchangeFree) * _exchangeRate;
+                    _exchangeOutput = _output;
                   });
                 }
               },
@@ -206,7 +214,7 @@ class _ExchangePageState extends State<ExchangePage> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return ExchangeListPage(mainCoin.symbol, exchangeCoin.symbol);
+                  return TransferListPage(mainCoin.symbol, "1000");
                 }));
               },
             )

@@ -26,7 +26,7 @@ class _UserRegisterState extends State<UserRegister> {
   var _leftCount = 0;
   int _opType = 0;
   String _phoneVal;
-  String _sms1 = "", _sms2 = "", _sms3 = "", _sms4 = "";
+  String _sms1 = "", _sms2 = "", _sms3 = "", _sms4 = "",_errorText="";
   GlobalKey<FormFieldState> _phoneKey = new GlobalKey<FormFieldState>();
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   FocusNode _sms2Node = new FocusNode() ,_sms3Node = new FocusNode(),_sms4Node = new FocusNode();
@@ -60,6 +60,7 @@ class _UserRegisterState extends State<UserRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       key: _scaffoldkey,
         // backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
@@ -142,7 +143,7 @@ class _UserRegisterState extends State<UserRegister> {
                 ),
             validator: (val) {
               if (!passwdExp.hasMatch(val)) {
-                return "请输入带字母或数字的6-16位密码";
+                return "请输入包含大小写字母及数字的8-16位密码";
               }
             },
           ),
@@ -171,6 +172,7 @@ class _UserRegisterState extends State<UserRegister> {
           ),
           SizedBox(
             height: 15,
+            child: Text(_errorText,style:TextStyle(color: Colors.red)),
           ),
           ProgressButton(
             color: Colors.green,
@@ -184,13 +186,19 @@ class _UserRegisterState extends State<UserRegister> {
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                var  _data=  await register(_phoneVal, _passwdCtr.text);
-               if (_data["Status"] as bool){
-                 Navigator.of(context).pop();
+               if (_data.state){
+                                  FocusScope.of(context).requestFocus(FocusNode());
+
+                 _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.green,)).closed.then((r){
+                   Navigator.of(context).pop();
+                 }
+                 );
+                 
                }else{
-                     _scaffoldkey.currentState.showSnackBar(SnackBar(
-                              content: Text("注册失败"+_data["Message"]),
-                              backgroundColor: Colors.red,
-                            ));
+                              setState(() {
+             _errorText = _data.messsage; 
+            });
+                          
                }
               }
             },
@@ -292,6 +300,7 @@ class _UserRegisterState extends State<UserRegister> {
             ],
           ),
         ),
+        Text(_errorText,style: TextStyle(color: Colors.red),),
         SizedBox(
           height: 30,
           child: Text.rich(TextSpan(text: _leftCount==0?"重新发送":_leftCount.toString(),recognizer: TapGestureRecognizer()
@@ -325,10 +334,9 @@ class _UserRegisterState extends State<UserRegister> {
                 _counter.cancel();
               });
             }else{
-             _scaffoldkey.currentState.showSnackBar(SnackBar(
-                              content: Text("验证码校验错误"),
-                              backgroundColor: Colors.red,
-                            ));
+            setState(() {
+             _errorText = "短信验证码校验失败"; 
+            });
             }
           },
         ),

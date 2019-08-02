@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:apcc_wallet/src/common/define.dart';
@@ -6,6 +7,7 @@ import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/model/usdt.dart';
 import 'package:apcc_wallet/src/model/usdt_eth.dart';
+import 'package:apcc_wallet/src/model/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -13,13 +15,13 @@ class Assets {
   String code;
   String nameCn;
   String nameEn;
-  String address;
+  Address address;
   String symbol;
-  double blance;
-  double freezingBlance;
-  double priceCny;
-  double priceUsd;
-  String overview;
+  String baseOn;
+  num blance;
+  num freezingBlance;
+  num priceCny;
+  num priceUsd;
   Assets(
       {this.code,
       this.nameCn,
@@ -30,7 +32,13 @@ class Assets {
       this.freezingBlance,
       this.priceCny,
       this.priceUsd,
-      this.overview});
+      this.baseOn});
+  Assets.fromJson(Map<String, dynamic> json)
+      : this.symbol = json["Symbol"],
+        this.baseOn = json["BaseOn"],
+        this.address = Address(val: json["Address"]),
+        this.blance = json["Blance"],
+        this.freezingBlance = json["FreezingBlance"];
 }
 
 class AssetLog {
@@ -38,36 +46,86 @@ class AssetLog {
   String fromAddress;
   String fromUser;
   String fromCoin;
-  String fromPreblance;
-  String fromBlance;
-  String fromPriceCny;
+  num fromAmount;
+  num fromPriceCny;
   String toUser;
   String toCoin;
   String toAddress;
-  String toPreblance;
-  String toBlance;
-  String toPriceCny;
+  String exchangeTxs;
+  num toAmount;
+  num toPriceCny;
   String createAt;
   int payType;
+  num free;
   int state;
+  String sendTxs;
+  String sendAddress;
+  String sendTime;
+
   AssetLog({
     this.uuid,
     this.fromAddress,
     this.fromCoin,
     this.fromUser,
-    this.fromPreblance,
-    this.fromBlance,
+    this.fromAmount,
     this.fromPriceCny,
+    this.exchangeTxs,
     this.toUser,
     this.toCoin,
     this.toAddress,
-    this.toBlance,
-    this.toPreblance,
+    this.toAmount,
     this.toPriceCny,
     this.payType,
+    this.free,
     this.createAt,
     this.state,
+    this.sendAddress,
+    this.sendTxs,
+    this.sendTime,
   });
+  AssetLog.fromJson(Map<String, dynamic> item)
+      : this.uuid = item["UUID"],
+        this.fromUser = item["FromUser"],
+        this.fromCoin = item["FromCoin"],
+        this.fromAddress = item["FromAddress"],
+        this.fromAmount = item["FromAmount"],
+        this.fromPriceCny = item["FromPriceCny"],
+        this.exchangeTxs=item["ExchangeTxs"],
+        this.toUser = item["ToUser"],
+        this.toCoin = item["ToCoin"],
+        this.toAddress = item["ToAddress"],
+        this.toAmount = item["toAmount"],
+        this.toPriceCny = item["ToPriceCny"],
+        this.payType = item["PayType"],
+        this.free = item["Free"],
+        this.createAt = item["CreateAt"],
+        this.state = item["State"],
+        this.sendAddress = item["SendAddress"],
+        this.sendTxs = item["SendTxs"],
+        this.sendTime = item["SendTime"];
+  Map<String, dynamic> toJson() {
+    return {
+      "uuid": this.uuid,
+      "fromUser": this.fromUser,
+      "fromCoin": this.fromCoin,
+      "fromAddress": this.fromAddress,
+      "fromAmount": this.fromAmount,
+      "fromPriceCny": this.fromPriceCny,
+      "exchangeTxs":this.exchangeTxs,
+      "toUser": this.toUser,
+      "toCoin": this.toCoin,
+      "toAddress": this.toAddress,
+      "toAmount": this.toAmount,
+      "toPriceCny": this.toPriceCny,
+      "payType": this.payType,
+      "free": this.free,
+      "createAt": this.createAt,
+      "state": this.state,
+      "sendAddress": this.sendAddress,
+      "sendTxs": this.sendTxs,
+      "sendTime": this.sendTime,
+    };
+  }
 }
 
 class Exchange {
@@ -123,32 +181,28 @@ class Exchange {
   }
 }
 
-Future<Map<String, Assets>> getAssets() async {
-  Map<String, Assets> assets = new Map();
+Future<List<Assets>> getLocalAssets() async {
+  List<Assets> assets = new List();
   for (var addr in address) {
     double _blacnce = 0;
-    String _overview;
-    switch (addr.coin) {
-      case "MHC":
-        var _amount = await getMHCblance(addr.val);
-        _blacnce = _amount.getInEther.toDouble();
-        assets["MHC"] = Assets(
-            address: addr.val,
-            symbol: addr.coin,
-            blance: _blacnce,
-            overview: "");
-        break;
-      case "USDT":
-        var _usdtblance = await getUSDTBlance(addr.val);
-        print("_blance======${_usdtblance}");
-        assets["USDT"] = Assets(
-            address: addr.val,
-            symbol: addr.coin,
-            blance: (_usdtblance.first as BigInt).toDouble(),
-            overview: "[ERC-20]");
-    }
-  }
 
+    var _amount = await getMHCblance(addr.val);
+    _blacnce = _amount.getInEther.toDouble();
+    assets.add(
+        Assets(address: addr, symbol: addr.coin, blance: _blacnce, baseOn: ""));
+  }
+  return assets;
+}
+
+Future<List<Assets>> getDBAssets() async {
+  List<Assets> assets = new List();
+  var _usdtAssets = await getUSDT();
+  print("_blance======${_usdtAssets.first.symbol}");
+  assets.add(Assets(
+      address: _usdtAssets.first.address,
+      symbol: _usdtAssets.first.symbol,
+      blance: (_usdtAssets.first.blance),
+      baseOn: _usdtAssets.first.baseOn));
   return assets;
 }
 
@@ -190,19 +244,30 @@ double getExchangeRate(String mainSymbol, exchangeSymbol) {
 //exchange货币兑换
 Future<Data> exchange(
     Assets from, Assets to, String password, num amount) async {
-  Exchange exchange = Exchange(
-      fromCoin: from.symbol,
-      fromAddress: from.address,
-      receiveAddress: coinReceiveAddress[from.symbol],
-      toCoin: to.symbol,
-      toAddress: to.address,
-      amount: amount);
-  var _data =
-      await sendMHC(from.address, exchange.receiveAddress, password, amount);
-  if (_data.state) {
-    exchange.receiveTxs = _data.data;
-    _data = await post("/assets/exchange", data: exchange.toJson());
+  AssetLog _assetLog = AssetLog(
+    fromCoin: from.symbol,
+    fromAddress: from.address.val,
+    fromAmount: amount,
+    toCoin: to.symbol,
+    toAddress: to.address.val
+  );
+  Data _data;
+  // // var _data = await post("/assets/", data: exchange.toJson());
+  // if (_data.state) {
+  switch (from.symbol + to.symbol) {
+    case "USDTMHC":
+      break;
+    case "MHCUSDT":
+      _data = await sendMHC(
+          from.address, coinReceiveAddress[from.symbol], password, amount);
+      if (_data.state) {
+        _assetLog.exchangeTxs = _data.data;
+      }
+      break;
+    default:
+    // }
   }
+       _data = await post("/assets/exchange", data: json.encode(_assetLog.toJson()));
 
   return _data;
 }
@@ -210,13 +275,19 @@ Future<Data> exchange(
 //兑换费率
 Future<Data> exchangeFree(String mainCoin) async {
   var _data =
-      await get("/assets/exchangefree", parameters: {"mainCoin": mainCoin});
+      await get("/assets/exchangefreerate", parameters: {"mainCoin": mainCoin});
   return _data;
 }
 
-Future<Data> transferFree(String coin) async {
-  var _data = await get("/assets/free", parameters: {"coin": coin});
-  return _data;
+//获取转账手续费
+Future<num> transferFree(String coin) async {
+  switch (coin) {
+    case "MHC":
+      break;
+    case "USDT":
+      return getTransferFree("USDT");
+    default:
+  }
 }
 
 Future<Data> exchangerate(String mainCoin, String exchangeCoin) async {
@@ -227,14 +298,22 @@ Future<Data> exchangerate(String mainCoin, String exchangeCoin) async {
 
 //同币种转账
 Future<Data> transfer(
-    String fromAddress, String toAddress, String password, num amount) async {
-  return await sendMHC(fromAddress, toAddress, password, amount);
+    Assets from, String toAddress, String password, num amount) async {
+  switch (from.symbol) {
+    case "MHC":
+      return await sendMHC(from.address, toAddress, password, amount);
+      break;
+    case "USDT":
+      return await send(
+          from.address.val, toAddress, "USDT", password, "out", amount);
+    default:
+  }
   ;
 }
 
 Future<PageData> orders(String coin, payType, page) async {
   List<AssetLog> _orders = new List();
-  var _data = await get("/assets/orders", parameters: {
+  var _data = await get("/assets/logs", parameters: {
     "FromCoin": coin,
     "order": "create_at",
     "sort": "desc",
@@ -246,23 +325,7 @@ Future<PageData> orders(String coin, payType, page) async {
   var _pageData = PageData.fromJson(_data.data);
   var _rows = _pageData.rows as List;
   _rows.forEach((item) {
-    _orders.add(AssetLog(
-        uuid: item["UUID"],
-        fromUser: item["FromUser"],
-        fromCoin: item["FromCoin"],
-        fromAddress: item["FromAddress"],
-        fromPreblance: item["FromPreblance"].toString(),
-        fromBlance: item["FromBlance"].toString(),
-        fromPriceCny: item["FromPriceCny"].toString(),
-        toUser: item["ToUser"],
-        toCoin: item["ToCoin"],
-        toAddress: item["ToAddress"],
-        toPreblance: item["ToPreblance"].toString(),
-        toBlance: item["ToBlance"].toString(),
-        toPriceCny: item["ToPriceCny"].toString(),
-        payType: item["PayType"],
-        createAt: item["CreateAt"],
-        state: item["State"]));
+    _orders.add(AssetLog.fromJson(item));
   });
   _pageData.rows = _orders;
   return _pageData;

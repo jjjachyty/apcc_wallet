@@ -54,6 +54,7 @@ class _MainPageState extends State<MainPage> {
     } else {
       // TODO: implement build
       return Scaffold(
+        resizeToAvoidBottomInset: true,
         bottomNavigationBar: new BottomNavigationBar(
           onTap: onTabTapped,
           currentIndex: _currentMain,

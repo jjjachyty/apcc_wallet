@@ -2,7 +2,9 @@ import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/coins.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:apcc_wallet/src/model/news.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/news/detail.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -24,9 +26,9 @@ class _IndexState extends State<Index> {
         _news = _data;
       });
     });
-    all({"order": "used", "sort": "desc"}).then((page) {
+    main().then((data) {
       setState(() {
-        _list = page.rows;
+        _list = data.data;
       });
     });
   }
@@ -192,9 +194,11 @@ class _IndexState extends State<Index> {
   }
 
   Widget _usedDapp() {
+    
     return Container(
         height: 60,
-        child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: _list == null? Loading():ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _list.length,
           itemBuilder: (context, index) {
@@ -214,6 +218,7 @@ class _IndexState extends State<Index> {
       children: <Widget>[
         _newsSwiper(),
         Divider(),
+        Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
         _usedDapp(),
         Divider(),
         _coinPrice(),

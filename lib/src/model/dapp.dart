@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 
 class Dapp {
   String uuid;
@@ -43,4 +44,26 @@ Future<PageData> all(Map<String,dynamic> params) async {
   _pageData.rows = _list;
   }
   return _pageData;
+}
+
+Future<Data> main() async {
+  List<Dapp> _list = new List();
+  var _data = await get("/dapp/main",parameters: {"user":user==null?"":user.uuid});
+
+  if (_data.state){
+  var _rows = _data.data as List;
+  _rows.forEach((item) {
+    _list.add(Dapp(uuid: item["UUID"],name: item["Name"],subtitle: item["Subtitle"],category: item["Category"],permission: item["Permission"],synopsis: item["Synopsis"],score: item["Score"].toString(),logo: item["Logo"],
+    banner: item["Banner"],snapshot: item["Snapshot"],video: item["Video"],owner: item["Owner"],used: item["Used"],state: item["State"],submitAt: item["SubmitAt"],upperAt: item["UpperAt"],lowerAt: item["LowerAt"],
+    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"]
+    ));
+  });
+  _data.data = _list;
+  }
+  return _data;
+}
+
+Future<Data> used(String dappid) async {
+  var _data =  get("/dapp/used",parameters:{"dapp":dappid} );
+  return _data;
 }

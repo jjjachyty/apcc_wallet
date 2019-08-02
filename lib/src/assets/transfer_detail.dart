@@ -27,8 +27,8 @@ children: <Widget>[
     title: Text(log.fromCoin),
   ),
     ListTile(
-    leading: Text("价格"),
-    title: Text("￥"+log.fromPriceCny),
+    leading: Text("金额"),
+    title: Text(log.fromAmount.toString()),
   ),
   ListTile(
     leading: Text("地址"),
@@ -44,14 +44,14 @@ children: <Widget>[
     title: Text(log.toCoin),
   ),
     ListTile(
-    leading: Text("价格"),
-    title: Text("￥"+log.toPriceCny),
+    leading: Text("金额"),
+    title: Text(log.toAmount.toString()),
+  ),
+    ListTile(
+    leading: Text("手续费"),
+    title: Text("￥"+log.free.toString()),
   ),
   Divider(),
-  ListTile(
-    leading: Text("金额"),
-    title: Text((toDouble(log.fromPreblance)-toDouble(log.fromBlance)).toString(),style: TextStyle(color: Colors.green),),
-  ),
   ListTile(
     leading: Text("状态"),
     title: Text(log.state==1?"完成":"转账中...",style: TextStyle(color: Colors.green),),

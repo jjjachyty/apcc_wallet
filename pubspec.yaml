@@ -27,7 +27,7 @@ dependencies:
   bip32: ^1.0.5
   resource: ^2.1.5
   flutter_redux: ^0.5.3
-  web3dart: ^1.0.0
+  web3dart: ^1.1.0
   unorm_dart: ^0.1.1
   path_provider: ^1.1.0
   progress_dialog: ^1.1.0+1

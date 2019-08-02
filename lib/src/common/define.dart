@@ -54,3 +54,11 @@ List<Address> address;
 //USDT价格
 Map<String, Coin> coins = new Map();
 Map<String, String> coinReceiveAddress = new Map();
+
+
+class PasswordError extends Error {
+  /** Message describing the assertion error. */
+  final Object message;
+  PasswordError([this.message]);
+  String toString() => "密码错误";
+}

@@ -56,7 +56,7 @@ class _TransferListPageState extends State<TransferListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("转账记录"),
+        title: Text("记录"),
       ),
       body: Container(
         padding: EdgeInsets.all(8),
@@ -76,8 +76,7 @@ class _TransferListPageState extends State<TransferListPage> {
           
                 trailing: Text.rich(TextSpan(
                     text: "-" +
-                        (toDouble(_log.fromPreblance) -
-                                toDouble(_log.fromBlance))
+                        (_log.fromAmount)
                             .toString(),children: <TextSpan>[
                               TextSpan(text: _state,style: TextStyle(color: Colors.green))
                             ])),

@@ -12,6 +12,14 @@ class DappPage extends StatefulWidget {
 class _DappPageState extends State<DappPage> {
    Dapp app;
   _DappPageState(this.app);
+ 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    used(app.uuid);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

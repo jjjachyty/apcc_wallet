@@ -28,6 +28,9 @@ void init(BuildContext context, Store store) async {
   //   }
   // });
   var token = await getStorageString("_token");
+  if (token ==null){
+    token = "";
+  }
   print("toke=${token}");
 
   api = new Dio(BaseOptions(baseUrl: apiURL, connectTimeout: 5000,
@@ -79,8 +82,11 @@ void init(BuildContext context, Store store) async {
   address = await getAllAddress();
 
   initMHCClient();
-  initUSDTClient();
   //初始化货币兑换接收地址
-  coinReceiveAddress["USDT"] = "1MmRUa7RPpRZzU3TksnWAgZjXWWbP2jUuv";
+  coinReceiveAddress["USDT"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
   coinReceiveAddress["MHC"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
+
+  // storage.delete(key:"rootPrivateKey");
+  // storage.delete(key: "address");
+  getUSDT();
 }

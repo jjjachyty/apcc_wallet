@@ -1,8 +1,10 @@
 import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/hdwallet/private_key.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -25,7 +27,7 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
 
 
 
-  void _onSubmit(Store<AppState> store) {
+  void _onSubmit() {
     
      var _pk = "";
 
@@ -36,27 +38,15 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
 
      
       form.save();
-
-      new Future.delayed(Duration(seconds: 1), () {
              createMain(mnemonic, _passwdConf).then((privateKey) {
                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
                  return PrivateKeyPage(privateKey);
                }),(route)=>false);
       });
-  
-              
-
+      new Future.delayed(Duration(seconds: 1), () {
+                post("/user/paypasswd",data: FormData.from({"payPassword":_passwd}));
       });
- 
-  
 
-
-  
-        print("=============1==============");
-
-      
- print('submitting to backend...');
-  
 
 
    
@@ -91,7 +81,10 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                           },
                         )),
                     validator: (val) {
-                      return val.length < 6 ? "密码长度至少6位" : null;
+                      if (!passwdExp.hasMatch(val)) {
+                return "请输入包含大小写字母及数字的8-16位密码";
+              }
+                      
                     },
                     onSaved: (val) {
                       this._passwd = val;
@@ -122,22 +115,19 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  new StoreConnector<AppState, Store<AppState>>(
-                      converter: (store) => store,
-                      builder: (context, store) {
-                        return new RaisedButton(
+                   new RaisedButton(
                           child: new Text(
                             '创建',
                             style: const TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
                           
-                              _onSubmit(store);
+                              _onSubmit();
                             
                           },
                           color: Theme.of(context).primaryColor,
-                        );
-                      })
+                        )
+                      
                 ],
               )));
   }

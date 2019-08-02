@@ -81,6 +81,7 @@ class _CaptchaState extends State<Captcha> {
                     return "请输入6位验证码";
                   }
                 },
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(10),
                   errorText: null,

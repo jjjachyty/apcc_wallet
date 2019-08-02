@@ -116,10 +116,9 @@ Future<Data> loginWithSMS(String phone, sms) async {
   return _data;
 }
 
-Future<dynamic> register(String phone, passwd) async {
-  var response =
-      await post("/auth/register", data: {"phone": phone, "password": passwd});
-  return response.data;
+Future<Data> register(String phone, passwd) async {
+
+  return await post("/auth/register", data: {"phone": phone, "password": passwd});;
 }
 
 Future<Data> setPayPasswd(String password, Store<AppState> store) async {

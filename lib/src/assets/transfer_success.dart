@@ -51,7 +51,7 @@ class TransferSuccessPage extends StatelessWidget {
           ),
           Text("因网络原因到账时间不准,还请耐心等待"),
           Divider(),
-          Table(
+         txHash!=null? Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: {0:FractionColumnWidth(0.2),2:FractionColumnWidth(0.2)},
             children: <TableRow>[
@@ -65,7 +65,7 @@ class TransferSuccessPage extends StatelessWidget {
               ]),
               
             ],
-          ),
+          ):Text("可在转账记录中查询详情"),
   
         ],
       ),
