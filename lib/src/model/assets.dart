@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:bip32/bip32.dart' as bip32;
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
@@ -9,6 +10,7 @@ import 'package:apcc_wallet/src/model/usdt.dart';
 import 'package:apcc_wallet/src/model/usdt_eth.dart';
 import 'package:apcc_wallet/src/model/wallet.dart';
 import 'package:dio/dio.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 class Assets {
@@ -90,11 +92,11 @@ class AssetLog {
         this.fromAddress = item["FromAddress"],
         this.fromAmount = item["FromAmount"],
         this.fromPriceCny = item["FromPriceCny"],
-        this.exchangeTxs=item["ExchangeTxs"],
+        this.exchangeTxs = item["ExchangeTxs"],
         this.toUser = item["ToUser"],
         this.toCoin = item["ToCoin"],
         this.toAddress = item["ToAddress"],
-        this.toAmount = item["toAmount"],
+        this.toAmount = item["ToAmount"],
         this.toPriceCny = item["ToPriceCny"],
         this.payType = item["PayType"],
         this.free = item["Free"],
@@ -111,7 +113,7 @@ class AssetLog {
       "fromAddress": this.fromAddress,
       "fromAmount": this.fromAmount,
       "fromPriceCny": this.fromPriceCny,
-      "exchangeTxs":this.exchangeTxs,
+      "exchangeTxs": this.exchangeTxs,
       "toUser": this.toUser,
       "toCoin": this.toCoin,
       "toAddress": this.toAddress,
@@ -187,7 +189,9 @@ Future<List<Assets>> getLocalAssets() async {
     double _blacnce = 0;
 
     var _amount = await getMHCblance(addr.val);
-    _blacnce = _amount.getInEther.toDouble();
+    _blacnce =
+        (_amount.getInWei / BigInt.from(1000000000000)).toDouble() / 1000000;
+
     assets.add(
         Assets(address: addr, symbol: addr.coin, blance: _blacnce, baseOn: ""));
   }
@@ -245,12 +249,11 @@ double getExchangeRate(String mainSymbol, exchangeSymbol) {
 Future<Data> exchange(
     Assets from, Assets to, String password, num amount) async {
   AssetLog _assetLog = AssetLog(
-    fromCoin: from.symbol,
-    fromAddress: from.address.val,
-    fromAmount: amount,
-    toCoin: to.symbol,
-    toAddress: to.address.val
-  );
+      fromCoin: from.symbol,
+      fromAddress: from.address.val,
+      fromAmount: amount,
+      toCoin: to.symbol,
+      toAddress: to.address.val);
   Data _data;
   // // var _data = await post("/assets/", data: exchange.toJson());
   // if (_data.state) {
@@ -258,16 +261,28 @@ Future<Data> exchange(
     case "USDTMHC":
       break;
     case "MHCUSDT":
-      _data = await sendMHC(
-          from.address, coinReceiveAddress[from.symbol], password, amount);
-      if (_data.state) {
-        _assetLog.exchangeTxs = _data.data;
-      }
+      // _data = await sendMHC(
+      //     from.address, coinReceiveAddress[from.symbol], password, amount);
+      // if (_data.state) {
+      //   _assetLog.exchangeTxs = _data.data;
+      // }
+
+      var _privateKey = await getAddressPrivateKey(from.address, password);
+      var _key = bip32.BIP32.fromBase58(_privateKey);
+
+      var _data = post("/exchange/MHC2USDT",
+          data: FormData.from({
+            "privateKey": bytesToHex(_key.privateKey,
+                include0x: false, forcePadLength: 64),
+            "exchangeAddress": coinReceiveAddress[from.symbol],
+            "toAddress": to.address.val,
+            "amount": amount
+          }));
       break;
     default:
     // }
   }
-       _data = await post("/assets/exchange", data: json.encode(_assetLog.toJson()));
+  _data = await post("/assets/exchange", data: json.encode(_assetLog.toJson()));
 
   return _data;
 }
@@ -275,7 +290,7 @@ Future<Data> exchange(
 //兑换费率
 Future<Data> exchangeFree(String mainCoin) async {
   var _data =
-      await get("/assets/exchangefreerate", parameters: {"mainCoin": mainCoin});
+      await get("/assets/exchangefree", parameters: {"mainCoin": mainCoin});
   return _data;
 }
 
@@ -283,6 +298,7 @@ Future<Data> exchangeFree(String mainCoin) async {
 Future<num> transferFree(String coin) async {
   switch (coin) {
     case "MHC":
+      return await getMHCFree();
       break;
     case "USDT":
       return getTransferFree("USDT");

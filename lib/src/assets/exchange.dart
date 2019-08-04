@@ -5,6 +5,7 @@ import 'package:apcc_wallet/src/assets/usdt_sell.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
+import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 
@@ -25,7 +26,7 @@ class _ExchangePageState extends State<ExchangePage> {
   bool _tomhc = true;
   String _payPasswd;
   double _amount;
-  num _exchangeFree = 0, _exchangeRate = 0;
+  num _exchangeFree = 0, _free = 0, _exchangeRate = 0;
   _ExchangePageState(this.mainCoin, this.exchangeCoin);
   double _exchangeOutput = 0;
   GlobalKey<EditableTextState> _amountKey = new GlobalKey<EditableTextState>();
@@ -37,14 +38,20 @@ class _ExchangePageState extends State<ExchangePage> {
     // _futureBuilderFuture = getExchange(mainCoin.symbol, exchangeCoin.symbol);
     // TODO: implement initState
     super.initState();
-    var _symbol = mainCoin.symbol;
-    if (_symbol == "MHC") {
-      _symbol = exchangeCoin.symbol;
-    }
-    exchangeFree(_symbol).then((data) {
+    // var _symbol = mainCoin.symbol;
+    // if (_symbol == "MHC") {
+    //   _symbol = exchangeCoin.symbol;
+    // }
+    exchangeFree(mainCoin.symbol).then((data) {
       if (data.state) {
-        setState(() {
-          _exchangeFree = data.data;
+        getMHCFree().then((free) {
+          _free = free;
+          setState(() {
+            _exchangeFree = data.data;
+            if (mainCoin.symbol == "MHC") {
+              _exchangeFree += _free;
+            }
+          });
         });
       }
     });
@@ -80,7 +87,7 @@ class _ExchangePageState extends State<ExchangePage> {
                 } else {
                   num _output = 0;
                   if (mainCoin.symbol == "MHC") {
-                    _output = (_amount - _exchangeFree) * _exchangeRate;
+                    _output = (_amount - _exchangeFree - _free) * _exchangeRate;
                   } else {
                     _output = (_amount * _exchangeRate) - _exchangeFree;
                   }
@@ -172,8 +179,8 @@ class _ExchangePageState extends State<ExchangePage> {
                   _formKey.currentState.save();
 
                   if (_amount == null ||
-                      _amount < _exchangeFree ||
-                      _amount > mainCoin.blance) {
+                      _amount < _exchangeFree + _free ||
+                      (_amount + _exchangeFree + _free) > mainCoin.blance) {
                     setState(() {
                       _errText = "金额必须大于手续费且小于可用金额";
                     });

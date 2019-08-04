@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import 'event_bus.dart';
 
-var apiURL = "http://192.168.1.11:9090/api/wallet/v1";
+var apiURL = "http://192.168.0.100:9090/api/wallet/v1";
 
 Dio api;
 
@@ -16,7 +16,7 @@ Future<Data> post(
   dynamic data,
 }) async {
   Data _data;
-  try { 
+  try {
     var _response = await api.post(path, data: data);
     _data = Data(
         state: _response.data["Status"],
@@ -41,7 +41,7 @@ Future<Data> get(
   Data _data;
   try {
     var _response = await api.get(path, queryParameters: parameters);
-  print("$path   _response==== ${_response}");
+    print("$path   _response==== ${_response}");
 
     _data = Data(
         state: _response.data["Status"],

@@ -15,7 +15,6 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 
-
 final String apiUrl = "http://119.3.108.19:8110";
 final storage = new FlutterSecureStorage();
 final iv = "yyyyyyyyyyyyyyyy";
@@ -71,14 +70,20 @@ initMHCClient() async {
   print("价格===$_gasPrice");
 }
 
+Future<double> getMHCFree() async {
+  return ((await _mhcClient.getGasPrice()).getInWei * BigInt.from(2100))
+          .toDouble() /
+      1000000000000000000;
+}
+
 //获取地址的私钥
-Future<String> getAddressPrivateKey(Address addr,String password) async {
+Future<String> getAddressPrivateKey(Address addr, String password) async {
   var _key = "";
   try {
     return await Cipher2.decryptAesCbc128Padding7(
         addr.privateKey, password, iv);
   } catch (e) {
-  return throw new PasswordError("密码错误");
+    return throw new PasswordError("密码错误");
   }
 }
 
@@ -111,7 +116,7 @@ Future<Data> sendMHC(Address from, String to, String password, num value,
       state: false,
       messsage: "地址错误",
     );
-  }on PasswordError catch(e){
+  } on PasswordError catch (e) {
     _result = Data(
       state: false,
       messsage: "钱包密码错误",
@@ -129,13 +134,13 @@ Future<String> createMain(String mnemonic, String password) async {
   //     "武 蛋 敲 缝 闻 亲 矩 圣 婚 淮 霞 警"; //await bip39.generateMnemonic(lang: 'zh_cn');
   print(mnemonic);
   print(password.length);
-    print(iv.length);
+  print(iv.length);
   final seed = bip39.mnemonicToSeed(mnemonic);
   print(HEX.encode(seed));
   final root = bip32.BIP32.fromSeed(seed);
   print(root.toBase58());
   print(root.privateKey);
-  String nonce = await Cipher2.generateNonce();
+  // String nonce = await Cipher2.generateNonce();
   final encrypted =
       await Cipher2.encryptAesCbc128Padding7(root.toBase58(), password, iv);
   await storage.write(key: "rootPrivateKey", value: encrypted);
@@ -194,7 +199,7 @@ Future<List<Address>> getAddress() async {
   List<Address> _adds = new List();
 
   var _addressStr = await storage.read(key: "address");
-   print("xxxxxxxxxxxxxxxx${_addressStr}");
+  print("xxxxxxxxxxxxxxxx${_addressStr}");
   if (_addressStr != null) {
     var _jsonList = json.decode(_addressStr) as List;
     _jsonList.forEach((val) {
@@ -205,5 +210,5 @@ Future<List<Address>> getAddress() async {
 }
 
 Future<List<Address>> getAllAddress() async {
-    return await getAddress();
+  return await getAddress();
 }

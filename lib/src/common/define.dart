@@ -45,7 +45,7 @@ var avatarURL = "http://avatar.apcchis.com/";
 var newestVersion = Version(versionCode: "0.0.2");
 var currentVersion = Version(versionCode: "0.0.2");
 
-var payType = {1000: "货币兑换", 1001: "平台内部转账", 1002: "转出平台", 1003: "金额解冻"};
+var payTypes = {1000: "货币兑换", 1001: "平台内部转账", 1002: "转出平台", 1003: "金额解冻"};
 
 var mnemonic = "";
 //本地钱包所以的地址
@@ -54,7 +54,6 @@ List<Address> address;
 //USDT价格
 Map<String, Coin> coins = new Map();
 Map<String, String> coinReceiveAddress = new Map();
-
 
 class PasswordError extends Error {
   /** Message describing the assertion error. */
