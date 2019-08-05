@@ -24,7 +24,7 @@ class _ExchangeListPageState extends State<ExchangeListPage> {
   @override
   void initState() {
     super.initState();
-     orders(mainCoin, 1000, currentPage).then((_pageData) {
+     exchangeList(mainCoin, exchangeCoin, currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);
@@ -77,7 +77,7 @@ class _ExchangeListPageState extends State<ExchangeListPage> {
                 
                 trailing: Text.rich(TextSpan(
                   style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                    text: _log.amount.toStringAsFixed(6),children: <TextSpan>[
+                    text: _log.fromAmount.toStringAsFixed(6),children: <TextSpan>[
                               TextSpan(text: _state,style: TextStyle(color: Colors.green,fontSize: 12))
                             ])),
                             onTap: (){

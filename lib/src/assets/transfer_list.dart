@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
 class TransferListPage extends StatefulWidget {
-  String coin, payType;
+  String coin,  payType;
 
   TransferListPage(this.coin, this.payType);
   @override

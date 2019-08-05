@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TransferSuccessPage extends StatelessWidget {
-  String txHash;
-  TransferSuccessPage(this.txHash);
+  String title;
+  TransferSuccessPage(this.title);
 
   GlobalKey<ScaffoldState> _key = new GlobalKey();
   @override
@@ -44,28 +44,28 @@ class TransferSuccessPage extends StatelessWidget {
                 size: 50,
               ),
               Text(
-                "转账成功",
+                title,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
           ),
           Text("因网络原因到账时间不准,还请耐心等待"),
           Divider(),
-         txHash!=null? Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: {0:FractionColumnWidth(0.2),2:FractionColumnWidth(0.2)},
-            children: <TableRow>[
-              TableRow(children: <Widget>[
-                Text("交易Hash"),
-                Text(txHash),
-                FlatButton(child: Text("复制",style: TextStyle(color: Colors.green),),onPressed: (){
-                   Clipboard.setData(ClipboardData(text: txHash));
-                  _key.currentState.showSnackBar(SnackBar(backgroundColor: Colors.green, content: Text("已复制"),));
-                },)
-              ]),
+        //  txHash!=null? Table(
+        //   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        //   columnWidths: {0:FractionColumnWidth(0.2),2:FractionColumnWidth(0.2)},
+        //     children: <TableRow>[
+        //       TableRow(children: <Widget>[
+        //         Text("交易Hash"),
+        //         Text(txHash),
+        //         FlatButton(child: Text("复制",style: TextStyle(color: Colors.green),),onPressed: (){
+        //            Clipboard.setData(ClipboardData(text: txHash));
+        //           _key.currentState.showSnackBar(SnackBar(backgroundColor: Colors.green, content: Text("已复制"),));
+        //         },)
+        //       ]),
               
-            ],
-          ):Text("可在转账记录中查询详情"),
+        //     ],
+        //   ):Text("可在转账记录中查询详情"),
   
         ],
       ),

@@ -115,7 +115,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                       ? "--"
                                       : _assets[index]
                                           .blance
-                                          .toString(),
+                                          .toStringAsFixed(6),
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                       color: Colors.white,

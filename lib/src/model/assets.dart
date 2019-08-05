@@ -7,7 +7,7 @@ import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:apcc_wallet/src/model/usdt.dart';
-import 'package:apcc_wallet/src/model/usdt_eth.dart';
+// import 'package:apcc_wallet/src/model/usdt_eth.dart';
 import 'package:apcc_wallet/src/model/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:web3dart/crypto.dart';
@@ -135,13 +135,16 @@ class Exchange {
   String user;
   String fromCoin;
   String fromAddress;
-  String receiveAddress;
-  String receiveTxs;
+   num fromPriceCny;
+  String sendAddress;
   String toCoin;
   String toAddress;
+     num toPriceCny;
+
   String sendTxs;
   String sendAt;
-  num amount;
+  num fromAmount;
+  num toAmount;
   num free;
   num rate;
   String createAt;
@@ -151,13 +154,15 @@ class Exchange {
       this.user,
       this.fromCoin,
       this.fromAddress,
-      this.receiveAddress,
-      this.receiveTxs,
+      this.fromPriceCny,
+      this.sendAddress,
       this.toCoin,
       this.toAddress,
       this.sendTxs,
       this.sendAt,
-      this.amount,
+      this.fromAmount,
+      this.toAmount,
+      this.toPriceCny,
       this.free,
       this.rate,
       this.createAt,
@@ -168,14 +173,16 @@ class Exchange {
       "user": this.user,
       "fromCoin": this.fromCoin,
       "fromAddress": this.fromAddress,
-      "receiveAddress": this.receiveAddress,
-      "receiveTxs": this.receiveTxs,
+      "fromPriceCny":this.fromPriceCny,
+      "toPriceCny":this.toPriceCny,
+      "sendAddress": this.sendAddress,
       "toCoin": this.toCoin,
       "toAddress": this.toAddress,
       "sendTxs": this.sendTxs,
       "sendAt": this.sendAt,
       "free": this.free,
-      "amount": this.amount,
+      "amount": this.fromAmount,
+      "toAmount":this.toAmount,
       "rate": this.rate,
       "createAt": this.createAt,
       "state": this.state
@@ -190,7 +197,7 @@ Future<List<Assets>> getLocalAssets() async {
 
     var _amount = await getMHCblance(addr.val);
     _blacnce =
-        (_amount.getInWei / BigInt.from(1000000000000)).toDouble() / 1000000;
+        (_amount.getInWei / BigInt.from(1000000000000000000)).toDouble();
 
     assets.add(
         Assets(address: addr, symbol: addr.coin, blance: _blacnce, baseOn: ""));
@@ -200,7 +207,7 @@ Future<List<Assets>> getLocalAssets() async {
 
 Future<List<Assets>> getDBAssets() async {
   List<Assets> assets = new List();
-  var _usdtAssets = await getUSDT();
+  var _usdtAssets = await getDBCoins();
   print("_blance======${_usdtAssets.first.symbol}");
   assets.add(Assets(
       address: _usdtAssets.first.address,
@@ -259,18 +266,20 @@ Future<Data> exchange(
   // if (_data.state) {
   switch (from.symbol + to.symbol) {
     case "USDTMHC":
+    _data = await post("/exchange/usdt2mhc",
+          data: FormData.from({
+            "fromAddress": from.address.val,
+            "password": password,
+            "toAddress": to.address.val,
+            "amount": amount
+          }));
+
       break;
     case "MHCUSDT":
-      // _data = await sendMHC(
-      //     from.address, coinReceiveAddress[from.symbol], password, amount);
-      // if (_data.state) {
-      //   _assetLog.exchangeTxs = _data.data;
-      // }
-
       var _privateKey = await getAddressPrivateKey(from.address, password);
       var _key = bip32.BIP32.fromBase58(_privateKey);
 
-      var _data = post("/exchange/MHC2USDT",
+       _data =await  post("/exchange/mhc2usdt",
           data: FormData.from({
             "privateKey": bytesToHex(_key.privateKey,
                 include0x: false, forcePadLength: 64),
@@ -282,7 +291,6 @@ Future<Data> exchange(
     default:
     // }
   }
-  _data = await post("/assets/exchange", data: json.encode(_assetLog.toJson()));
 
   return _data;
 }
@@ -320,8 +328,7 @@ Future<Data> transfer(
       return await sendMHC(from.address, toAddress, password, amount);
       break;
     case "USDT":
-      return await send(
-          from.address.val, toAddress, "USDT", password, "out", amount);
+      return await sendUSDT(from.address.val, toAddress, amount,password);
     default:
   }
   ;
@@ -365,12 +372,14 @@ Future<PageData> exchangeList(String mainCoin, exchangeCoin, page) async {
         user: item["User"],
         fromCoin: item["FromCoin"],
         fromAddress: item["FromAddress"],
-        receiveAddress: item["ReceiveAddress"],
-        receiveTxs: item["ReceiveTxs"],
         toCoin: item["ToCoin"],
         toAddress: item["ToAddress"],
+        sendAddress: item["SendAddress"],
         sendTxs: item["SendTxs"].toString(),
-        amount: item["Amount"],
+        fromAmount: item["FromAmount"],
+        fromPriceCny: item["FromPriceCny"],
+        toAmount: item["ToAmount"],
+        toPriceCny: item["ToPriceCny"],
         free: item["Free"],
         rate: item["Rate"],
         createAt: item["CreateAt"],

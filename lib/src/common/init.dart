@@ -88,5 +88,5 @@ void init(BuildContext context, Store store) async {
 
   // storage.delete(key:"rootPrivateKey");
   // storage.delete(key: "address");
-  getUSDT();
+  // getUSDT();
 }

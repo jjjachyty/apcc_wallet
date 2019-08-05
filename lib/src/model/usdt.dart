@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 
 
-Future<List<Assets>> getUSDT() async {
+Future<List<Assets>> getDBCoins() async {
   List<Assets> _assets = new List();
    var _data =  await get("/assets/all");
    print("getUSDT_data$_data");
@@ -19,3 +19,8 @@ Future<List<Assets>> getUSDT() async {
    return _assets;
 }
 
+  Future<Data> sendUSDT(String fromAddress,String toAddress,num amount,String password) async{
+    var _data =  await post("/transfer/usdt",data:FormData.from({"password":password,"amount":amount,"toAddress":toAddress,"fromAddress":fromAddress}));
+    _data.data = null;
+    return _data;
+   }

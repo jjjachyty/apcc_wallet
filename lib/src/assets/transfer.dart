@@ -182,7 +182,7 @@ class _TransferPageState extends State<TransferPage> {
                       if (_data.state) {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (build) {
-                          return TransferSuccessPage(_data.data);
+                          return TransferSuccessPage("转账成功");
                         }));
                       } else {
                         setState(() {

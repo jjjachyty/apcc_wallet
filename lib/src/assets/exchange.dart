@@ -80,21 +80,21 @@ class _ExchangePageState extends State<ExchangePage> {
               onChanged: (val) {
                 _amount = double.tryParse(val);
 
-                if (_amount == null || _amount < _exchangeFree) {
+                if (_amount == null ) {
                   setState(() {
                     _exchangeOutput = 0;
                   });
                 } else {
-                  num _output = 0;
-                  if (mainCoin.symbol == "MHC") {
-                    _output = (_amount - _exchangeFree - _free) * _exchangeRate;
-                  } else {
-                    _output = (_amount * _exchangeRate) - _exchangeFree;
-                  }
+                  // num _output = 0;
+                  // if (mainCoin.symbol == "MHC") {
+                    // _output = (_amount  ) * _exchangeRate;
+                  // } else {
+                  //   _output = (_amount * _exchangeRate) - _exchangeFree;
+                  // }
 
                   setState(() {
                     _amount = _amount;
-                    _exchangeOutput = _output;
+                    _exchangeOutput = _amount * _exchangeRate;
                   });
                 }
               },
@@ -182,7 +182,7 @@ class _ExchangePageState extends State<ExchangePage> {
                       _amount < _exchangeFree + _free ||
                       (_amount + _exchangeFree + _free) > mainCoin.blance) {
                     setState(() {
-                      _errText = "金额必须大于手续费且小于可用金额";
+                      _errText = "兑换金额(含手续)必须大于手续费且小于可用金额";
                     });
                   } else {
                     setState(() {
@@ -194,7 +194,7 @@ class _ExchangePageState extends State<ExchangePage> {
                     if (_data.state) {
                       Navigator.of(context)
                           .pushReplacement(MaterialPageRoute(builder: (build) {
-                        return TransferSuccessPage(_data.data["ReceiveTxs"]);
+                        return TransferSuccessPage("兑换成功");
                       }));
                     } else {
                       setState(() {
@@ -221,7 +221,7 @@ class _ExchangePageState extends State<ExchangePage> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return TransferListPage(mainCoin.symbol, "1000");
+                  return ExchangeListPage(mainCoin.symbol, exchangeCoin.symbol);
                 }));
               },
             )

@@ -71,9 +71,9 @@ initMHCClient() async {
 }
 
 Future<double> getMHCFree() async {
-  return ((await _mhcClient.getGasPrice()).getInWei * BigInt.from(2100))
-          .toDouble() /
-      1000000000000000000;
+  return ((await _mhcClient.getGasPrice()).getInWei * BigInt.from(2100) /
+      BigInt.from(1000000000000000000 ))
+          .toDouble();
 }
 
 //获取地址的私钥

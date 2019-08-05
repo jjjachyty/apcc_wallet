@@ -53,7 +53,7 @@ class TransferDetailPage extends StatelessWidget {
             ),
             ListTile(
               leading: Text("手续费"),
-              title: Text("￥" + log.free.toString()),
+              title: Text("￥" + log.free.toString()+"MHC"),
             ),
             ListTile(
               leading: Text("费率"),
