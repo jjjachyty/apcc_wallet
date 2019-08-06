@@ -42,12 +42,31 @@ class _TransferPageState extends State<TransferPage> {
 
   @override
   void initState() {
+    if(assets.symbol =="USDT"){
+      Future.delayed(Duration(microseconds: 500),(){
+        var dialog = CupertinoAlertDialog(
+          content: Text(
+            "USDT转出平台暂只支持以太坊 ERC-20 代币转账(0x),请勿使用Omni协议地址",
+          ),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text("已知晓"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+                showDialog(context: context, builder: (_) => dialog);
+
+      });
+    }
     transferFree(assets.symbol).then((data) {
           setState(() {
                       _free = data;
 
           });
-       
+    
       
     });
     // TODO: implement initState
@@ -66,7 +85,7 @@ class _TransferPageState extends State<TransferPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (buildContext) {
-                return TransferListPage(assets.symbol, "1002");
+                return TransferListPage(assets.symbol);
               }));
             },
           )
@@ -103,7 +122,7 @@ class _TransferPageState extends State<TransferPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                maxLength: assets.blance.toString().length,
+                maxLength: 18,
                 decoration: InputDecoration(
                     labelText: "金额 可转出" + assets.blance.toString(),
                     // hintText: "可转出" + assets.blance.toString(),

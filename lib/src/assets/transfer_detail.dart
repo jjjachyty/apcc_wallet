@@ -4,7 +4,7 @@ import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/material.dart';
 
 class TransferDetailPage extends StatelessWidget {
-  AssetLog log;
+  TransferLog log;
   TransferDetailPage(this.log);
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,19 @@ class TransferDetailPage extends StatelessWidget {
             ),
             ListTile(
               leading: Text("币种"),
-              title: Text(log.fromCoin),
+              title: Text(log.coin),
             ),
             ListTile(
-              leading: Text("金额"),
-              title: Text(log.fromAmount.toString()),
+              leading: Text("转出金额"),
+              title: Text(log.amount.toString()),
+            ),
+             ListTile(
+              leading: Text("手续费"),
+              title: Text(log.free.toString()),
+            ),
+             ListTile(
+              leading: Text("到账金额"),
+              title: Text((log.amount-log.free).toString()),
             ),
             ListTile(
               leading: Text("地址"),
@@ -45,21 +53,9 @@ class TransferDetailPage extends StatelessWidget {
             ),
             ListTile(
               leading: Text("币种"),
-              title: Text(log.toCoin),
+              title: Text(log.coin),
             ),
-            ListTile(
-              leading: Text("金额"),
-              title: Text(log.toAmount.toString()),
-            ),
-            ListTile(
-              leading: Text("手续费"),
-              title: Text("￥" + log.free.toString()+"MHC"),
-            ),
-            ListTile(
-              leading: Text("费率"),
-              title: Text("1:" +
-                  (log.fromPriceCny / log.toPriceCny).toStringAsFixed(6)),
-            ),
+           
             Divider(),
             ListTile(
               leading: Text("状态"),

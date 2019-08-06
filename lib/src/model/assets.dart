@@ -43,89 +43,79 @@ class Assets {
         this.freezingBlance = json["FreezingBlance"];
 }
 
-class AssetLog {
+class TransferLog {
   String uuid;
   String fromAddress;
   String fromUser;
   String fromCoin;
-  num fromAmount;
-  num fromPriceCny;
+  num priceCny;
   String toUser;
-  String toCoin;
+  String coin;
   String toAddress;
-  String exchangeTxs;
-  num toAmount;
-  num toPriceCny;
+  num amount;
   String createAt;
   int payType;
   num free;
   int state;
   String sendTxs;
   String sendAddress;
-  String sendTime;
+  String sendAt;
 
-  AssetLog({
+  TransferLog({
     this.uuid,
     this.fromAddress,
     this.fromCoin,
     this.fromUser,
-    this.fromAmount,
-    this.fromPriceCny,
-    this.exchangeTxs,
+this.amount,
     this.toUser,
-    this.toCoin,
+    this.coin,
     this.toAddress,
-    this.toAmount,
-    this.toPriceCny,
+
     this.payType,
     this.free,
     this.createAt,
     this.state,
     this.sendAddress,
     this.sendTxs,
-    this.sendTime,
+    this.sendAt,
   });
-  AssetLog.fromJson(Map<String, dynamic> item)
+  TransferLog.fromJson(Map<String, dynamic> item)
       : this.uuid = item["UUID"],
         this.fromUser = item["FromUser"],
         this.fromCoin = item["FromCoin"],
         this.fromAddress = item["FromAddress"],
-        this.fromAmount = item["FromAmount"],
-        this.fromPriceCny = item["FromPriceCny"],
-        this.exchangeTxs = item["ExchangeTxs"],
+        this.amount = item["Amount"],
         this.toUser = item["ToUser"],
-        this.toCoin = item["ToCoin"],
+        this.coin = item["Coin"],
         this.toAddress = item["ToAddress"],
-        this.toAmount = item["ToAmount"],
-        this.toPriceCny = item["ToPriceCny"],
+        this.priceCny=item["PriceCny"],
+        
         this.payType = item["PayType"],
         this.free = item["Free"],
         this.createAt = item["CreateAt"],
         this.state = item["State"],
         this.sendAddress = item["SendAddress"],
         this.sendTxs = item["SendTxs"],
-        this.sendTime = item["SendTime"];
+        this.sendAt = item["SendAt"];
   Map<String, dynamic> toJson() {
     return {
       "uuid": this.uuid,
       "fromUser": this.fromUser,
       "fromCoin": this.fromCoin,
       "fromAddress": this.fromAddress,
-      "fromAmount": this.fromAmount,
-      "fromPriceCny": this.fromPriceCny,
-      "exchangeTxs": this.exchangeTxs,
+      "amount": this.amount,
+      "priceCny": this.priceCny,
       "toUser": this.toUser,
-      "toCoin": this.toCoin,
+      "coin": this.coin,
       "toAddress": this.toAddress,
-      "toAmount": this.toAmount,
-      "toPriceCny": this.toPriceCny,
+
       "payType": this.payType,
       "free": this.free,
       "createAt": this.createAt,
       "state": this.state,
       "sendAddress": this.sendAddress,
       "sendTxs": this.sendTxs,
-      "sendTime": this.sendTime,
+      "sendAt": this.sendAt,
     };
   }
 }
@@ -255,12 +245,6 @@ double getExchangeRate(String mainSymbol, exchangeSymbol) {
 //exchange货币兑换
 Future<Data> exchange(
     Assets from, Assets to, String password, num amount) async {
-  AssetLog _assetLog = AssetLog(
-      fromCoin: from.symbol,
-      fromAddress: from.address.val,
-      fromAmount: amount,
-      toCoin: to.symbol,
-      toAddress: to.address.val);
   Data _data;
   // // var _data = await post("/assets/", data: exchange.toJson());
   // if (_data.state) {
@@ -334,21 +318,20 @@ Future<Data> transfer(
   ;
 }
 
-Future<PageData> orders(String coin, payType, page) async {
-  List<AssetLog> _orders = new List();
+Future<PageData> transferList(String coin,  page) async {
+  List<TransferLog> _orders = new List();
   var _data = await get("/assets/logs", parameters: {
     "FromCoin": coin,
     "order": "create_at",
     "sort": "desc",
-    "page": page,
-    "PayType": payType
+    "page": page
   });
   print("orders-------------------------------------");
   print(_data.data);
   var _pageData = PageData.fromJson(_data.data);
   var _rows = _pageData.rows as List;
   _rows.forEach((item) {
-    _orders.add(AssetLog.fromJson(item));
+    _orders.add(TransferLog.fromJson(item));
   });
   _pageData.rows = _orders;
   return _pageData;

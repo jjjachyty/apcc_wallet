@@ -6,25 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
 class TransferListPage extends StatefulWidget {
-  String coin,  payType;
+  String coin;
 
-  TransferListPage(this.coin, this.payType);
+  TransferListPage(this.coin);
   @override
   _TransferListPageState createState() =>
-      _TransferListPageState(this.coin, this.payType);
+      _TransferListPageState(this.coin);
 }
 
 class _TransferListPageState extends State<TransferListPage> {
-  var coin, payType;
-  _TransferListPageState(this.coin, this.payType);
-  List<AssetLog> _orders = new List();
+  var coin;
+  _TransferListPageState(this.coin);
+  List<TransferLog> _orders = new List();
   ScrollController _scrollController = new ScrollController();
   int currentPage = 1;
   bool isPerformingRequest = false;
   @override
   void initState() {
     super.initState();
-    orders(coin, payType, currentPage).then((_pageData) {
+    transferList(coin,  currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);
@@ -45,7 +45,7 @@ class _TransferListPageState extends State<TransferListPage> {
         isPerformingRequest = true;
         currentPage++;
       });
-      var _pageData = await orders(coin, payType, currentPage);
+      var _pageData = await transferList(coin,  currentPage);
       setState(() {
         _orders.addAll(_pageData.rows);
         isPerformingRequest = false;
@@ -75,7 +75,7 @@ class _TransferListPageState extends State<TransferListPage> {
                 style: TextStyle(fontSize: 15),
               ),
               title: Text(payTypes[_log.payType]),
-              trailing: Text("-" + (_log.fromAmount).toString(),
+              trailing: Text("-" + (_log.amount).toString(),
                   style: TextStyle(color: Colors.green)),
               onTap: () {
                 Navigator.of(context)

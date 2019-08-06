@@ -20,7 +20,7 @@ class RechargePage extends StatelessWidget {
           ),
           actions: <Widget>[
             CupertinoButton(
-              child: Text("确定"),
+              child: Text("已知晓"),
               onPressed: () {
                 Navigator.pop(context);
               },
