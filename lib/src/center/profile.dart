@@ -7,16 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
-  User user;
-  Profile(this.user);
+  Profile();
 
   @override
-  _ProfileState createState() => _ProfileState(this.user);
+  _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-   User user;
-  _ProfileState(this.user);
+ 
   File _image;
   String _nickName,_errText="";
   GlobalKey<FormFieldState> _nickNamekey = new GlobalKey<FormFieldState>();

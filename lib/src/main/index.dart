@@ -48,7 +48,6 @@ class _IndexState extends State<Index> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final price = snapshot.data as List<Coin>;
-
               return ListView.separated(
                 itemCount: price.length,
                 itemBuilder: (context, index) {
@@ -196,16 +195,24 @@ class _IndexState extends State<Index> {
   Widget _usedDapp() {
     
     return Container(
-        height: 60,
+        height: 90,
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: _list == null? Loading():ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _list.length,
           itemBuilder: (context, index) {
-            return Image.network(
+            return 
+            Column(
+              children: <Widget>[
+                Image.network(
               _list[index].logo,
-              width: 70,
+              height: 60,
+              width: 80,
+            ),
+            Text(_list[index].name,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),)
+              ],
             );
+            
           },
         ));
   }
@@ -218,7 +225,7 @@ class _IndexState extends State<Index> {
       children: <Widget>[
         _newsSwiper(),
         Divider(),
-        Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
+        // Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
         _usedDapp(),
         Divider(),
         _coinPrice(),

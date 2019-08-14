@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:apcc_wallet/src/common/define.dart' as prefix0;
 import 'package:apcc_wallet/src/common/http.dart' as comhttp;
 
 import 'package:apcc_wallet/src/common/define.dart';
@@ -70,10 +71,16 @@ initMHCClient() async {
   print("价格===$_gasPrice");
 }
 
+
+Future<EtherAmount> getGasPrice() async {
+  return await _mhcClient.getGasPrice();
+}
+
 Future<double> getMHCFree() async {
-  return ((await _mhcClient.getGasPrice()).getInWei * BigInt.from(2100) /
-      BigInt.from(1000000000000000000 ))
-          .toDouble();
+  return ((await _mhcClient.getGasPrice()).getInWei *
+          BigInt.from(2100) /
+          BigInt.from(1000000000000000000))
+      .toDouble();
 }
 
 //获取地址的私钥
@@ -92,15 +99,8 @@ Future<Data> sendMHC(Address from, String to, String password, num value,
   Data _result = Data(state: false);
 
   try {
-    var _privateKey = await getAddressPrivateKey(from, password);
-
-    var _key = bip32.BIP32.fromBase58(_privateKey);
-
-    print("pk===${_key.privateKey.toString()}");
-
     String _tx = await _mhcClient.sendTransaction(
-        EthPrivateKey.fromHex(
-            bytesToHex(_key.privateKey, include0x: false, forcePadLength: 64)),
+        await getCredentials(from, password),
         Transaction(
           to: EthereumAddress.fromHex(to),
           gasPrice: _gasPrice,
@@ -123,6 +123,17 @@ Future<Data> sendMHC(Address from, String to, String password, num value,
     );
   }
   return _result;
+}
+
+Future<Credentials> getCredentials(Address from, String password) async {
+  print("获取地址${from.val}Credentials");
+  var _privateKey = await getAddressPrivateKey(from, password);
+  print("地址${from.val}PK $_privateKey");
+
+  var _key = bip32.BIP32.fromBase58(_privateKey);
+
+  return EthPrivateKey.fromHex(
+      bytesToHex(_key.privateKey, include0x: false, forcePadLength: 64));
 }
 
 Future<EtherAmount> getMHCblance(String address) async {
@@ -212,3 +223,40 @@ Future<List<Address>> getAddress() async {
 Future<List<Address>> getAllAddress() async {
   return await getAddress();
 }
+
+// 获取智能合约实例
+DeployedContract getContractInstance(
+    String abiCode, String name, String contractAddress) {
+  return DeployedContract(ContractAbi.fromJson(abiCode, name),
+      EthereumAddress.fromHex(contractAddress));
+}
+
+// 调用智能合约
+Future<String> callContractPayable(
+    String abiCode,
+    String contractAddress,
+    String contractname,
+    String functionName,
+    String password,
+    List parameters) async {
+  var contractInstance =
+      getContractInstance(abiCode, contractname, contractAddress);
+  return _mhcClient.sendTransaction(
+      (await getCredentials(address[0], password)),
+      Transaction.callContract(
+          contract: contractInstance,
+          function: contractInstance.function(functionName),
+          parameters: parameters),
+      chainId: 3333);
+}
+Future<List> callContract(
+    String abiCode,
+    String contractAddress,
+    String contractname,
+    String functionName,
+    List parameters) async {
+        var contractInstance =
+      getContractInstance(abiCode, contractname, contractAddress);
+  return await _mhcClient.call(
+      contract: contractInstance, function: contractInstance.function(functionName), params: parameters);
+    }

@@ -143,9 +143,8 @@ class _ExchangePageState extends State<ExchangePage> {
                 validator: (val) {
                   if (val == null ||
                       val == "" ||
-                      val.length < 8 ||
-                      val.length > 16) {
-                    return "支付密码为8-16位数";
+                      val.length != 16) {
+                    return "支付密码为16位数";
                   }
                 },
                 onSaved: (val) {

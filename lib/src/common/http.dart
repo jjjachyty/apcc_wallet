@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import 'event_bus.dart';
 
-var apiURL = "http://192.168.1.11:9090/api/wallet/v1";
+var apiURL = "http://119.3.108.19:9090/api/wallet/v1";
 
 Dio api;
 
@@ -24,8 +24,8 @@ Future<Data> post(
         data: _response.data["Data"]);
   } on DioError catch (e) {
     print(e.type);
-    if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
-      _data = Data(state: false, messsage: "请求超时,请重试");
+    if (e.type == DioErrorType.RECEIVE_TIMEOUT||e.type == DioErrorType.CONNECT_TIMEOUT) {
+      _data = Data(state: false, messsage: "请求超时,请稍后重试");
     } else {
       _data = Data(state: false, messsage: e.message);
     }
@@ -51,7 +51,7 @@ Future<Data> get(
     print(e.type);
     if (e.type == DioErrorType.RECEIVE_TIMEOUT ||
         e.type == DioErrorType.CONNECT_TIMEOUT) {
-      _data = Data(state: false, messsage: "请求超时,请重试");
+      _data = Data(state: false, messsage: "请求超时,请稍后重试");
     } else {
       _data = Data(state: false, messsage: e.message);
     }

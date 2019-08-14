@@ -166,7 +166,8 @@ Future<Data> modifiyProfile(File image, String nickName) async {
       _user.nickName = nickName;
     }
     setStorageString("_user", _user.toJson());
-    eventBus.fire(UserInfoUpdate(_user));
+    // eventBus.fire(UserInfoUpdate(_user));
+    user = _user;
   }
 
   return _data;

@@ -216,6 +216,7 @@ class _UserLoginState extends State<UserLogin> {
                       },
                     );
                   }),
+                  SizedBox(height: 20,),
               _goRegister(),
             ])));
   }
@@ -368,6 +369,7 @@ class _UserLoginState extends State<UserLogin> {
                   },
                 ),
               ),
+              SizedBox(height: 20,),
               _goRegister(),
             ])));
   }

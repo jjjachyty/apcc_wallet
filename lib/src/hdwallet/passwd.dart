@@ -6,6 +6,7 @@ import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:apcc_wallet/src/store/state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -27,18 +28,14 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
 
 
 
-  void _onSubmit() {
+  Future _onSubmit() async {
     
-     var _pk = "";
-
-    //测试
- 
     final form = _passwdForm.currentState;
     if (form.validate()) {
 
      
       form.save();
-             createMain(mnemonic, _passwdConf).then((privateKey) {
+            await createMain(mnemonic, _passwdConf).then((privateKey) {
                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
                  return PrivateKeyPage(privateKey);
                }),(route)=>false);
@@ -82,7 +79,7 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                         )),
                     validator: (val) {
                       if (!passwdExp.hasMatch(val)) {
-                return "请输入包含大小写字母及数字的8-16位密码";
+                return "请输入包含大小写字母及数字的16位密码";
               }
                       
                     },
@@ -115,18 +112,21 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                   SizedBox(
                     height: 20,
                   ),
-                   new RaisedButton(
-                          child: new Text(
-                            '创建',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                          
-                              _onSubmit();
-                            
-                          },
-                          color: Theme.of(context).primaryColor,
-                        )
+
+  ProgressButton(
+                  color: Colors.green,
+                  defaultWidget: Text(
+                    "创建",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  progressWidget: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+                  onPressed: () async {
+                     await _onSubmit();
+                  }),
+
                       
                 ],
               )));

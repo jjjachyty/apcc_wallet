@@ -112,6 +112,19 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
           onPressed: () async {
+            if ( _img1 ==null){
+              setState(() {
+                _errText = "请上传身份证正面照";
+              });
+              return ;
+            }
+            if ( _img2 ==null){
+              setState(() {
+                _errText = "请上传身份证反面照";
+              });
+              return ;
+            }
+
             var _data = await recognition(_img1, _img2);
             if (_data.state) {
               IDCard _cd = IDCard.fromJSON(_data.data["Cards"][0]);
@@ -134,6 +147,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
               setState(() {
                 _errText = _data.messsage;
               });
+            
             }
           },
         ),

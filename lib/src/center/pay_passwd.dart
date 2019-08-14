@@ -42,7 +42,7 @@ class _TradePassWdState extends State<TradePassWd> {
                   maxLength: 16,
                   validator: (val) {
                    if (!passwdExp.hasMatch(val)) {
-                      return "密码为8-16位大小写字母及数字组合";
+                      return "密码为16位大小写字母及数字组合";
                     }
                   },
                   decoration: InputDecoration(
@@ -161,7 +161,7 @@ class _TradePassWdState extends State<TradePassWd> {
                   maxLength: 16,
                   validator: (val) {
                    if (!passwdExp.hasMatch(val)) {
-                      return "密码为8-16位大小写字母及数字组合";
+                      return "密码为16位大小写字母及数字组合";
                     }
                     if (val == _orgPasswdCtr.text){
                       return "新密码与原密码一致";

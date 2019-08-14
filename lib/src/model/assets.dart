@@ -198,7 +198,6 @@ Future<List<Assets>> getLocalAssets() async {
 Future<List<Assets>> getDBAssets() async {
   List<Assets> assets = new List();
   var _usdtAssets = await getDBCoins();
-  print("_blance======${_usdtAssets.first.symbol}");
   assets.add(Assets(
       address: _usdtAssets.first.address,
       symbol: _usdtAssets.first.symbol,
@@ -238,8 +237,8 @@ Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
 }
 
 double getExchangeRate(String mainSymbol, exchangeSymbol) {
-  return toDouble(coins[mainSymbol].priceCny) /
-      toDouble(coins[exchangeSymbol].priceCny);
+  return coins[mainSymbol].priceCny /
+      coins[exchangeSymbol].priceCny;
 }
 
 //exchange货币兑换
@@ -267,7 +266,7 @@ Future<Data> exchange(
           data: FormData.from({
             "privateKey": bytesToHex(_key.privateKey,
                 include0x: false, forcePadLength: 64),
-            "exchangeAddress": coinReceiveAddress[from.symbol],
+            // "exchangeAddress": coinReceiveAddress[from.symbol],
             "toAddress": to.address.val,
             "amount": amount
           }));
@@ -318,15 +317,17 @@ Future<Data> transfer(
   ;
 }
 
-Future<PageData> transferList(String coin,  page) async {
+Future<PageData> transferList(String coin, address, page) async {
+    print("orders$coin $address");
+
   List<TransferLog> _orders = new List();
   var _data = await get("/assets/logs", parameters: {
-    "FromCoin": coin,
+    "coin": coin,
+    "address":address,
     "order": "create_at",
     "sort": "desc",
     "page": page
   });
-  print("orders-------------------------------------");
   print(_data.data);
   var _pageData = PageData.fromJson(_data.data);
   var _rows = _pageData.rows as List;

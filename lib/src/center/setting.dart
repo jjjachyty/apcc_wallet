@@ -42,7 +42,7 @@ class UserSetting extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
-                          return Profile(store.state.user);
+                          return Profile();
                         }));
                       },
                     ),
@@ -62,29 +62,29 @@ class UserSetting extends StatelessWidget {
                           : Icon(Icons.keyboard_arrow_right),
                       title: Text("实名认证"),
                       onTap: () {
-                        if (store.state.user.idCardAuth == 1) {
+                        if (user.idCardAuth == 1) {
                         } else {
                           Navigator.of(context).pushNamed("/user/idcard");
                         }
                       },
                     ),
-                    new ListTile(
-                      dense: true,
-                      contentPadding: EdgeInsets.zero,
-                      isThreeLine: false,
-                      leading: Icon(
-                        Icons.lock_outline,
-                        color: Colors.green,
-                      ),
-                      trailing: Icon(Icons.keyboard_arrow_right),
-                      title: Text("支付密码"),
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return TradePassWd(store.state.user.hasPayPasswd);
-                        }));
-                      },
-                    ),
+                    // new ListTile(
+                    //   dense: true,
+                    //   contentPadding: EdgeInsets.zero,
+                    //   isThreeLine: false,
+                    //   leading: Icon(
+                    //     Icons.lock_outline,
+                    //     color: Colors.green,
+                    //   ),
+                    //   trailing: Icon(Icons.keyboard_arrow_right),
+                    //   title: Text("支付密码"),
+                    //   onTap: () {
+                    //     Navigator.of(context)
+                    //         .push(MaterialPageRoute(builder: (context) {
+                    //       return TradePassWd(store.state.user.hasPayPasswd);
+                    //     }));
+                    //   },
+                    // ),
                     new ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,

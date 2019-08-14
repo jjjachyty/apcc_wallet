@@ -7,6 +7,7 @@ import 'package:apcc_wallet/src/common/utils.dart';
 
 import 'package:apcc_wallet/src/model/captcha.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _UserRegisterState extends State<UserRegister> {
             maxLength: 16,
             obscureText: _obscureFlag,
             decoration: InputDecoration(
-                hintText: "请输入6-16位密码",
+                hintText: "请输入包含大小写字母及数字的16位密码",
                 border: OutlineInputBorder(),
                 counterText: "",
                 suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye),onPressed: (){
@@ -143,7 +144,7 @@ class _UserRegisterState extends State<UserRegister> {
                 ),
             validator: (val) {
               if (!passwdExp.hasMatch(val)) {
-                return "请输入包含大小写字母及数字的8-16位密码";
+                return "请输入包含大小写字母及数字的16位密码";
               }
             },
           ),
@@ -189,10 +190,28 @@ class _UserRegisterState extends State<UserRegister> {
                if (_data.state){
                                   FocusScope.of(context).requestFocus(FocusNode());
 
-                 _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.green,)).closed.then((r){
-                   Navigator.of(context).pop();
-                 }
-                 );
+                //  _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.green,)).closed.then((r){
+                //    Navigator.of(context).pop();
+                //  }
+
+                 
+                //  );
+
+                        var dialog = CupertinoAlertDialog(
+          content: Text(
+            "恭喜,注册成功",
+          ),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text("去登录"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+                showDialog(context: context, builder: (_) => dialog);
                  
                }else{
                               setState(() {

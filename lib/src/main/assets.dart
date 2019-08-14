@@ -29,7 +29,7 @@ class _AssetsPageState extends State<AssetsPage> {
     // });
     // TODO: implement initState
     super.initState();
-    if (address != null) {
+    if (address != null && user !=null) {
       _onRefresh();
     }
   }

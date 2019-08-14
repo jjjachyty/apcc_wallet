@@ -16,6 +16,7 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
+import 'package:web3dart/web3dart.dart';
 
 void init(BuildContext context, Store store) async {
   await initSharedPreferences();
@@ -83,8 +84,8 @@ void init(BuildContext context, Store store) async {
 
   initMHCClient();
   //初始化货币兑换接收地址
-  coinReceiveAddress["USDT"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
-  coinReceiveAddress["MHC"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
+  // coinReceiveAddress["USDT"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
+  // coinReceiveAddress["MHC"] = "0xC05dEb0C5e841Aa564f41f769335BC96D75Ade65";
 
   // storage.delete(key:"rootPrivateKey");
   // storage.delete(key: "address");
