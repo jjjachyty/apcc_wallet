@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/common/loding.dart';
 import 'package:apcc_wallet/src/dapp/index.dart';
+import 'package:apcc_wallet/src/dapp/test.dart';
 import 'package:apcc_wallet/src/model/coins.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:apcc_wallet/src/model/news.dart';
@@ -194,42 +195,43 @@ class _IndexState extends State<Index> {
   }
 
   Widget _usedDapp() {
-    
     return Container(
         height: 90,
         padding: EdgeInsets.symmetric(horizontal: 8),
-        child: _list == null? Loading():ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: _list.length,
-          itemBuilder: (context, index) {
-            return 
-            GestureDetector(
-              child:Column(
-              children: <Widget>[
-                Image.network(
-              _list[index].logo,
-              height: 60,
-              width: 80,
-            ),
-            Text(_list[index].name,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),)
-              ],
-            ) ,
-              onTap: (){
-                            Navigator.push(context, PageRouteBuilder(pageBuilder:
-                      (BuildContext context, Animation animation,
-                          Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: animation,
-                        alignment: Alignment.center,
-                        child: DappPage(_list[index]));
-                  }));
-              },
-            );
-            
-            
-          },
-          
-        ));
+        child: _list == null
+            ? Loading()
+            : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _list.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    child: Column(
+                      children: <Widget>[
+                        Image.network(
+                          _list[index].logo,
+                          height: 60,
+                          width: 80,
+                        ),
+                        Text(
+                          _list[index].name,
+                          style: TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(context, PageRouteBuilder(pageBuilder:
+                          (BuildContext context, Animation animation,
+                              Animation secondaryAnimation) {
+                        return ScaleTransition(
+                            scale: animation,
+                            alignment: Alignment.center,
+                            child: MyApp());
+                      }));
+                    },
+                  );
+                },
+              ));
   }
 
   @override

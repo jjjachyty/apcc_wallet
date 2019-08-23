@@ -18,12 +18,11 @@ class _DappsPageState extends State<DappsPage> {
   List<Dapp> _listSwiper = new List();
   final flutterWebViewPlugin = FlutterWebviewPlugin();
 
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    all({"order": "used","sort":"desc"}).then((page) {
+    all({"order": "used", "sort": "desc"}).then((page) {
       setState(() {
         _list = page.rows;
         _listSwiper..add(_list[0])..add(_list[1])..add(_list[2])..add(_list[3]);
@@ -46,19 +45,18 @@ class _DappsPageState extends State<DappsPage> {
 
   Widget _searchBar() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-        child: 
-        
-        TextField(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: TextField(
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
-           Navigator.of(context).push(MaterialPageRoute(builder: (context){
-             return SearchAppPage();
-           }));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return SearchAppPage();
+            }));
           },
           // enabled: false,
-          decoration:
-              InputDecoration(hintText: "点击搜索Dapp", prefixIcon: Icon(Icons.search),
+          decoration: InputDecoration(
+              hintText: "点击搜索Dapp",
+              prefixIcon: Icon(Icons.search),
               contentPadding: EdgeInsets.all(0),
               border: OutlineInputBorder()),
         ));
@@ -126,9 +124,8 @@ class _DappsPageState extends State<DappsPage> {
                         alignment: Alignment.center,
                         child: MyApp());
                   }));
-                  
-                  // flutterWebViewPlugin.launch("http://192.168.1.11:8080",withJavascript: true,javascriptChannels:getJsChannel(context,_list[index]),enableAppScheme: true ); 
 
+                  // flutterWebViewPlugin.launch("http://192.168.1.11:8080",withJavascript: true,javascriptChannels:getJsChannel(context,_list[index]),enableAppScheme: true );
                 },
               );
             }));
@@ -143,7 +140,7 @@ class _DappsPageState extends State<DappsPage> {
     }
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: 200.0,
+        height: MediaQuery.of(context).size.width * 0.8,
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
             return (Image.network(
@@ -166,14 +163,13 @@ class _DappsPageState extends State<DappsPage> {
           autoplayDelay: 5000,
           onTap: (index) {
             Navigator.push(context, PageRouteBuilder(pageBuilder:
-                      (BuildContext context, Animation animation,
-                          Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: animation,
-                        alignment: Alignment.center,
-                        child: DappPage(_list[index]));
-                  }));
-
+                (BuildContext context, Animation animation,
+                    Animation secondaryAnimation) {
+              return ScaleTransition(
+                  scale: animation,
+                  alignment: Alignment.center,
+                  child: MyApp());
+            }));
           },
         ));
   }

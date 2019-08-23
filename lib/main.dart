@@ -1,4 +1,3 @@
-
 import 'package:apcc_wallet/router.dart';
 
 import 'package:apcc_wallet/src/common/init.dart';
@@ -26,8 +25,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-        init(context, store);
-  SystemChrome.setEnabledSystemUIOverlays([]);
+    init(context, store);
+    // SystemChrome.setEnabledSystemUIOverlays([]);
     return new StoreProvider(
         store: store,
         child: MaterialApp(
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             primarySwatch: Colors.green,
           ),
-           home: new SplashScreen(),
+          home: new SplashScreen(),
           routes: routes,
         ));
   }

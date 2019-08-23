@@ -45,18 +45,22 @@ class _SplashScreenState extends State<SplashScreen> {
       alignment: const Alignment(1.0, -1.0), // 右上角对齐
       children: [
         new ConstrainedBox(
-          constraints: BoxConstraints.expand(),
-          child: new CachedNetworkImage(
-        imageUrl: "http://avatar.apcchis.com/splashscreens.png",
-        placeholder: (context, url) => new CircularProgressIndicator(),
-        errorWidget: (context, url, error) => new Icon(Icons.error),
-     )
-  
+            constraints: BoxConstraints.expand(),
+            child: new CachedNetworkImage(
+              fit: BoxFit.fill,
+              // height: MediaQuery.of(context).size.height,
+              // width: MediaQuery.of(context).size.width,
+              imageUrl: "http://avatar.apcchis.com/splashscreens.png",
+              placeholder: (context, url) => new CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
+            )
+
             // fit: BoxFit.fill,
-          // ),
-        ),
+            // ),
+            ),
         new Padding(
-          padding: new EdgeInsets.fromLTRB(0.0, MediaQuery.of(context).size.height*0.7, 10.0, 0.0),
+          padding: new EdgeInsets.fromLTRB(
+              0.0, MediaQuery.of(context).size.height * 0.7, 10.0, 0.0),
           child: new FlatButton(
             onPressed: () {
               navigationPage();

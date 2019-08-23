@@ -12,8 +12,8 @@ import 'webview_scaffold.dart' as webview;
 const kAndroidUserAgent =
     'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36';
 
-String selectedUrl = 'http://192.168.1.11:8080';
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+String selectedUrl = 'http://www.baidu.com';
+var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MyApp extends StatefulWidget {
   @override
@@ -24,37 +24,37 @@ class MyApp extends StatefulWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Container(
-      
+
 //     );
 //   }
 // }
-
 
 class _MyAppState extends State<MyApp> {
   final flutterWebViewPlugin = FlutterWebviewPlugin();
 
   @override
   Widget build(BuildContext context) {
-    return  webview.WebviewScaffold(
+    return webview.WebviewScaffold(
       resizeToAvoidBottomInset: true,
-            key: scaffoldKey,
+      key: scaffoldKey,
       url: selectedUrl,
       // javascriptChannels: ,
       //  appBar: AppBar(centerTitle: true,backgroundColor: Colors.transparent,title: Text("APP2MHC",style: TextStyle(color: Colors.green),),elevation: 0,),
       withLocalStorage: true,
       enableAppScheme: true,
-      initialChild:  Container(
-          // color: Colors.green,
+      initialChild: Container(
+        // color: Colors.green,
         child: Center(
-          child: Text("广告位",style: TextStyle(color: Colors.green),),
+          child: Text(
+            "广告位",
+            style: TextStyle(color: Colors.green),
+          ),
         ),
       ),
     );
-        
-   
+
     // SystemChrome.setEnabledSystemUIOverlays([]);
     // TODO: implement build
- 
   }
   // @override
   // Widget build(BuildContext context) {
