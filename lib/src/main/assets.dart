@@ -36,13 +36,11 @@ class _AssetsPageState extends State<AssetsPage> {
 
   Future<void> _onRefresh() async {
     var _data = await getLocalAssets();
+
+    var _db = await getDBAssets();
+       _data.addAll(_db);
     setState(() {
       _assets = _data;
-    });
-    getDBAssets().then((assets){
-       setState(() {
-      _assets.addAll(assets);
-       });
     });
   }
 

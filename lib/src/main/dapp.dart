@@ -1,8 +1,12 @@
 import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:apcc_wallet/src/dapp/search.dart';
+import 'package:apcc_wallet/src/dapp/test.dart';
+import 'package:apcc_wallet/src/dapp/test_jsChannel.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class DappsPage extends StatefulWidget {
   @override
@@ -12,7 +16,9 @@ class DappsPage extends StatefulWidget {
 class _DappsPageState extends State<DappsPage> {
   List<Dapp> _list = new List();
   List<Dapp> _listSwiper = new List();
+  final flutterWebViewPlugin = FlutterWebviewPlugin();
 
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -118,8 +124,11 @@ class _DappsPageState extends State<DappsPage> {
                     return ScaleTransition(
                         scale: animation,
                         alignment: Alignment.center,
-                        child: DappPage(_list[index]));
+                        child: MyApp());
                   }));
+                  
+                  // flutterWebViewPlugin.launch("http://192.168.1.11:8080",withJavascript: true,javascriptChannels:getJsChannel(context,_list[index]),enableAppScheme: true ); 
+
                 },
               );
             }));
@@ -164,6 +173,7 @@ class _DappsPageState extends State<DappsPage> {
                         alignment: Alignment.center,
                         child: DappPage(_list[index]));
                   }));
+
           },
         ));
   }

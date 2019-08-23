@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/dapp/jsChannel.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/material.dart';
 
 class DappPage extends StatefulWidget {
   Dapp app;
@@ -24,9 +26,11 @@ class _DappPageState extends State<DappPage> {
     used(app.uuid);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(app.name),
@@ -34,7 +38,9 @@ class _DappPageState extends State<DappPage> {
         actions: <Widget>[
         IconButton(icon: Icon(Icons.close),onPressed: (){
           Navigator.of(context).pop();
-        },)
+        },),
+        SampleMenu(_controller.future),
+
       ],),
       body: Builder(builder: (BuildContext context) {
         return WebView(
@@ -46,7 +52,7 @@ class _DappPageState extends State<DappPage> {
           },
           // TODO(iskakaushik): Remove this when collection literals makes it to stable.
           // ignore: prefer_collection_literals
-          javascriptChannels: getJsChannel(context,_controller.future,app),
+          // javascriptChannels: getJsChannel(context,_controller.future,app),
           navigationDelegate: (NavigationRequest request) {
             if (request.url.startsWith(app.homePage)) {
               print('blocking navigation to $request}');
@@ -55,8 +61,11 @@ class _DappPageState extends State<DappPage> {
             print('allowing navigation to $request');
             return NavigationDecision.navigate;
           },
-          onPageFinished: (String url) {
+          onPageFinished: (String url) async {
             print('Page finished loading: $url');
+            (await _controller.future).evaluateJavascript(
+        'localStorage["address"] = "'+address[0].val+'";');
+
           },
         );
       }));
@@ -64,4 +73,52 @@ class _DappPageState extends State<DappPage> {
   }
 
  
+}
+
+enum MenuOptions {
+  about,
+  reload,
+}
+
+class SampleMenu extends StatelessWidget {
+  SampleMenu(this.controller);
+
+  final Future<WebViewController> controller;
+  final CookieManager cookieManager = CookieManager();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<WebViewController>(
+      future: controller,
+      builder:
+          (BuildContext context, AsyncSnapshot<WebViewController> controller) {
+        return PopupMenuButton<MenuOptions>(
+          onSelected: (MenuOptions value) {
+            switch (value) {
+              case MenuOptions.about:
+                
+                break;
+              case MenuOptions.reload:
+              controller.data.reload();
+              break;
+              
+            }
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuItem<MenuOptions>>[
+            PopupMenuItem<MenuOptions>(
+                  value: MenuOptions.reload,
+                  child: const Text('刷新'),
+                  enabled: controller.hasData,
+                ),
+                PopupMenuItem<MenuOptions>(
+                  value: MenuOptions.about,
+                  child: const Text('说明'),
+                  enabled: controller.hasData,
+                ),
+
+              ],
+        );
+      },
+    );
+  }
 }

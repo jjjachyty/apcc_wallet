@@ -15,8 +15,8 @@ import '../bip39/src/bip39_base.dart' as bip39;
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
-
 final String apiUrl = "http://119.3.108.19:8110";
+
 final storage = new FlutterSecureStorage();
 final iv = "yyyyyyyyyyyyyyyy";
 
@@ -66,9 +66,10 @@ Web3Client getEthClint() {
 
 initMHCClient() async {
   _mhcClient = new Web3Client(apiUrl, new Client());
-
   _gasPrice = await _mhcClient.getGasPrice();
   print("价格===$_gasPrice");
+
+ 
 }
 
 
@@ -85,7 +86,6 @@ Future<double> getMHCFree() async {
 
 //获取地址的私钥
 Future<String> getAddressPrivateKey(Address addr, String password) async {
-  var _key = "";
   try {
     return await Cipher2.decryptAesCbc128Padding7(
         addr.privateKey, password, iv);
@@ -126,14 +126,15 @@ Future<Data> sendMHC(Address from, String to, String password, num value,
 }
 
 Future<Credentials> getCredentials(Address from, String password) async {
-  print("获取地址${from.val}Credentials");
+  print("获取地址 ${from.val} Credentials");
   var _privateKey = await getAddressPrivateKey(from, password);
   print("地址${from.val}PK $_privateKey");
 
   var _key = bip32.BIP32.fromBase58(_privateKey);
+  var pkHex = bytesToHex(_key.privateKey, include0x: false, forcePadLength: 64);
+  print("PKHEX == $pkHex");
 
-  return EthPrivateKey.fromHex(
-      bytesToHex(_key.privateKey, include0x: false, forcePadLength: 64));
+  return EthPrivateKey.fromHex(pkHex);
 }
 
 Future<EtherAmount> getMHCblance(String address) async {
@@ -238,17 +239,34 @@ Future<String> callContractPayable(
     String contractname,
     String functionName,
     String password,
-    List parameters) async {
+    List parameters,
+    {int gas,BigInt value}
+  ) async {
   var contractInstance =
       getContractInstance(abiCode, contractname, contractAddress);
+  try{
+    gas = gas??2100;
+
   return _mhcClient.sendTransaction(
       (await getCredentials(address[0], password)),
       Transaction.callContract(
           contract: contractInstance,
           function: contractInstance.function(functionName),
-          parameters: parameters),
-      chainId: 3333);
+          parameters: parameters,
+          from:EthereumAddress.fromHex(address[0].val),
+           gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.gwei, 1),
+          maxGas: gas,
+          value: EtherAmount.inWei(value),
+          ),
+      chainId: 3333,
+      );
+      }catch(e){
+        rethrow;
+      }
 }
+
+
+
 Future<List> callContract(
     String abiCode,
     String contractAddress,
@@ -259,4 +277,9 @@ Future<List> callContract(
       getContractInstance(abiCode, contractname, contractAddress);
   return await _mhcClient.call(
       contract: contractInstance, function: contractInstance.function(functionName), params: parameters);
+    }
+
+  Future<bool>  checkTransaction(String txs) async {
+    var txReceipt =await  _mhcClient.getTransactionReceipt(txs);
+    return txReceipt==null?false:true;
     }

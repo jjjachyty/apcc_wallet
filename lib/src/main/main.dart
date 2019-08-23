@@ -2,6 +2,7 @@ import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/version.dart';
+import 'package:apcc_wallet/src/dapp/test.dart';
 import 'package:apcc_wallet/src/main/assets.dart';
 import 'package:apcc_wallet/src/main/dapp.dart';
 import 'package:apcc_wallet/src/model/user.dart';

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -46,19 +46,23 @@ class _SplashScreenState extends State<SplashScreen> {
       children: [
         new ConstrainedBox(
           constraints: BoxConstraints.expand(),
-          child: new Image.network(
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561698924208&di=1950fbfe6ca91058444dcde9b313b6e6&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fc84742653dc55555d32b02f7b0e13aaab7ebadd62d5da-aBKVnx_fw658",
-            fit: BoxFit.fill,
-          ),
+          child: new CachedNetworkImage(
+        imageUrl: "http://avatar.apcchis.com/splashscreens.png",
+        placeholder: (context, url) => new CircularProgressIndicator(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
+     )
+  
+            // fit: BoxFit.fill,
+          // ),
         ),
         new Padding(
-          padding: new EdgeInsets.fromLTRB(0.0, 30.0, 10.0, 0.0),
+          padding: new EdgeInsets.fromLTRB(0.0, MediaQuery.of(context).size.height*0.7, 10.0, 0.0),
           child: new FlatButton(
             onPressed: () {
               navigationPage();
             },
 //            padding: EdgeInsets.all(0.0),
-            color: Colors.grey,
+            color: Colors.transparent,
             child: new Text(
               "$count 跳过广告",
               style: new TextStyle(color: Colors.white, fontSize: 12.0),

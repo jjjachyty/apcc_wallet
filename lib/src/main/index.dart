@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/common/loding.dart';
+import 'package:apcc_wallet/src/dapp/index.dart';
 import 'package:apcc_wallet/src/model/coins.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:apcc_wallet/src/model/news.dart';
@@ -202,7 +203,8 @@ class _IndexState extends State<Index> {
           itemCount: _list.length,
           itemBuilder: (context, index) {
             return 
-            Column(
+            GestureDetector(
+              child:Column(
               children: <Widget>[
                 Image.network(
               _list[index].logo,
@@ -211,9 +213,22 @@ class _IndexState extends State<Index> {
             ),
             Text(_list[index].name,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),)
               ],
+            ) ,
+              onTap: (){
+                            Navigator.push(context, PageRouteBuilder(pageBuilder:
+                      (BuildContext context, Animation animation,
+                          Animation secondaryAnimation) {
+                    return ScaleTransition(
+                        scale: animation,
+                        alignment: Alignment.center,
+                        child: DappPage(_list[index]));
+                  }));
+              },
             );
             
+            
           },
+          
         ));
   }
 
