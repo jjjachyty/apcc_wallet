@@ -313,7 +313,7 @@ class _UserRegisterState extends State<UserRegister> {
           ),
         ),
         Text(
-          _errorText,
+          _errorText??"",
           style: TextStyle(color: Colors.red),
         ),
         SizedBox(
