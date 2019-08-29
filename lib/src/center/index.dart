@@ -63,7 +63,18 @@ class _UserCenterState extends State<UserCenter> {
             Navigator.of(context).pushNamed("/contactus");
           },
         ),
-        Divider()
+        new ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          isThreeLine: false,
+          leading: Icon(Icons.bookmark,color: Colors.green,),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          title: Text("使用条款"),
+          onTap: () {
+            Navigator.of(context).pushNamed("/notice");
+          },
+        ),
+        Divider(),
       ],
     );
   }

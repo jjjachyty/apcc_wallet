@@ -16,7 +16,7 @@ class ContactUs extends StatelessWidget {
                 IconData(0xe600, fontFamily: 'myIcon'),
                 color: Colors.green,
               ),
-              trailing: Text("..."),
+              trailing: Text("yaxingda001（13308313620）"),
               onTap: () async {
                 if (await canLaunch("weixin://")) {
                   await launch("weixin://");
@@ -35,7 +35,7 @@ class ContactUs extends StatelessWidget {
                 IconData(0xe65c, fontFamily: 'myIcon'),
                 color: Colors.green,
               ),
-              trailing: Text("..."),
+              trailing: Text("392851289"),
             ),
             ListTile(
               leading: Icon(Icons.phone,color: Colors.green,),

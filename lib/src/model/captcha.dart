@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:dio/dio.dart';
 
@@ -8,9 +9,8 @@ Future<String> getCaptcha(String id) async {
   return response.data["Data"]["img"];
 }
 
-Future<bool> verificationCaptcha(String id,value) async {
-  var  response = await api.post("/com/captcha",queryParameters: {"phone":id,"value":value});
-  return response.data["Status"];
+Future<Data> verificationCaptcha(String id,value) async {
+  return await post("/com/captcha",data: new FormData.from({"phone":id,"value":value}));
 }
 
 Future<bool> verificationSms(String id,value ) async {

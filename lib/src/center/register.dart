@@ -172,7 +172,7 @@ class _UserRegisterState extends State<UserRegister> {
           ),
           SizedBox(
             height: 15,
-            child: Text(_errorText, style: TextStyle(color: Colors.red)),
+            child: Text(_errorText??"", style: TextStyle(color: Colors.red)),
           ),
           ProgressButton(
             color: Colors.green,

@@ -106,11 +106,12 @@ class _CaptchaState extends State<Captcha> {
                       onPressed: () async {
                         if (_input.currentState.validate()) {
                           _input.currentState.save();
-                          if (await verificationCaptcha(this.phone,_smsValue)) {
+                          var _data = await verificationCaptcha(this.phone,_smsValue);
+                          if (_data.state) {
                             Navigator.of(context).pop(true);
                           } else {
                             _scaffoldkey.currentState.showSnackBar(SnackBar(
-                              content: Text("验证码校验错误,请重新输入"),
+                              content: Text(_data.messsage),
                               backgroundColor: Colors.red,
                             ));
                             _input.currentState.reset();
