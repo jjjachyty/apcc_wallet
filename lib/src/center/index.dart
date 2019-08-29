@@ -45,7 +45,7 @@ class _UserCenterState extends State<UserCenter> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
-          leading: Icon(Icons.info),
+          leading: Icon(Icons.info,color: Colors.green,),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("关于我们"),
           onTap: () {
@@ -56,7 +56,7 @@ class _UserCenterState extends State<UserCenter> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
-          leading: Icon(Icons.message),
+          leading: Icon(Icons.message,color: Colors.green,),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("联系我们"),
           onTap: () {
@@ -77,10 +77,7 @@ class _UserCenterState extends State<UserCenter> {
             child: Container(
                 height: 250,
                 decoration: new BoxDecoration(
-                  // image: DecorationImage(
-                  //     colorFilter: ColorFilter.linearToSrgbGamma(),
-                  //     fit: BoxFit.fill,
-                  //     image: NetworkImage(getAvatarURL(user.avatar))),
+                  image: DecorationImage(image: AssetImage("assets/images/avatar_bg.png"),fit: BoxFit.fill) ,
 
                   color: Colors.green.shade500.withOpacity(0.8),
                 ),
@@ -140,7 +137,7 @@ class _UserCenterState extends State<UserCenter> {
               Container(
                 // color: Colors.green,
                 decoration: new BoxDecoration(
-                  color: Colors.green.shade500.withOpacity(0.8),
+                  image: DecorationImage(image: AssetImage("assets/images/avatar_bg.png"),fit: BoxFit.fill) ,
                   gradient: RadialGradient(colors: [
                     Colors.green.shade300,
                     Colors.green.shade400,
@@ -159,11 +156,11 @@ class _UserCenterState extends State<UserCenter> {
                             margin: EdgeInsets.only(top: 30),
                             child: Image.asset(
                               "assets/images/nologinavatar.png",
-                              width: 50,
+                              width: 60,
                               color: Colors.white,
                             ))),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Text(
                       "点击头像登陆",

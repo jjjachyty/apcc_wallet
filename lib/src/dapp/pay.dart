@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:web3dart/json_rpc.dart';
-import 'test_common.dart';
+import 'common.dart';
 
 _showPaySuccessed(BuildContext context,String txs) {
   showDialog(

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         init(context, store);
-  SystemChrome.setEnabledSystemUIOverlays([]);
+   SystemChrome.setEnabledSystemUIOverlays([]);
     return new StoreProvider(
         store: store,
         child: MaterialApp(

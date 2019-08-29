@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Version extends StatelessWidget {
@@ -40,8 +41,12 @@ class Version extends StatelessWidget {
         body: Container(
           child: Column(
             children: <Widget>[
+              Container(
+                alignment: Alignment.centerRight,
+                child: Text("发布时间 ${newestVersion.releaseTime}",style: TextStyle(fontSize: 12),),
+              ),
               Expanded(
-                child: SingleChildScrollView(child: Text("${newestVersion.releaseNote}"),) ,
+                child: new MarkdownBody(data: "${newestVersion.releaseNote}"),//SingleChildScrollView(child: Text("${newestVersion.releaseNote}"),) ,
               ),
              
             ],

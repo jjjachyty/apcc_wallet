@@ -22,9 +22,11 @@ class Dapp {
   String lowerAt;
   String auditor;
   String auditOpinions;
+  String abiCode;
+  String address;
   String homePage;
   Dapp({this.uuid,this.name,this.subtitle,this.category,this.permission,this.synopsis,this.score,this.logo,this.banner,this.snapshot,this.video,this.owner,this.used,this.state,this.submitAt,
-  this.upperAt,this.lowerAt,this.auditor,this.auditOpinions,this.homePage});
+  this.upperAt,this.lowerAt,this.auditor,this.auditOpinions,this.homePage,this.address});
 }
 
 Future<PageData> all(Map<String,dynamic> params) async {
@@ -38,7 +40,7 @@ Future<PageData> all(Map<String,dynamic> params) async {
   _rows.forEach((item) {
     _list.add(Dapp(uuid: item["UUID"],name: item["Name"],subtitle: item["Subtitle"],category: item["Category"],permission: item["Permission"],synopsis: item["Synopsis"],score: item["Score"].toString(),logo: item["Logo"],
     banner: item["Banner"],snapshot: item["Snapshot"],video: item["Video"],owner: item["Owner"],used: item["Used"],state: item["State"],submitAt: item["SubmitAt"],upperAt: item["UpperAt"],lowerAt: item["LowerAt"],
-    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"]
+    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"]
     ));
   });
   _pageData.rows = _list;
@@ -55,7 +57,7 @@ Future<Data> main() async {
   _rows.forEach((item) {
     _list.add(Dapp(uuid: item["UUID"],name: item["Name"],subtitle: item["Subtitle"],category: item["Category"],permission: item["Permission"],synopsis: item["Synopsis"],score: item["Score"].toString(),logo: item["Logo"],
     banner: item["Banner"],snapshot: item["Snapshot"],video: item["Video"],owner: item["Owner"],used: item["Used"],state: item["State"],submitAt: item["SubmitAt"],upperAt: item["UpperAt"],lowerAt: item["LowerAt"],
-    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"]
+    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"]
     ));
   });
   _data.data = _list;

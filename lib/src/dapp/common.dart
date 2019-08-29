@@ -1,36 +1,48 @@
 import 'dart:convert';
 
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/dapp/dapp.dart';
+import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
+import 'package:apcc_wallet/src/model/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-class ContractVars{
-  @required String abiCode ;
-  @required String address;
-  @required String name;
-  @required String method;
+class ContractVars {
+  @required
+  String abiCode;
+  @required
+  String address;
+  @required
+  String name;
+  @required
+  String method;
   List<dynamic> parameters;
   num gas;
   BigInt value;
-  ContractVars(this.abiCode,this.address,this.name,this.method,{this.parameters,this.gas});
-  ContractVars.fromJson(Map<String, dynamic> data):this.abiCode=data["abiCode"],this.address=data["address"],this.name=data["name"],this.method=data["method"],this.parameters=getParameters(data["parameters"]),
-  this.gas=data["gas"]??2100,this.value=BigInt.from(data["value"]??0);
+  ContractVars(this.abiCode, this.address, this.name, this.method,
+      {this.parameters, this.gas});
+  ContractVars.fromJson(Map<String, dynamic> data)
+      : this.abiCode = data["abiCode"],
+        this.address = data["address"],
+        this.name = data["name"],
+        this.method = data["method"],
+        this.parameters = getParameters(data["parameters"]),
+        this.gas = data["gas"] ?? 2100,
+        this.value = BigInt.from(data["value"] ?? 0);
 }
 
-
-
-
-
-Future<WebViewController> dappController;
+final dappController = FlutterWebviewPlugin();
 Dapp app;
 BuildContext dappContext;
 
 //回调浏览器callback方法
-void callBack(dynamic callbackParams, String error,String callback) async {
+void callBack(dynamic callbackParams, String error, String callback) async {
   if (callback != null) {
-    (await dappController)
-        .evaluateJavascript("window.mhcCallBacks." +
+    dappController
+        .evalJavascript("window.mhcCallBacks." +
             callback +
             "(" +
             returnCallBack(callbackParams, error) +
@@ -56,7 +68,7 @@ List getParameters(dynamic parameters) {
         break;
 
       default:
-       _newParams.add(item["value"]);
+        _newParams.add(item["value"]);
     }
   });
   return _newParams;
@@ -64,7 +76,11 @@ List getParameters(dynamic parameters) {
 
 //处理消息
 returnCallBack(dynamic params, String err) {
-  return json.encode({"state": err==""?true:false, "data": returnParameter(params), "error": err});
+  return json.encode({
+    "state": err == "" ? true : false,
+    "data": returnParameter(params),
+    "error": err
+  });
 }
 
 //处理返回参数
@@ -93,4 +109,56 @@ List caseList(items) {
     }
   });
   return _newParams;
+}
+
+//Dapp 检查
+launchDapp(BuildContext context, Dapp app) {
+  if(user==null){
+        showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              content: Text(
+                "尚未登录,请先登录",
+              ),
+              actions: <Widget>[
+                CupertinoButton(
+                  child: Text("确定"),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed("/login");
+                  },
+                ),
+              ],
+            ));
+  }else if (address == null || address.length == 0) {
+    showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              content: Text(
+                "Dapp需要使用本地钱包地址,请先创建钱包或者导入钱包",
+              ),
+              actions: <Widget>[
+                CupertinoButton(
+                  child: Text("确定"),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed("/wallet/new");
+                  },
+                ),
+              ],
+            ));
+  } else {
+    if (app.homePage == "") {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return Developing(app);
+      }));
+    } else {
+      Navigator.push(context, PageRouteBuilder(pageBuilder:
+          (BuildContext context, Animation animation,
+              Animation secondaryAnimation) {
+        return ScaleTransition(
+            scale: animation,
+            alignment: Alignment.center,
+            child: DappPage(app));
+      }));
+    }
+  }
 }

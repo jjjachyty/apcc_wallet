@@ -135,6 +135,13 @@ Future<Data> setPayPasswd(String password, Store<AppState> store) async {
   return _data;
 }
 
+Future<Data> checkPhone(String phone) async {
+  return await get("/auth/checkphone",
+      parameters: 
+          {"phone": phone});
+}
+
+
 Future<Data> modifiyTradePasswd(String orgPasswd, passwdConf) async {
   return await post("/user/paypasswd",
       data: new FormData.from(

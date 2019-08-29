@@ -8,6 +8,7 @@ import 'package:apcc_wallet/src/center/register.dart';
 
 import 'package:apcc_wallet/src/common/about.dart';
 import 'package:apcc_wallet/src/common/contact.dart';
+import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/hdwallet/import_mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';

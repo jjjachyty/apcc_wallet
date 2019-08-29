@@ -2,15 +2,13 @@ import 'package:apcc_wallet/src/center/index.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/version.dart';
-import 'package:apcc_wallet/src/dapp/test.dart';
 import 'package:apcc_wallet/src/main/assets.dart';
 import 'package:apcc_wallet/src/main/dapp.dart';
-import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/material.dart';
 
 import 'dapp.dart';
 import 'index.dart';
-import 'receive.dart';
+
 
 class MainPage extends StatefulWidget {
   @override
@@ -37,11 +35,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    pages
-      ..add(Index())
-      ..add(AssetsPage())
-      ..add(DappsPage())
-      ..add(UserCenter());
+    pages..add(Index())..add(AssetsPage())..add(DappsPage())..add(UserCenter());
     super.initState();
   }
 

@@ -46,13 +46,13 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
                 child: GestureDetector(
               onTap: () async {
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await ImagePicker.pickImage(source: ImageSource.camera);
 
                 setState(() {
                   _img1 = image;
                 });
               },
-              child: Icon(IconData(0xe50c, fontFamily: 'myIcon'),
+              child: Icon(IconData(0xe648, fontFamily: 'myIcon'),
                   size: 100, color: Colors.green),
             )),
             Expanded(
@@ -75,13 +75,13 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
                 child: GestureDetector(
               onTap: () async {
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await ImagePicker.pickImage(source: ImageSource.camera);
 
                 setState(() {
                   _img2 = image;
                 });
               },
-              child: Icon(IconData(0xe616, fontFamily: 'myIcon'),
+              child: Icon(IconData(0xe642, fontFamily: 'myIcon'),
                   size: 100, color: Colors.green),
             )),
             Expanded(

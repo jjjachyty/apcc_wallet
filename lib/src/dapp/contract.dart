@@ -1,5 +1,5 @@
 import 'package:apcc_wallet/src/dapp/pay.dart';
-import 'package:apcc_wallet/src/dapp/test.dart';
+import 'package:apcc_wallet/src/dapp/dapp.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
-import 'test_common.dart';
+import 'common.dart';
 
 call(ContractVars vals, String callBackName) async {
 

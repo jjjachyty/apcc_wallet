@@ -1,7 +1,8 @@
-import 'package:apcc_wallet/src/dapp/index.dart';
+import 'package:apcc_wallet/src/dapp/common.dart';
+import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/dapp/search.dart';
-import 'package:apcc_wallet/src/dapp/test.dart';
-import 'package:apcc_wallet/src/dapp/test_jsChannel.dart';
+import 'package:apcc_wallet/src/dapp/dapp.dart';
+import 'package:apcc_wallet/src/dapp/jsChannel.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,12 +19,11 @@ class _DappsPageState extends State<DappsPage> {
   List<Dapp> _listSwiper = new List();
   final flutterWebViewPlugin = FlutterWebviewPlugin();
 
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    all({"order": "used","sort":"desc"}).then((page) {
+    all({"order": "used", "sort": "desc"}).then((page) {
       setState(() {
         _list = page.rows;
         _listSwiper..add(_list[0])..add(_list[1])..add(_list[2])..add(_list[3]);
@@ -46,19 +46,18 @@ class _DappsPageState extends State<DappsPage> {
 
   Widget _searchBar() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-        child: 
-        
-        TextField(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: TextField(
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
-           Navigator.of(context).push(MaterialPageRoute(builder: (context){
-             return SearchAppPage();
-           }));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return SearchAppPage();
+            }));
           },
           // enabled: false,
-          decoration:
-              InputDecoration(hintText: "点击搜索Dapp", prefixIcon: Icon(Icons.search),
+          decoration: InputDecoration(
+              hintText: "点击搜索Dapp",
+              prefixIcon: Icon(Icons.search),
               contentPadding: EdgeInsets.all(0),
               border: OutlineInputBorder()),
         ));
@@ -118,17 +117,7 @@ class _DappsPageState extends State<DappsPage> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, PageRouteBuilder(pageBuilder:
-                      (BuildContext context, Animation animation,
-                          Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: animation,
-                        alignment: Alignment.center,
-                        child: MyApp());
-                  }));
-                  
-                  // flutterWebViewPlugin.launch("http://192.168.1.11:8080",withJavascript: true,javascriptChannels:getJsChannel(context,_list[index]),enableAppScheme: true ); 
-
+                   launchDapp(context,_list[index]);
                 },
               );
             }));
@@ -165,15 +154,7 @@ class _DappsPageState extends State<DappsPage> {
           autoplay: true,
           autoplayDelay: 5000,
           onTap: (index) {
-            Navigator.push(context, PageRouteBuilder(pageBuilder:
-                      (BuildContext context, Animation animation,
-                          Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: animation,
-                        alignment: Alignment.center,
-                        child: DappPage(_list[index]));
-                  }));
-
+                launchDapp(context,_list[index]);
           },
         ));
   }

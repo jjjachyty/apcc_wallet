@@ -41,8 +41,6 @@ Future<Data> get(
   Data _data;
   try {
     var _response = await api.get(path, queryParameters: parameters);
-    print("$path   _response==== ${_response}");
-
     _data = Data(
         state: _response.data["Status"],
         messsage: _response.data["Message"],

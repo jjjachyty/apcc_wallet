@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         new ConstrainedBox(
           constraints: BoxConstraints.expand(),
           child: new CachedNetworkImage(
+            fit: BoxFit.fill,
         imageUrl: "http://avatar.apcchis.com/splashscreens.png",
         placeholder: (context, url) => new CircularProgressIndicator(),
         errorWidget: (context, url, error) => new Icon(Icons.error),

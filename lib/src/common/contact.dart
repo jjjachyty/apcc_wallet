@@ -5,35 +5,51 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("联系我们"),),
+      appBar: AppBar(
+        title: Text("联系我们"),
+      ),
       body: Container(
         child: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.phone),
-              trailing: Text("xxxx"),
+              leading: Icon(
+                IconData(0xe600, fontFamily: 'myIcon'),
+                color: Colors.green,
+              ),
+              trailing: Text("..."),
               onTap: () async {
                 if (await canLaunch("weixin://")) {
-                    await launch("weixin://");
-                  }
- 
+                  await launch("weixin://");
+                }
               },
             ),
             ListTile(
-              leading: Icon(Icons.ac_unit),
-              trailing: Text("xxxx"),
+              leading: Icon(
+                IconData(0xe63d, fontFamily: 'myIcon'),
+                color: Colors.green,
+              ),
+              trailing: Text("..."),
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              trailing: Text("023-12345678"),
-              onTap: (){
+              leading: Icon(
+                IconData(0xe65c, fontFamily: 'myIcon'),
+                color: Colors.green,
+              ),
+              trailing: Text("..."),
+            ),
+            ListTile(
+              leading: Icon(Icons.phone,color: Colors.green,),
+              trailing: Text("023-68899565"),
+              onTap: () {
                 launch("tel:023-12345678");
               },
             ),
             ListTile(
-              leading: Icon(Icons.pin_drop,color: Colors.green,),
-              trailing: Text("重庆市渝中区大坪总部城1栋3楼"),
-              
+              leading: Icon(
+                Icons.pin_drop,
+                color: Colors.green,
+              ),
+              trailing: Text("重庆市渝中区大坪协信总部城D区1栋3楼"),
             )
           ],
         ),
