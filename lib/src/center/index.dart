@@ -75,7 +75,7 @@ class _UserCenterState extends State<UserCenter> {
         new BackdropFilter(
             filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-                height: 250,
+                height: MediaQuery.of(context).size.height * 0.35,
                 decoration: new BoxDecoration(
                   image: DecorationImage(image: AssetImage("assets/images/avatar_bg.png"),fit: BoxFit.fill) ,
 

@@ -1,4 +1,3 @@
-
 import 'package:apcc_wallet/router.dart';
 
 import 'package:apcc_wallet/src/common/init.dart';
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             primarySwatch: Colors.green,
           ),
-           home: new SplashScreen(),
+          home: new SplashScreen(),
           routes: routes,
         ));
   }

@@ -8,6 +8,9 @@ PODS:
     - Flutter
   - flutter_webview_plugin (0.0.1):
     - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - image_picker (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -16,9 +19,10 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - url_launcher (0.0.1):
+  - sqflite (0.0.1):
     - Flutter
-  - webview_flutter (0.0.1):
+    - FMDB (~> 2.7.2)
+  - url_launcher (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -30,12 +34,13 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - qrcode_reader (from `.symlinks/plugins/qrcode_reader/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CryptoSwift
+    - FMDB
 
 EXTERNAL SOURCES:
   cipher2:
@@ -54,10 +59,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qrcode_reader/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   cipher2: 215b8aa78b783cf5a17eb7b72fda55d025dbeefc
@@ -65,12 +70,13 @@ SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_secure_storage: 0c5779648ff644110e507909b77a57e620cbbf8b
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   qrcode_reader: 09b34d43b4c08fe5b63a6e56c96789bcea7b9148
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
-  webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
 
 PODFILE CHECKSUM: 30413f5c50ad350c767ea2f76777524061c29dcd
 

@@ -132,7 +132,7 @@ class _DappsPageState extends State<DappsPage> {
     }
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: 200.0,
+        height: MediaQuery.of(context).size.width * 0.8,
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
             return (Image.network(

@@ -54,10 +54,11 @@ class _SplashScreenState extends State<SplashScreen> {
      )
   
             // fit: BoxFit.fill,
-          // ),
-        ),
+            // ),
+            ),
         new Padding(
-          padding: new EdgeInsets.fromLTRB(0.0, MediaQuery.of(context).size.height*0.7, 10.0, 0.0),
+          padding: new EdgeInsets.fromLTRB(
+              0.0, MediaQuery.of(context).size.height * 0.7, 10.0, 0.0),
           child: new FlatButton(
             onPressed: () {
               navigationPage();

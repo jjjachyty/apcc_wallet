@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/dapp/index.dart';
+import 'package:apcc_wallet/src/dapp/test.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,43 +14,47 @@ class _SearchAppPageState extends State<SearchAppPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child:Container(
+        body: SafeArea(
+      child: Container(
           padding: EdgeInsets.all(8),
-        child:
-          Column(
+          child: Column(
             children: <Widget>[
               TextField(
-          textInputAction: TextInputAction.search,
-          autofocus: true,
-           onSubmitted: (val){
-             if (val.length == 0){
-                _list.clear();
-               return ; 
-             };
-             all({"Name": '%'+val+'%',"order": "name"}).then((page){
-               setState(() {
-                _list = page.rows; 
-               });
-             });
-           },
-          decoration: InputDecoration(prefix: Icon(Icons.search,color: Colors.green,),border: OutlineInputBorder(),contentPadding: EdgeInsets.all(6),suffix: Text.rich(TextSpan(text: "取消" ,recognizer:TapGestureRecognizer()..onTap=(){
-            Navigator.of(context).pop();
-          }))),
-        ),
-        _appList(),
+                textInputAction: TextInputAction.search,
+                autofocus: true,
+                onSubmitted: (val) {
+                  if (val.length == 0) {
+                    _list.clear();
+                    return;
+                  }
+                  ;
+                  all({"Name": '%' + val + '%', "order": "name"}).then((page) {
+                    setState(() {
+                      _list = page.rows;
+                    });
+                  });
+                },
+                decoration: InputDecoration(
+                    prefix: Icon(
+                      Icons.search,
+                      color: Colors.green,
+                    ),
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.all(6),
+                    suffix: Text.rich(TextSpan(
+                        text: "取消",
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).pop();
+                          }))),
+              ),
+              _appList(),
             ],
-          )
-        
-         
-
-
-      ),
-      ) 
-    );
+          )),
+    ));
   }
 
-    Widget _appList() {
+  Widget _appList() {
     return Expanded(
         child: ListView.builder(
             itemCount: _list.length,
@@ -109,11 +114,10 @@ class _SearchAppPageState extends State<SearchAppPage> {
                     return ScaleTransition(
                         scale: animation,
                         alignment: Alignment.center,
-                        child: DappPage(_list[index]));
+                        child: MyApp());
                   }));
                 },
               );
             }));
   }
-
 }
