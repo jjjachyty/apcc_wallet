@@ -1,5 +1,5 @@
+import 'package:apcc_wallet/src/dapp/common.dart';
 import 'package:apcc_wallet/src/dapp/index.dart';
-import 'package:apcc_wallet/src/dapp/test.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -108,14 +108,7 @@ class _SearchAppPageState extends State<SearchAppPage> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, PageRouteBuilder(pageBuilder:
-                      (BuildContext context, Animation animation,
-                          Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: animation,
-                        alignment: Alignment.center,
-                        child: MyApp());
-                  }));
+                 launchDapp(context,_list[index]);
                 },
               );
             }));
