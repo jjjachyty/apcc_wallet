@@ -75,6 +75,7 @@ class _UserCenterState extends State<UserCenter> {
           },
         ),
         Divider(),
+        
       ],
     );
   }

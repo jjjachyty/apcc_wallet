@@ -6,7 +6,6 @@ import 'package:apcc_wallet/src/dapp/jsChannel.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -17,19 +16,19 @@ const kAndroidUserAgent =
 // String selectedUrl = 'http://192.168.1.11:8080';
   // var scaffoldKey = GlobalKey<ScaffoldState>();
 
-class DappPage extends StatefulWidget {
+class DappFullPage extends StatefulWidget {
   Dapp app;
   @override
-  DappPage(this.app);
-  _DappPageState createState() => _DappPageState(this.app);
+  DappFullPage(this.app);
+  _DappFullPageState createState() => _DappFullPageState(this.app);
 }
 
-class _DappPageState extends State<DappPage> {
+class _DappFullPageState extends State<DappFullPage> {
   final flutterWebViewPlugin = FlutterWebviewPlugin();
     StreamSubscription<WebViewStateChanged> _onStateChanged;
 
   Dapp app;
-  _DappPageState(this.app);
+  _DappFullPageState(this.app);
 
 
    @override
@@ -56,13 +55,10 @@ class _DappPageState extends State<DappPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return  WebviewScaffold(
       url: app.homePage,
       javascriptChannels: getJsChannel(),
-      appBar: AppBar(centerTitle: true,backgroundColor: Colors.green,title: Text(app.name,style: TextStyle(color: Colors.white),),elevation: 0,leading: IconButton(icon: Icon(Icons.close),onPressed: (){
-        Navigator.of(context).pop();
-      },),),
+      //  appBar: AppBar(centerTitle: true,backgroundColor: Colors.transparent,title: Text("APP2MHC",style: TextStyle(color: Colors.green),),elevation: 0,),
       withLocalStorage: true,
       withJavascript: true,      
       initialChild: 
@@ -77,72 +73,5 @@ class _DappPageState extends State<DappPage> {
       );
      })
       
-    );
-    
-    }
-
-
-
-    
-}
-
-
-
-class _WebviewPlaceholder extends SingleChildRenderObjectWidget {
-  const _WebviewPlaceholder({
-    Key key,
-    @required this.onRectChanged,
-    Widget child,
-  }) : super(key: key, child: child);
-
-  final ValueChanged<Rect> onRectChanged;
-
-  @override
-  RenderObject createRenderObject(BuildContext context) {
-    return _WebviewPlaceholderRender(
-      onRectChanged: onRectChanged,
-    );
-  }
-
-  @override
-  void updateRenderObject(
-      BuildContext context, _WebviewPlaceholderRender renderObject) {
-    renderObject..onRectChanged = onRectChanged;
-  }
-}
-
-class _WebviewPlaceholderRender extends RenderProxyBox {
-  _WebviewPlaceholderRender({
-    RenderBox child,
-    ValueChanged<Rect> onRectChanged,
-  })  : _callback = onRectChanged,
-        super(child);
-
-  ValueChanged<Rect> _callback;
-  Rect _rect;
-
-  Rect get rect => _rect;
-
-  set onRectChanged(ValueChanged<Rect> callback) {
-    if (callback != _callback) {
-      _callback = callback;
-      notifyRect();
-    }
-  }
-
-  void notifyRect() {
-    if (_callback != null && _rect != null) {
-      _callback(_rect);
-    }
-  }
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    super.paint(context, offset);
-    final rect = offset & size;
-    if (_rect != rect) {
-      _rect = rect;
-      notifyRect();
-    }
-  }
+    );}
 }

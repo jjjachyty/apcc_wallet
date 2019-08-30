@@ -8,6 +8,7 @@ class Dapp {
   String subtitle;
   String category;
   String permission;
+  int  fullScreen;
   String synopsis;
   String score;
   String logo;
@@ -26,7 +27,7 @@ class Dapp {
   String address;
   String homePage;
   Dapp({this.uuid,this.name,this.subtitle,this.category,this.permission,this.synopsis,this.score,this.logo,this.banner,this.snapshot,this.video,this.owner,this.used,this.state,this.submitAt,
-  this.upperAt,this.lowerAt,this.auditor,this.auditOpinions,this.homePage,this.address});
+  this.upperAt,this.lowerAt,this.auditor,this.auditOpinions,this.homePage,this.address,this.fullScreen,this.abiCode});
 }
 
 Future<PageData> all(Map<String,dynamic> params) async {
@@ -40,7 +41,7 @@ Future<PageData> all(Map<String,dynamic> params) async {
   _rows.forEach((item) {
     _list.add(Dapp(uuid: item["UUID"],name: item["Name"],subtitle: item["Subtitle"],category: item["Category"],permission: item["Permission"],synopsis: item["Synopsis"],score: item["Score"].toString(),logo: item["Logo"],
     banner: item["Banner"],snapshot: item["Snapshot"],video: item["Video"],owner: item["Owner"],used: item["Used"],state: item["State"],submitAt: item["SubmitAt"],upperAt: item["UpperAt"],lowerAt: item["LowerAt"],
-    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"]
+    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"],fullScreen:item["FullScreen"],abiCode: item["AbiCode"]
     ));
   });
   _pageData.rows = _list;
@@ -57,7 +58,7 @@ Future<Data> main() async {
   _rows.forEach((item) {
     _list.add(Dapp(uuid: item["UUID"],name: item["Name"],subtitle: item["Subtitle"],category: item["Category"],permission: item["Permission"],synopsis: item["Synopsis"],score: item["Score"].toString(),logo: item["Logo"],
     banner: item["Banner"],snapshot: item["Snapshot"],video: item["Video"],owner: item["Owner"],used: item["Used"],state: item["State"],submitAt: item["SubmitAt"],upperAt: item["UpperAt"],lowerAt: item["LowerAt"],
-    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"]
+    auditor: item["Auditor"],auditOpinions: item["AuditOpinions"],homePage: item["HomePage"],address: item["Address"],fullScreen:item["FullScreen"],abiCode: item["AbiCode"]
     ));
   });
   _data.data = _list;

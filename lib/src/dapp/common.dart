@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/dapp/dapp.dart';
+import 'package:apcc_wallet/src/dapp/dapp_full.dart';
 import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
 import 'package:apcc_wallet/src/model/user.dart';
@@ -153,7 +154,17 @@ launchDapp(BuildContext context, Dapp app) {
         return Developing(app);
       }));
     } else {
+      if (app.fullScreen==1){
       Navigator.push(context, PageRouteBuilder(pageBuilder:
+          (BuildContext context, Animation animation,
+              Animation secondaryAnimation) {
+        return ScaleTransition(
+            scale: animation,
+            alignment: Alignment.center,
+            child: DappFullPage(app));
+      }));
+      }else{
+              Navigator.push(context, PageRouteBuilder(pageBuilder:
           (BuildContext context, Animation animation,
               Animation secondaryAnimation) {
         return ScaleTransition(
@@ -161,6 +172,8 @@ launchDapp(BuildContext context, Dapp app) {
             alignment: Alignment.center,
             child: DappPage(app));
       }));
+      }
+
     }
   }
 }

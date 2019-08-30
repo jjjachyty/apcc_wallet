@@ -1,40 +1,41 @@
 
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:http/http.dart';
-final newsURL = "http://api.apcchis.com/news/list";
-final newsDetailURL = "http://api.apcchis.com/news/detail";
+import 'package:apcc_wallet/src/common/http.dart';
+// final newsURL = "http://api.apcchis.com/news/list";
+// final newsDetailURL = "http://api.apcchis.com/news/detail";
 
 class News{
   String id;
       String title;
       String imgUrl;
       String content;
-      int  createAt;
+      String  createAt;
       News({this.id,this.title,this.imgUrl,this.content,this.createAt});
 }
 
 Future<List<News>> getNews() async{
     List<News> _news = new List();
-   var response = await Dio().get(newsURL);
+   var response = await get("/com/news",parameters:{"order": "create_at", "sort": "desc","size":5});
    print("getNews");
-  final _list = json.decode(response.data)["data"]["data"];
-  for (var item in _list) {
-    _news.add(News(id:item["id"].toString(),title:item["title"],imgUrl: item["cover"],content: item["content"] ));
+  if(response.state){
+    var _data = response.data["Rows"];
+      for (var item in _data) {
+    _news.add(News(id:item["UUID"].toString(),title:item["Title"],imgUrl: item["Banner"],content: item["Content"] ));
   }
+  }
+
 return _news;
 }
 
 
 Future<News> getNewsDetail(String id) async{
-  
-   final response = await Dio().get(newsDetailURL,queryParameters: {"id":id});
+  var _news ;
+   final response = await get("/com/newsdetail",parameters: {"uuid":id});
  
-  final _data = json.decode(response.data)["data"];
- print(_data);
-   final _news =  News(id:_data["id"].toString(),title:_data["title"],imgUrl: _data["cover"],content: _data["content"],createAt: _data["ctime"] );
-    print(_news.content);
-
+  if(response.state){
+    var _data = response.data;
+    _news =  News(id:_data["UUID"].toString(),title:_data["Title"],imgUrl: _data["Banner"],content: _data["Content"],createAt: _data["CreateAt"] );
+  }
 return _news;
 }

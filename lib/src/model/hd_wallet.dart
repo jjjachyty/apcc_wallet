@@ -59,8 +59,7 @@ Web3Client _mhcClient;
 EtherAmount _gasPrice;
 
 Web3Client getEthClint() {
-  print("getEthClint");
-  print(_mhcClient);
+
   return _mhcClient;
 }
 
@@ -68,8 +67,13 @@ initMHCClient() async {
   _mhcClient = new Web3Client(apiUrl, new Client());
   _gasPrice = await _mhcClient.getGasPrice();
   print("价格===$_gasPrice");
-
- 
+  // var filter = _mhcClient.events(FilterOptions(fromBlock: BlockNum.genesis(),toBlock: BlockNum.current(),address: EthereumAddress.fromHex(address[0].val)));
+  // print("filter");
+  // filter.every((event){
+  //   print(event.toString());
+  //   return true;
+  // });
+  
 }
 
 
