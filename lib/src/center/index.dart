@@ -45,7 +45,10 @@ class _UserCenterState extends State<UserCenter> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
-          leading: Icon(Icons.info,color: Colors.green,),
+          leading: Icon(
+            Icons.info,
+            color: Colors.green,
+          ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("关于我们"),
           onTap: () {
@@ -56,7 +59,10 @@ class _UserCenterState extends State<UserCenter> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
-          leading: Icon(Icons.message,color: Colors.green,),
+          leading: Icon(
+            Icons.message,
+            color: Colors.green,
+          ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("联系我们"),
           onTap: () {
@@ -67,7 +73,10 @@ class _UserCenterState extends State<UserCenter> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
-          leading: Icon(Icons.bookmark,color: Colors.green,),
+          leading: Icon(
+            Icons.bookmark,
+            color: Colors.green,
+          ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("使用条款"),
           onTap: () {
@@ -75,7 +84,25 @@ class _UserCenterState extends State<UserCenter> {
           },
         ),
         Divider(),
-        
+        user == null
+            ? Divider()
+            : new ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                isThreeLine: false,
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.green,
+                ),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                title: Text("设置"),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return UserSetting();
+                  }));
+                },
+              ),
       ],
     );
   }
@@ -89,8 +116,9 @@ class _UserCenterState extends State<UserCenter> {
             child: Container(
                 height: MediaQuery.of(context).size.height * 0.35,
                 decoration: new BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/images/avatar_bg.png"),fit: BoxFit.fill) ,
-
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/avatar_bg.png"),
+                      fit: BoxFit.fill),
                   color: Colors.green.shade500.withOpacity(0.8),
                 ),
                 child: Column(
@@ -98,20 +126,20 @@ class _UserCenterState extends State<UserCenter> {
                     AppBar(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
-                      actions: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.settings,
-                            // color: Colors.green,
-                          ),
-                          onPressed: () async {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return UserSetting();
-                            }));
-                          },
-                        )
-                      ],
+                      // actions: <Widget>[
+                      //   IconButton(
+                      //     icon: Icon(
+                      //       Icons.settings,
+                      //       // color: Colors.green,
+                      //     ),
+                      //     onPressed: () async {
+                      //       Navigator.of(context)
+                      //           .push(MaterialPageRoute(builder: (context) {
+                      //         return UserSetting();
+                      //       }));
+                      //     },
+                      //   )
+                      // ],
                     ),
                     Column(
                       children: <Widget>[
@@ -149,7 +177,9 @@ class _UserCenterState extends State<UserCenter> {
               Container(
                 // color: Colors.green,
                 decoration: new BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/images/avatar_bg.png"),fit: BoxFit.fill) ,
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/avatar_bg.png"),
+                      fit: BoxFit.fill),
                   gradient: RadialGradient(colors: [
                     Colors.green.shade300,
                     Colors.green.shade400,
