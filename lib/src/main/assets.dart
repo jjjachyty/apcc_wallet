@@ -10,6 +10,7 @@ import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:apcc_wallet/src/model/coins.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class _AssetsPageState extends State<AssetsPage> {
     // });
     // TODO: implement initState
     super.initState();
-    if (address != null && user !=null) {
+    if (address != null && user != null) {
       _onRefresh();
     }
   }
@@ -38,7 +39,7 @@ class _AssetsPageState extends State<AssetsPage> {
     var _data = await getLocalAssets();
 
     var _db = await getDBAssets();
-       _data.addAll(_db);
+    _data.addAll(_db);
     setState(() {
       _assets = _data;
     });
@@ -49,7 +50,7 @@ class _AssetsPageState extends State<AssetsPage> {
     if (user == null) {
       return NoLoginPage();
     }
-    if (address.length ==0) {
+    if (address.length == 0) {
       return NoWalletPage();
     }
 
@@ -97,8 +98,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                         child: Text(
                                           _assets.length == 0
                                               ? ""
-                                              : _assets[index]
-                                                  .baseOn,
+                                              : _assets[index].baseOn,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 10),
@@ -140,8 +140,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return ExchangePage(
-                                                _assets[index],
+                                            return ExchangePage(_assets[index],
                                                 _assets[_exchangeIndex]);
                                           }));
                                         },
@@ -158,8 +157,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return RechargePage(
-                                                _assets[index]);
+                                            return RechargePage(_assets[index]);
                                           }));
                                         },
                                       text: "充值",
@@ -174,12 +172,34 @@ class _AssetsPageState extends State<AssetsPage> {
                                       style: TextStyle(color: Colors.white),
                                       recognizer: new TapGestureRecognizer()
                                         ..onTap = () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return TransferPage(
-                                                _assets[index]);
-                                          }));
+                                          if (user.idCardAuth == 1) {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return TransferPage(
+                                                  _assets[index]);
+                                            }));
+                                          } else {
+                                            showDialog(
+                                                context: context,
+                                                builder: (_) =>
+                                                    CupertinoAlertDialog(
+                                                      content: Text(
+                                                        "转账功能需实名认证,请先完成实名认证",
+                                                      ),
+                                                      actions: <Widget>[
+                                                        CupertinoButton(
+                                                          child: Text("去认证"),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushReplacementNamed(
+                                                                    "/user/idcard");
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ));
+                                          }
                                         }),
                                   textAlign: TextAlign.center,
                                 ),

@@ -49,6 +49,9 @@ dependencies:
   flutter_secure_storage: ^3.2.1+1
   cached_network_image: ^1.1.1
   flutter_markdown: ^0.2.0
+  flutter_downloader: ^1.1.9
+  permission_handler: ^3.2.2
+  toast: ^0.1.5
   
 dev_dependencies:
   flutter_test:

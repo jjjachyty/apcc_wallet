@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'dapp.dart';
 import 'index.dart';
 
-
 class MainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -43,38 +42,33 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     _listener();
 
-    if (newestVersion.versionCode != "" &&
-        currentVersion.versionCode != newestVersion.versionCode) {
-      return Version();
-    } else {
-      // TODO: implement build
-      return Scaffold(
-        resizeToAvoidBottomInset: true,
-        bottomNavigationBar: new BottomNavigationBar(
-          onTap: onTabTapped,
-          currentIndex: _currentMain,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.home),
-              title: new Text('首页'),
-            ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.attach_money),
-              title: new Text('资产'),
-            ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.apps),
-              title: new Text('Dapp'),
-            ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.person),
-              title: new Text('我的'),
-            ),
-          ],
-        ),
-        body: pages[_currentMain],
-      );
-    }
+    // TODO: implement build
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      bottomNavigationBar: new BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentMain,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          new BottomNavigationBarItem(
+            icon: new Icon(Icons.home),
+            title: new Text('首页'),
+          ),
+          new BottomNavigationBarItem(
+            icon: new Icon(Icons.attach_money),
+            title: new Text('资产'),
+          ),
+          new BottomNavigationBarItem(
+            icon: new Icon(Icons.apps),
+            title: new Text('Dapp'),
+          ),
+          new BottomNavigationBarItem(
+            icon: new Icon(Icons.person),
+            title: new Text('我的'),
+          ),
+        ],
+      ),
+      body: pages[_currentMain],
+    );
   }
 }

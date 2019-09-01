@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:apcc_wallet/src/common/define.dart';
+import 'package:apcc_wallet/src/common/version.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigationPage() {
     _timer.cancel();
-    Navigator.of(context).pushReplacementNamed('/main');
+    if (newestVersion.versionCode != "" &&
+        currentVersion.versionCode != newestVersion.versionCode) {
+      Navigator.of(context).pushReplacementNamed('/version');
+    } else {
+      Navigator.of(context).pushReplacementNamed('/main');
+    }
   }
 
   @override
@@ -45,14 +52,14 @@ class _SplashScreenState extends State<SplashScreen> {
       alignment: const Alignment(1.0, -1.0), // 右上角对齐
       children: [
         new ConstrainedBox(
-          constraints: BoxConstraints.expand(),
-          child: new CachedNetworkImage(
-            fit: BoxFit.fill,
-        imageUrl: "http://avatar.apcchis.com/splashscreens.png",
-        placeholder: (context, url) => new CircularProgressIndicator(),
-        errorWidget: (context, url, error) => new Icon(Icons.error),
-     )
-  
+            constraints: BoxConstraints.expand(),
+            child: new CachedNetworkImage(
+              fit: BoxFit.fill,
+              imageUrl: "http://avatar.apcchis.com/splashscreens.png",
+              placeholder: (context, url) => new CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
+            )
+
             // fit: BoxFit.fill,
             // ),
             ),

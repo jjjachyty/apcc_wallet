@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:apcc_wallet/src/model/id_card.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,8 +46,11 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
             Expanded(
                 child: GestureDetector(
               onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
+                var image = await ImagePicker.pickImage(
+                    source: ImageSource.camera,
+                    maxWidth: 1000,
+                    maxHeight: 800,
+                    imageQuality: 70);
 
                 setState(() {
                   _img1 = image;
@@ -74,8 +78,11 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
             Expanded(
                 child: GestureDetector(
               onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
+                var image = await ImagePicker.pickImage(
+                    source: ImageSource.camera,
+                    maxWidth: 1000,
+                    maxHeight: 800,
+                    imageQuality: 70);
 
                 setState(() {
                   _img2 = image;
@@ -112,17 +119,17 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
           onPressed: () async {
-            if ( _img1 ==null){
+            if (_img1 == null) {
               setState(() {
                 _errText = "请上传身份证正面照";
               });
-              return ;
+              return;
             }
-            if ( _img2 ==null){
+            if (_img2 == null) {
               setState(() {
                 _errText = "请上传身份证反面照";
               });
-              return ;
+              return;
             }
 
             var _data = await recognition(_img1, _img2);
@@ -147,7 +154,6 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
               setState(() {
                 _errText = _data.messsage;
               });
-            
             }
           },
         ),
@@ -160,7 +166,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Expanded(child: Text("姓名")),
+            Expanded(child: Text("姓名:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.name),
@@ -169,12 +175,12 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("性别")),
+            Expanded(child: Text("性别:")),
             Expanded(
               child: Text(this._idcard.gender),
             ),
             Expanded(
-              child: Text("名族"),
+              child: Text("名族:"),
             ),
             Expanded(
               child: Text(_idcard.race),
@@ -183,7 +189,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("生日")),
+            Expanded(child: Text("生日:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.birthday),
@@ -192,7 +198,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("地址")),
+            Expanded(child: Text("地址:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.address),
@@ -201,7 +207,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("身份证号")),
+            Expanded(child: Text("身份证号:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.number),
@@ -210,7 +216,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("签发机关")),
+            Expanded(child: Text("签发机关:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.issuedBy),
@@ -219,24 +225,39 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
         ),
         Row(
           children: <Widget>[
-            Expanded(child: Text("有效期")),
+            Expanded(child: Text("有效期:")),
             Expanded(
               flex: 3,
               child: Text(this._idcard.validDate),
             )
           ],
         ),
-        FlatButton(
-          child: Text("信息有误,重新认证", style: TextStyle(color: Colors.green)),
-          onPressed: () {
-            setState(() {
-              this._show = !this._show;
-              this._errText = "";
-            });
-          },
+        Container(
+          alignment: Alignment.center,
+          child: Text.rich(
+            TextSpan(
+                text: "信息有误?,",
+                style: TextStyle(color: Colors.green),
+                children: [
+                  TextSpan(
+                    text: "重新认证",
+                    style: TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        setState(() {
+                          this._show = !this._show;
+                          this._errText = "";
+                        });
+                      },
+                  )
+                ]),
+          ),
         ),
         SizedBox(
-          child: Text(_errText),
+          child: Text(
+            _errText,
+            style: TextStyle(color: Colors.red),
+          ),
         ),
         new ProgressButton(
             color: Colors.green,
@@ -251,9 +272,13 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
               print(_idcard.address);
               var _data = await idCard(this._idcard);
               if (_data.state) {
+                user.idCardAuth = 1;
+                setUser(user);
                 Navigator.of(context).pop();
               } else {
-                _errText = _data.messsage;
+                setState(() {
+                  _errText = _data.messsage;
+                });
               }
             })
       ],

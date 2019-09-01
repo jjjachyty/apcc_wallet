@@ -6,9 +6,11 @@ import 'package:apcc_wallet/src/center/login_passwd.dart';
 import 'package:apcc_wallet/src/center/notice.dart';
 import 'package:apcc_wallet/src/center/profile.dart';
 import 'package:apcc_wallet/src/center/register.dart';
+import 'package:apcc_wallet/src/center/setting.dart';
 
 import 'package:apcc_wallet/src/common/about.dart';
 import 'package:apcc_wallet/src/common/contact.dart';
+import 'package:apcc_wallet/src/common/version.dart';
 import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/hdwallet/import_mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
@@ -39,5 +41,7 @@ final Map<String, WidgetBuilder> routes = {
   "/login": (BuildContext context) => new UserLogin(),
   "/notice": (BuildContext context) => new Notice(),
   "/user/idcard": (BuildContext context) => new IDCardRecognition(),
+  "/user/setting": (BuildContext context) => new UserSetting(),
+  "/version": (BuildContext context) => new VersionPage(),
   // "/transfersuccess": (BuildContext context) => new TransferSuccessPage(),
 };
