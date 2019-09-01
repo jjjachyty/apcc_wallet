@@ -83,6 +83,20 @@ class _UserCenterState extends State<UserCenter> {
             Navigator.of(context).pushNamed("/notice");
           },
         ),
+        new ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          isThreeLine: false,
+          leading: Icon(
+            Icons.bookmark,
+            color: Colors.green,
+          ),
+          trailing: Text(currentVersion.versionCode),
+          title: Text("当前版本"),
+          // onTap: () {
+          //   Navigator.of(context).pushNamed("/notice");
+          // },
+        ),
         Divider(),
         user == null
             ? Divider()
