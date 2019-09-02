@@ -1,7 +1,5 @@
 import 'package:apcc_wallet/src/common/define.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 class MnemonicRepeatPage extends StatefulWidget {
   @override

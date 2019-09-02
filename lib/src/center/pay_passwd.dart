@@ -1,10 +1,8 @@
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/model/user.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+
 
 class TradePassWd extends StatefulWidget {
   var hasPasswd = false;
@@ -83,10 +81,8 @@ class _TradePassWdState extends State<TradePassWd> {
                     _passwdConf = val;
                   },
                 ),
-                new StoreConnector<AppState, Store<AppState>>(
-                    converter: (store) => store,
-                    builder: (context, store) {
-                      return ProgressButton(
+
+                       ProgressButton(
                         color: Colors.green,
                         defaultWidget: Text(
                           "设置",
@@ -101,7 +97,7 @@ class _TradePassWdState extends State<TradePassWd> {
                           if (_passwdForm.currentState.validate()){
                             _passwdForm.currentState.save();
   var data =
-                              await setPayPasswd(_passwdConf, store);
+                              await setPayPasswd(_passwdConf);
                           if (data.state) {
                             SnackBar(
                               content: Text("设置成功"),
@@ -111,8 +107,8 @@ class _TradePassWdState extends State<TradePassWd> {
                           }
                           
                         },
-                      );
-                    })
+                      )
+                   
               ],
             ),
           ),

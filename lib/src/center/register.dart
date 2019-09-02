@@ -430,7 +430,7 @@ class _UserRegisterState extends State<UserRegister> {
                 style: TextStyle(color: Colors.blue),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () {
-                    print("用户注册协议");
+                   Navigator.of(context).pushNamed("/notice");
                   },
               )
             ])),

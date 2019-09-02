@@ -1,14 +1,10 @@
-import 'dart:async';
+
 
 import 'package:apcc_wallet/src/common/define.dart';
-import 'package:apcc_wallet/src/common/utils.dart';
-import 'package:apcc_wallet/src/store/state.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
-import '../store/actions.dart';
+
+
 import 'package:flutter/material.dart';
-import 'package:bip39/bip39.dart' as bip39;
 
 class ImportMnemonicPage extends StatefulWidget {
   @override

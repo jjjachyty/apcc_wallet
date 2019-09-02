@@ -1,29 +1,22 @@
-import 'package:apcc_wallet/src/assets/transfer_success.dart';
-import 'package:apcc_wallet/src/center/captcha.dart';
+
 import 'package:apcc_wallet/src/center/id_auth.dart';
 import 'package:apcc_wallet/src/center/login.dart';
 import 'package:apcc_wallet/src/center/login_passwd.dart';
 import 'package:apcc_wallet/src/center/notice.dart';
-import 'package:apcc_wallet/src/center/profile.dart';
 import 'package:apcc_wallet/src/center/register.dart';
 import 'package:apcc_wallet/src/center/setting.dart';
 
 import 'package:apcc_wallet/src/common/about.dart';
 import 'package:apcc_wallet/src/common/contact.dart';
 import 'package:apcc_wallet/src/common/version.dart';
-import 'package:apcc_wallet/src/dapp/developing.dart';
 import 'package:apcc_wallet/src/hdwallet/import_mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';
 import 'package:apcc_wallet/src/hdwallet/mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
 import 'package:apcc_wallet/src/main/main.dart';
-import 'package:apcc_wallet/src/news/detail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
-import 'src/store/state.dart';
 
 final Map<String, WidgetBuilder> routes = {
   "/main": (BuildContext context) => new MainPage(),

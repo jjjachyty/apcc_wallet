@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
+// import 'package:install_plugin/install_plugin.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
@@ -48,11 +49,11 @@ class _VersionPageState extends State<VersionPage> {
         }
       }
       if (status == DownloadTaskStatus.complete) {
-        print("下载完成");
+       
         print(pr.isShowing());
         if (pr.isShowing()) {
           pr.hide();
-          _installApk();
+          OpenFile.open(_localPath+"/MHC.apk");          
         }
       }
     });
@@ -87,7 +88,6 @@ class _VersionPageState extends State<VersionPage> {
                 } else {
                   Toast.show("无法打开浏览器", context);
                 }
-                download(context);
                 //ios相关代码
               } else if (Platform.isAndroid) {
                 //
@@ -161,10 +161,11 @@ _downloadFile(downloadUrl, savePath) {
   FlutterDownloader.enqueue(
     url: downloadUrl,
     savedDir: savePath,
-    showNotification: true,
+    showNotification: false,
+    fileName: "MHC.apk",
     // show download progress in status bar (for Android)
     openFileFromNotification:
-        true, // click on notification to open downloaded file (for Android)
+        false, // click on notification to open downloaded file (for Android)
   );
 }
 
@@ -190,14 +191,7 @@ Future<bool> _checkPermission() async {
   return false;
 }
 
-// 安装
-Future<Null> _installApk() async {
-  // XXXXX为项目名
-  const platform = const MethodChannel("MHC");
-  try {
-    // 调用app地址
-    await platform.invokeMethod('install', {'path': _localPath + '/MHC.apk'});
-  } on PlatformException catch (error) {
-    print(error);
-  }
-}
+
+  // Future<String> installApk(String filePath, String appId) async {
+  //   return await InstallPlugin.installApk(_localPath+"/MHC.apk", "com.example.apcc_wallet");
+  // }

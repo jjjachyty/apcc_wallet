@@ -1,18 +1,13 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:url_launcher/url_launcher.dart';
 
-import 'package:apcc_wallet/src/center/login.dart';
 import 'package:apcc_wallet/src/center/setting.dart';
 import 'package:apcc_wallet/src/common/define.dart';
-import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:apcc_wallet/src/store/state.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+
 
 class Item {
   Function onClick;
@@ -31,6 +26,7 @@ class UserCenter extends StatefulWidget {
 class _UserCenterState extends State<UserCenter> {
   @override
   Widget build(BuildContext context) {
+    
     if (user != null) {
       return _logined();
     } else {
@@ -60,7 +56,7 @@ class _UserCenterState extends State<UserCenter> {
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
           leading: Icon(
-            Icons.message,
+            Icons.contacts,
             color: Colors.green,
           ),
           trailing: Icon(Icons.keyboard_arrow_right),
@@ -88,10 +84,10 @@ class _UserCenterState extends State<UserCenter> {
           contentPadding: EdgeInsets.zero,
           isThreeLine: false,
           leading: Icon(
-            Icons.bookmark,
+            Icons.stars,
             color: Colors.green,
           ),
-          trailing: Text(currentVersion.versionCode),
+          trailing: Text(currentVersion.versionCode+"  "),
           title: Text("当前版本"),
           // onTap: () {
           //   Navigator.of(context).pushNamed("/notice");

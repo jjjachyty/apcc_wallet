@@ -4,11 +4,8 @@ import 'package:apcc_wallet/src/common/init.dart';
 import 'package:apcc_wallet/src/common/splashScreen.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_redux/flutter_redux.dart';
-import './src/store/state.dart';
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import './src/store/reducer.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -17,19 +14,12 @@ void main() => runApp(MyApp());
 // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 
 class MyApp extends StatelessWidget {
-  /// initialState 初始化 State
-  final store = new Store<AppState>(
-    appReducer,
-    initialState: AppState.initialState(),
-  );
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-        init(context, store);
+        init(context);
    SystemChrome.setEnabledSystemUIOverlays([]);
-    return new StoreProvider(
-        store: store,
-        child: MaterialApp(
+    return new  MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             // This is the theme of your application.
@@ -42,9 +32,10 @@ class MyApp extends StatelessWidget {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             primarySwatch: Colors.green,
+            
           ),
           home: new SplashScreen(),
           routes: routes,
-        ));
+        );
   }
 }

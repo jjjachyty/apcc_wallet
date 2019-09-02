@@ -1,4 +1,3 @@
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -39,15 +38,7 @@ class _ReceiveState extends State<Receive> {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, Store<AppState>>(
-      onInit: (store){
-         keys = store.state.wallets.keys.toList();
-
-           _currentAddr = keys[0];
-      },
-        converter: (store) => store,
-        builder: (context, store) {
-          return  PageView.builder(
+    return   PageView.builder(
             itemCount: keys.length,
             itemBuilder: (context,index){
                return     Container(
@@ -62,6 +53,6 @@ class _ReceiveState extends State<Receive> {
               
                 );
               
-        });
+       
   }
 }

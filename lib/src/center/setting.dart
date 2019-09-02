@@ -1,13 +1,8 @@
-import 'package:apcc_wallet/src/center/pay_passwd.dart';
 import 'package:apcc_wallet/src/center/profile.dart';
-import 'package:apcc_wallet/src/common/event_bus.dart';
-import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+
 
 // class UserSetting extends StatefulWidget {
 //   @override
@@ -17,9 +12,7 @@ import 'package:redux/redux.dart';
 class UserSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, Store<AppState>>(
-        converter: (store) => store,
-        builder: (context, store) {
+     
           return Scaffold(
               appBar: AppBar(
                 title: Text("设置"),
@@ -117,6 +110,6 @@ class UserSetting extends StatelessWidget {
                   ],
                 ),
               ));
-        });
+        
   }
 }

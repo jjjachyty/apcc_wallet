@@ -1,18 +1,12 @@
 import 'dart:async';
 
 import 'package:apcc_wallet/src/center/captcha.dart';
-import 'package:apcc_wallet/src/center/index.dart';
-import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
-import 'package:apcc_wallet/src/main/main.dart';
 import 'package:apcc_wallet/src/model/user.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+
 
 RegExp phoneExp = RegExp(
     r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
@@ -173,10 +167,7 @@ class _UserLoginState extends State<UserLogin> {
                       textAlign: TextAlign.left,
                     ),
                   )),
-              new StoreConnector<AppState, Store<AppState>>(
-                  converter: (store) => store,
-                  builder: (context, store) {
-                    return new ProgressButton(
+               ProgressButton(
                       color: Colors.green,
                       defaultWidget: Text(
                         "登录",
@@ -214,8 +205,8 @@ class _UserLoginState extends State<UserLogin> {
 
                         // }
                       },
-                    );
-                  }),
+                    ),
+                  
                   SizedBox(height: 20,),
               _goRegister(),
             ])));

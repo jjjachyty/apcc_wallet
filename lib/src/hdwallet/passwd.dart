@@ -2,14 +2,10 @@ import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/hdwallet/private_key.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+
 
 
 class WalletPasswdPage extends StatefulWidget {

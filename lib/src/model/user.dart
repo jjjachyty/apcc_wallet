@@ -2,14 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:apcc_wallet/src/common/define.dart';
-import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/id_card.dart';
-import 'package:apcc_wallet/src/store/state.dart';
 import 'package:dio/dio.dart';
 
-import 'package:redux/redux.dart';
 
 User user;
 
@@ -121,15 +118,13 @@ Future<Data> register(String phone, passwd) async {
   return await post("/auth/register", data: {"phone": phone, "password": passwd});;
 }
 
-Future<Data> setPayPasswd(String password, Store<AppState> store) async {
+Future<Data> setPayPasswd(String password) async {
   //  response=await dio.post("/test",data:{"id":12,"name":"wendu"})
   var _data = await post("/user/paypasswd",
       data: new FormData.from({"password": password}));
 
   if (_data.state) {
-    store.state.user.hasPayPasswd = true;
-    setStorageString("_user", store.state.user.toJson());
-    print(getStorageString("_user"));
+    setStorageString("_user", user.toJson());
   }
 
   return _data;

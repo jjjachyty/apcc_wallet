@@ -56,12 +56,12 @@ class _SplashScreenState extends State<SplashScreen> {
             child: new CachedNetworkImage(
               fit: BoxFit.fill,
               imageUrl: "http://avatar.apcchis.com/splashscreens.png",
-              placeholder: (context, url) => new CircularProgressIndicator(),
+              placeholder: (context, url) => Container(
+                color: Colors.white,
+                child: Image.asset("assets/images/logo.png"),
+                ) ,
               errorWidget: (context, url, error) => new Icon(Icons.error),
             )
-
-            // fit: BoxFit.fill,
-            // ),
             ),
         new Padding(
           padding: new EdgeInsets.fromLTRB(

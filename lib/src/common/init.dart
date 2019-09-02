@@ -1,24 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:apcc_wallet/src/model/coins.dart';
-import 'package:cipher2/cipher2.dart';
 
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/http.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
-import 'package:apcc_wallet/src/model/usdt.dart';
-import 'package:apcc_wallet/src/model/usdt_eth.dart';
+
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/model/version.dart';
-import 'package:apcc_wallet/src/store/actions.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import 'package:web3dart/web3dart.dart';
 
-void init(BuildContext context, Store store) async {
+
+void init(BuildContext context) async {
   await initSharedPreferences();
   // initWallet().then((val) {
   //   store.dispatch(RefreshWalletsAction(val));
