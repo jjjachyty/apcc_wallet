@@ -8,7 +8,6 @@ import 'package:apcc_wallet/src/model/user.dart';
 
 import 'package:flutter/material.dart';
 
-
 class Item {
   Function onClick;
   Widget leading;
@@ -26,7 +25,6 @@ class UserCenter extends StatefulWidget {
 class _UserCenterState extends State<UserCenter> {
   @override
   Widget build(BuildContext context) {
-    
     if (user != null) {
       return _logined();
     } else {
@@ -87,7 +85,7 @@ class _UserCenterState extends State<UserCenter> {
             Icons.stars,
             color: Colors.green,
           ),
-          trailing: Text(currentVersion.versionCode+"  "),
+          trailing: Text(currentVersion.versionCode + "  "),
           title: Text("当前版本"),
           // onTap: () {
           //   Navigator.of(context).pushNamed("/notice");
@@ -119,62 +117,50 @@ class _UserCenterState extends State<UserCenter> {
 
   Widget _logined() {
     return Scaffold(
-        body: Column(
-      children: <Widget>[
-        new BackdropFilter(
-            filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-                height: MediaQuery.of(context).size.height * 0.35,
-                decoration: new BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/avatar_bg.png"),
-                      fit: BoxFit.fill),
-                  color: Colors.green.shade500.withOpacity(0.8),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    AppBar(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      // actions: <Widget>[
-                      //   IconButton(
-                      //     icon: Icon(
-                      //       Icons.settings,
-                      //       // color: Colors.green,
-                      //     ),
-                      //     onPressed: () async {
-                      //       Navigator.of(context)
-                      //           .push(MaterialPageRoute(builder: (context) {
-                      //         return UserSetting();
-                      //       }));
-                      //     },
-                      //   )
-                      // ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                            height: 150,
-                            width: 150,
-                            child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage: user.avatar == ""
-                                    ? AssetImage("assets/images/money.png")
-                                    : NetworkImage(getAvatarURL(user.avatar)))),
-                        Text(
-                          user.nickName,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ],
-                ))),
-        Expanded(child: _item()),
-      ],
-    ));
+      body: Column(
+        children: <Widget>[
+          new BackdropFilter(
+              filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Container(
+                  height: MediaQuery.of(context).size.height * 0.35,
+                  decoration: new BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/avatar_bg.png"),
+                        fit: BoxFit.fill),
+                    color: Colors.green.shade500.withOpacity(0.8),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Container(
+                              height: 150,
+                              width: 150,
+                              child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: user.avatar == ""
+                                      ? AssetImage("assets/images/money.png")
+                                      : NetworkImage(
+                                          getAvatarURL(user.avatar)))),
+                          Text(
+                            user.nickName,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ],
+                  ))),
+          Expanded(child: _item()),
+        ],
+      ),
+    );
   }
 
   Widget _nologin() {

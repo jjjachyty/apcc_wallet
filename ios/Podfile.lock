@@ -15,6 +15,10 @@ PODS:
   - FMDB/standard (2.7.5)
   - image_picker (0.0.1):
     - Flutter
+  - install_plugin (0.0.1):
+    - Flutter
+  - open_file (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - permission_handler (3.2.2):
@@ -36,6 +40,8 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - install_plugin (from `.symlinks/plugins/install_plugin/ios`)
+  - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - qrcode_reader (from `.symlinks/plugins/qrcode_reader/ios`)
@@ -61,6 +67,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  install_plugin:
+    :path: ".symlinks/plugins/install_plugin/ios"
+  open_file:
+    :path: ".symlinks/plugins/open_file/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -83,6 +93,8 @@ SPEC CHECKSUMS:
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
+  install_plugin: a13e7ddd2bab0c701b48cd359c26d0394125b6fb
+  open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   qrcode_reader: 09b34d43b4c08fe5b63a6e56c96789bcea7b9148

@@ -1,5 +1,5 @@
 import 'dart:io';
-// import 'package:install_plugin/install_plugin.dart';
+import 'package:install_plugin/install_plugin.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -49,11 +49,11 @@ class _VersionPageState extends State<VersionPage> {
         }
       }
       if (status == DownloadTaskStatus.complete) {
-       
         print(pr.isShowing());
         if (pr.isShowing()) {
           pr.hide();
-          OpenFile.open(_localPath+"/MHC.apk");          
+          // OpenFile.open(_localPath + "/MHC.apk");
+          installApk(_localPath + "/MHC.apk", "com.example.apcc_wallet");
         }
       }
     });
@@ -88,6 +88,7 @@ class _VersionPageState extends State<VersionPage> {
                 } else {
                   Toast.show("无法打开浏览器", context);
                 }
+                // gotoAppStore("");
                 //ios相关代码
               } else if (Platform.isAndroid) {
                 //
@@ -191,7 +192,12 @@ Future<bool> _checkPermission() async {
   return false;
 }
 
+Future<String> installApk(String filePath, String appId) async {
+  return await InstallPlugin.installApk(
+      _localPath + "/MHC.apk", "com.example.apcc_wallet");
+}
 
-  // Future<String> installApk(String filePath, String appId) async {
-  //   return await InstallPlugin.installApk(_localPath+"/MHC.apk", "com.example.apcc_wallet");
-  // }
+/// for iOS: go to app store by the url
+// Future<String> gotoAppStore(String urlString) async {
+//   return await InstallPlugin.gotoAppStore("www.baidu.com");
+// }
