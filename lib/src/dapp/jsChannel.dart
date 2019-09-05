@@ -13,12 +13,10 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:web3dart/web3dart.dart';
 
 Set<JavascriptChannel> getJsChannel() {
- 
   Set<JavascriptChannel> _jsChannel = new Set<JavascriptChannel>();
   _jsChannel.add(_mhc());
   return _jsChannel;
 }
-
 
 JavascriptChannel _mhc() {
   return JavascriptChannel(
@@ -40,27 +38,26 @@ JavascriptChannel _mhc() {
               SnackBar(
                 content: Text(_data["content"]),
                 backgroundColor: _data["backgroundColor"] == null
-                    ? Colors.green
+                    ? Colors.indigo
                     : Color(_data["backgroundColor"]),
                 duration: Duration(seconds: 4),
               ),
             );
-           
+
             break;
           case "address": //获取用户地址
             callBack(address[0].val, "", _callback);
             break;
           case "scan":
-          
-          break;
+            break;
           case "close":
-          Navigator.of(dappContext).pop();
-          // FlutterWebviewPlugin().close();
-          
-          break;
+            Navigator.of(dappContext).pop();
+            // FlutterWebviewPlugin().close();
+
+            break;
           case "reload":
-          FlutterWebviewPlugin().reload();
-          break;
+            FlutterWebviewPlugin().reload();
+            break;
           case "contract_call": //智能合约payable调用
             var _vals = ContractVars.fromJson(_data);
 

@@ -39,13 +39,13 @@ class PrivateKeyPage extends StatelessWidget {
             FlatButton(
               child: Text(
                 "复制",
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: Colors.indigo),
               ),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: privateKey));
                 scaffold.currentState.showSnackBar(SnackBar(
                   content: Text("复制成功"),
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.indigo,
                 ));
               },
             ),

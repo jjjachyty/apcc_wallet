@@ -31,13 +31,13 @@ class TransferDetailPage extends StatelessWidget {
               leading: Text("转出金额"),
               title: Text(log.amount.toString()),
             ),
-             ListTile(
+            ListTile(
               leading: Text("手续费"),
               title: Text(log.free.toString()),
             ),
-             ListTile(
+            ListTile(
               leading: Text("到账金额"),
-              title: Text((log.amount-log.free).toString()),
+              title: Text((log.amount - log.free).toString()),
             ),
             ListTile(
               leading: Text("地址"),
@@ -45,7 +45,7 @@ class TransferDetailPage extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_downward,
-              color: Colors.green,
+              color: Colors.indigo,
             ),
             ListTile(
               leading: Text("地址"),
@@ -55,13 +55,12 @@ class TransferDetailPage extends StatelessWidget {
               leading: Text("币种"),
               title: Text(log.coin),
             ),
-           
             Divider(),
             ListTile(
               leading: Text("状态"),
               title: Text(
                 log.state == 1 ? "完成" : "转账中...",
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: Colors.indigo),
               ),
             )
           ],

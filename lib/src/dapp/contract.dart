@@ -10,10 +10,9 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'common.dart';
 
 call(ContractVars vals, String callBackName) async {
-
   try {
-    var _callbackParams = await callContract(vals.abiCode, vals.address,
-        vals.name, vals.method, vals.parameters);
+    var _callbackParams = await callContract(
+        vals.abiCode, vals.address, vals.name, vals.method, vals.parameters);
     callBack(_callbackParams, "", callBackName);
   } catch (e) {
     callBack("", e.toString(), callBackName);
@@ -21,67 +20,69 @@ call(ContractVars vals, String callBackName) async {
 }
 
 callPayable(ContractVars vals, String callBackName) async {
- 
   var _price = await getGasPrice();
-  var _gasMHC =
-      _price.getInWei * BigInt.from(vals.gas) / BigInt.from(1000000000000000000);
+  var _gasMHC = _price.getInWei *
+      BigInt.from(vals.gas) /
+      BigInt.from(1000000000000000000);
   FlutterWebviewPlugin().hide();
 
-  Scaffold.of(dappContext).showBottomSheet((context){
-return Container(
-            height: 300,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                    // leading: Image(
-                    //   image: CachedNetworkImageProvider(_app.logo),
-                    //   width: 40,
-                    //   height: 40,
-                    // ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        FlutterWebviewPlugin().show();
-                      },
-                    ),
-                    title: Text.rich(TextSpan(
-                      text: "该操作需要支付MHC",
-                      style: TextStyle(color: Colors.green),
-                    ))),
-                Divider(),
-                ListTile(
-                  enabled: false,
-                  leading: Text("金额"),
-                  trailing: Text((vals.value / BigInt.from(1000000000000000000)).toString() + "MHC"),
+  Scaffold.of(dappContext).showBottomSheet((context) {
+    return Container(
+        height: 300,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+                // leading: Image(
+                //   image: CachedNetworkImageProvider(_app.logo),
+                //   width: 40,
+                //   height: 40,
+                // ),
+                trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    FlutterWebviewPlugin().show();
+                  },
                 ),
-                ListTile(
-                  enabled: false,
-                  leading: Text("Gas"),
-                  trailing: Text(_gasMHC.toStringAsFixed(8) + " MHC"),
+                title: Text.rich(TextSpan(
+                  text: "该操作需要支付MHC",
+                  style: TextStyle(color: Colors.indigo),
+                ))),
+            Divider(),
+            ListTile(
+              enabled: false,
+              leading: Text("金额"),
+              trailing: Text(
+                  (vals.value / BigInt.from(1000000000000000000)).toString() +
+                      "MHC"),
+            ),
+            ListTile(
+              enabled: false,
+              leading: Text("Gas"),
+              trailing: Text(_gasMHC.toStringAsFixed(8) + " MHC"),
+            ),
+            ListTile(
+              enabled: false,
+              leading: Text("Gas单价"),
+              trailing: Text(_price.getInWei.toString() + " Wei"),
+            ),
+            ProgressButton(
+                color: Colors.indigo,
+                defaultWidget: Text(
+                  "支付",
+                  style: TextStyle(color: Colors.white),
                 ),
-                ListTile(
-                  enabled: false,
-                  leading: Text("Gas单价"),
-                  trailing: Text(_price.getInWei.toString() + " Wei"),
-                ),
-                ProgressButton(
-                    color: Colors.green,
-                    defaultWidget: Text(
-                      "支付",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    progressWidget: CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      showPasswd(vals,callBackName);
-                    }),
-              ],
-            ));
+                progressWidget: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  showPasswd(vals, callBackName);
+                }),
+          ],
+        ));
   });
 
   // showModalBottomSheet(
@@ -109,7 +110,7 @@ return Container(
   //                   ),
   //                   title: Text.rich(TextSpan(
   //                     text: "该操作需要支付MHC",
-  //                     style: TextStyle(color: Colors.green),
+  //                     style: TextStyle(color: Colors.indigo),
   //                   ))),
   //               Divider(),
   //               ListTile(
@@ -128,7 +129,7 @@ return Container(
   //                 trailing: Text(_price.getInWei.toString() + " Wei"),
   //               ),
   //               ProgressButton(
-  //                   color: Colors.green,
+  //                   color: Colors.indigo,
   //                   defaultWidget: Text(
   //                     "支付",
   //                     style: TextStyle(color: Colors.white),
@@ -146,7 +147,6 @@ return Container(
   //     },
   //     elevation: 10.0);
 }
-
 
 // transfer(ContractVars vals, String callBackName) async {
 //   print("methods ${vals.method}");
@@ -171,7 +171,7 @@ return Container(
 //                     ),
 //                     title: Text.rich(TextSpan(
 //                       text: "该操作需要支付MHC",
-//                       style: TextStyle(color: Colors.green),
+//                       style: TextStyle(color: Colors.indigo),
 //                     ))),
 //                 Divider(),
 //                                 ListTile(
@@ -185,7 +185,7 @@ return Container(
 //                   trailing: Text(_gasMHC.toString() + " MHC"),
 //                 ),
 //                 ProgressButton(
-//                     color: Colors.green,
+//                     color: Colors.indigo,
 //                     defaultWidget: Text(
 //                       "支付",
 //                       style: TextStyle(color: Colors.white),
@@ -204,5 +204,3 @@ return Container(
 //       },
 //       elevation: 10.0);
 // }
-
-

@@ -80,14 +80,14 @@ class _ExchangePageState extends State<ExchangePage> {
               onChanged: (val) {
                 _amount = double.tryParse(val);
 
-                if (_amount == null ) {
+                if (_amount == null) {
                   setState(() {
                     _exchangeOutput = 0;
                   });
                 } else {
                   // num _output = 0;
                   // if (mainCoin.symbol == "MHC") {
-                    // _output = (_amount  ) * _exchangeRate;
+                  // _output = (_amount  ) * _exchangeRate;
                   // } else {
                   //   _output = (_amount * _exchangeRate) - _exchangeFree;
                   // }
@@ -141,9 +141,7 @@ class _ExchangePageState extends State<ExchangePage> {
                 obscureText: true,
                 maxLength: 16,
                 validator: (val) {
-                  if (val == null ||
-                      val == "" ||
-                      val.length != 16) {
+                  if (val == null || val == "" || val.length != 16) {
                     return "支付密码为16位数";
                   }
                 },
@@ -165,7 +163,7 @@ class _ExchangePageState extends State<ExchangePage> {
               style: TextStyle(color: Colors.red),
             ),
             ProgressButton(
-              color: Colors.green,
+              color: Colors.indigo,
               defaultWidget: Text(
                 "兑换",
                 style: TextStyle(color: Colors.white),

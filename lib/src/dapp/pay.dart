@@ -8,7 +8,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'common.dart';
 
-_showPaySuccessed(BuildContext context,String txs) {
+_showPaySuccessed(BuildContext context, String txs) {
   showDialog(
       barrierDismissible: false,
       context: context,
@@ -23,7 +23,7 @@ _showPaySuccessed(BuildContext context,String txs) {
                       children: <Widget>[
                         Icon(
                           Icons.check_circle,
-                          color: Colors.green,
+                          color: Colors.indigo,
                           size: 50,
                         ),
                         Text("支付成功"),
@@ -31,7 +31,7 @@ _showPaySuccessed(BuildContext context,String txs) {
                         Divider(),
                         MaterialButton(
                           child: Text("完成"),
-                          color: Colors.green,
+                          color: Colors.indigo,
                           textColor: Colors.white,
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -93,7 +93,7 @@ showPasswd(ContractVars vals, String callBackName) {
                       ),
                       Divider(),
                       ProgressButton(
-                          color: Colors.green,
+                          color: Colors.indigo,
                           defaultWidget: Text(
                             "确认",
                             style: TextStyle(color: Colors.white),
@@ -119,30 +119,28 @@ showPasswd(ContractVars vals, String callBackName) {
                                     vals.method,
                                     _password,
                                     vals.parameters,
-                                    gas:vals.gas,
+                                    gas: vals.gas,
                                     value: vals.value);
-                                    print("---callContractPayable-------------------$val");
-                                
-                                  callBack(val, "", callBackName);
-                                Navigator.of(context).pop();
-                                  FlutterWebviewPlugin().show();
+                                print(
+                                    "---callContractPayable-------------------$val");
 
-                               _showPaySuccessed(context,val);
-                             
-                                
+                                callBack(val, "", callBackName);
+                                Navigator.of(context).pop();
+                                FlutterWebviewPlugin().show();
+
+                                _showPaySuccessed(context, val);
                               } on ArgumentError catch (e) {
                                 print(e);
                                 state(() {
                                   _payError = "传入参数错误" + e.toString();
                                 });
                               } on RPCError catch (e) {
-                                if (e.errorCode==-32000){
-                                   state(() {
-                                  _payError = "Gas+余额不足";
-                                });
+                                if (e.errorCode == -32000) {
+                                  state(() {
+                                    _payError = "Gas+余额不足";
+                                  });
                                 }
-                               
-                              }catch (e) {
+                              } catch (e) {
                                 state(() {
                                   _payError = e.toString();
                                 });

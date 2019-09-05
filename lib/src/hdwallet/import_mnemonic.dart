@@ -1,8 +1,4 @@
-
-
 import 'package:apcc_wallet/src/common/define.dart';
-
-
 
 import 'package:flutter/material.dart';
 
@@ -44,7 +40,6 @@ class _ImportMnemonicPageState extends State<ImportMnemonicPage> {
                     padding: EdgeInsets.all(10.0),
                     itemBuilder: (buildContext, index) {
                       return TextFormField(
-                        
                         maxLength: 1,
                         autofocus: index == 0 ? true : false,
                         decoration: InputDecoration(
@@ -64,7 +59,7 @@ class _ImportMnemonicPageState extends State<ImportMnemonicPage> {
                 )),
             new MaterialButton(
               minWidth: 200,
-              color: Colors.green,
+              color: Colors.indigo,
               textColor: Colors.white,
               child: new Text("确认"),
               onPressed: () {

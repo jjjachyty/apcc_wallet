@@ -71,7 +71,7 @@ class BigMenu extends StatelessWidget {
         this._click();
       },
       child: Card(
-        color: Colors.blueAccent,
+        color: Colors.indigoAccent,
         //z轴的高度，设置card的阴影
         elevation: 20.0,
         //设置shape，这里设置成了R角
@@ -82,7 +82,7 @@ class BigMenu extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         semanticContainer: false,
         child: Container(
-          color: Colors.green,
+          color: Colors.indigo,
           width: 200,
           height: 150,
           alignment: Alignment.center,

@@ -57,13 +57,13 @@ class _DappFullPageState extends State<DappFullPage> {
     return WebviewScaffold(
         url: app.homePage,
         javascriptChannels: getJsChannel(),
-        //  appBar: AppBar(centerTitle: true,backgroundColor: Colors.transparent,title: Text("APP2MHC",style: TextStyle(color: Colors.green),),elevation: 0,),
+        //  appBar: AppBar(centerTitle: true,backgroundColor: Colors.transparent,title: Text("APP2MHC",style: TextStyle(color: Colors.indigo),),elevation: 0,),
         withLocalStorage: true,
         withJavascript: true,
         initialChild: Builder(builder: (context) {
           dappContext = context;
           return Container(
-            color: Colors.green,
+            color: Colors.indigo,
             child: Center(
               child: Text(
                 "广告位招租,详询客服",

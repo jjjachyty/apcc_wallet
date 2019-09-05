@@ -19,7 +19,7 @@ class _TransferPageState extends State<TransferPage> {
   Assets assets;
   double _amount;
   String _errText;
-  String  _payPasswd;
+  String _payPasswd;
   num _free;
   _TransferPageState(this.assets);
   TextEditingController _addressCtl = new TextEditingController();
@@ -42,8 +42,8 @@ class _TransferPageState extends State<TransferPage> {
 
   @override
   void initState() {
-    if(assets.symbol =="USDT"){
-      Future.delayed(Duration(microseconds: 500),(){
+    if (assets.symbol == "USDT") {
+      Future.delayed(Duration(microseconds: 500), () {
         var dialog = CupertinoAlertDialog(
           content: Text(
             "USDT转出平台暂只支持以太坊 ERC-20 代币转账(0x),请勿使用Omni协议地址",
@@ -57,17 +57,13 @@ class _TransferPageState extends State<TransferPage> {
             ),
           ],
         );
-                showDialog(context: context, builder: (_) => dialog);
-
+        showDialog(context: context, builder: (_) => dialog);
       });
     }
     transferFree(assets.symbol).then((data) {
-          setState(() {
-                      _free = data;
-
-          });
-    
-      
+      setState(() {
+        _free = data;
+      });
     });
     // TODO: implement initState
     super.initState();
@@ -85,7 +81,7 @@ class _TransferPageState extends State<TransferPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (buildContext) {
-                return TransferListPage(assets.symbol,assets.address.val);
+                return TransferListPage(assets.symbol, assets.address.val);
               }));
             },
           )
@@ -133,7 +129,7 @@ class _TransferPageState extends State<TransferPage> {
                       val == "" ||
                       double.tryParse(val) == null ||
                       double.tryParse(val) <= 0 ||
-                      double.tryParse(val)+_free > assets.blance) {
+                      double.tryParse(val) + _free > assets.blance) {
                     return "转出金额为0至${assets.blance}(含手续费)之间";
                   }
                 },
@@ -161,10 +157,7 @@ class _TransferPageState extends State<TransferPage> {
                   obscureText: true,
                   maxLength: 16,
                   validator: (val) {
-                    if (val == null ||
-                        val == "" ||
-                      
-                        val.length != 16) {
+                    if (val == null || val == "" || val.length != 16) {
                       return "支付密码为16位数";
                     }
                   },
@@ -183,7 +176,7 @@ class _TransferPageState extends State<TransferPage> {
                 height: 10,
               ),
               ProgressButton(
-                  color: Colors.green,
+                  color: Colors.indigo,
                   defaultWidget: Text(
                     "转账",
                     style: TextStyle(color: Colors.white),
@@ -196,8 +189,8 @@ class _TransferPageState extends State<TransferPage> {
                     if (_formkey.currentState.validate()) {
                       _formkey.currentState.save();
 
-                      var _data = await transfer(assets,
-                          _addressCtl.text, _payPasswd, _amount);
+                      var _data = await transfer(
+                          assets, _addressCtl.text, _payPasswd, _amount);
                       if (_data.state) {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (build) {

@@ -46,6 +46,8 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: new BottomNavigationBar(
+        // backgroundColor: Colors.indigo,
+        // selectedItemColor: Colors.white,
         onTap: onTabTapped,
         currentIndex: _currentMain,
         type: BottomNavigationBarType.fixed,

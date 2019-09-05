@@ -16,10 +16,9 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
   @override
   initState() {
     super.initState();
-     print(mnemonic);
+    print(mnemonic);
     _mmics = mnemonic.split(" ");
     _mmics.shuffle();
-  
   }
 
   Widget _inputs() {
@@ -32,31 +31,27 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
         ),
         itemCount: 12,
         itemBuilder: (BuildContext context, int index) {
-          return 
-          GestureDetector(
-            onTap: (){
-              setState(() {
-                _inputsVal[index]=(index+1).toString();
-                _currentIndex = index;
-              });
-              
-
-            },
-            child:
-          Container(
-            alignment: Alignment.center,
-            height: 10,
-            width: 10,
-            child: Text(
-              _inputsVal[index] == null ? (index+1).toString() : _inputsVal[index],
-              
-              style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 20,
-                  
-                  fontWeight: FontWeight.bold),
-            ),
-          ));
+          return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _inputsVal[index] = (index + 1).toString();
+                  _currentIndex = index;
+                });
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 10,
+                width: 10,
+                child: Text(
+                  _inputsVal[index] == null
+                      ? (index + 1).toString()
+                      : _inputsVal[index],
+                  style: TextStyle(
+                      color: Colors.indigo,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ));
         });
   }
 
@@ -72,7 +67,7 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
       itemBuilder: (BuildContext context, int index) {
         return new MaterialButton(
           padding: EdgeInsets.zero,
-          color: Colors.green,
+          color: Colors.indigo,
           textColor: Colors.white,
           child: new Text(
             _mmics[index],
@@ -138,17 +133,16 @@ class _MnemonicRepeatState extends State<MnemonicRepeatPage> {
                 flex: 1, child: Container(height: 300, child: _inputs())),
             new MaterialButton(
               minWidth: 200,
-              color: Colors.green,
+              color: Colors.indigo,
               textColor: Colors.white,
               child: new Text('下一步'),
               onPressed: () {
                 print("下一步");
                 var _trimVal = "";
-                _inputsVal.forEach((e){
-                  if (e !=null){
- _trimVal= _trimVal + e;
+                _inputsVal.forEach((e) {
+                  if (e != null) {
+                    _trimVal = _trimVal + e;
                   }
-                 
                 });
                 print(_trimVal);
                 print(mnemonic.replaceAll(" ", ""));

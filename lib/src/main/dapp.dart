@@ -97,7 +97,7 @@ class _DappsPageState extends State<DappsPage> {
                       TextSpan(
                           text: _list[index].category,
                           style: TextStyle(
-                              color: Colors.green,
+                              color: Colors.indigo,
                               fontWeight: FontWeight.bold,
                               fontSize: 10),
                           children: [
@@ -117,7 +117,7 @@ class _DappsPageState extends State<DappsPage> {
                   ],
                 ),
                 onTap: () {
-                   launchDapp(context,_list[index]);
+                  launchDapp(context, _list[index]);
                 },
               );
             }));
@@ -154,7 +154,7 @@ class _DappsPageState extends State<DappsPage> {
           autoplay: true,
           autoplayDelay: 5000,
           onTap: (index) {
-                launchDapp(context,_list[index]);
+            launchDapp(context, _list[index]);
           },
         ));
   }

@@ -56,65 +56,63 @@ class _UserRegisterState extends State<UserRegister> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldkey,
-        // backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        // ),
-        body: Column(
-          children: <Widget>[
-            new Stack(children: <Widget>[
-              Image.network(
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561036531223&di=55a931822b6fe5faefbe8b276b821c75&imgtype=jpg&src=http%3A%2F%2Fres.rongzi.com%2Fcontent%2Fupload%2Fimages%2Fueditor%2F20160606%2F6360080025278760485574019.jpg",
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                fit: BoxFit.fill,
-              ),
-              Positioned(
-                width: MediaQuery.of(context).size.width,
-                child: AppBar(
-                  centerTitle: true,
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  title: Text(
-                    "注册",
-                  ),
-                ),
-
-                // backgroundColor: Colors.transparent,
-              )
-            ]),
-            Container(
-              padding: EdgeInsets.all(8),
-              child: _opType == 0
-                  ? _phone()
-                  : _opType == 1 ? _smsCode() : _passwd(),
+    return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/login_bg.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
             ),
-            Divider(),
-            Text.rich(new TextSpan(
-                text: '已有账号? ',
-                style: new TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w400),
-                children: [
-                  TextSpan(
-                      recognizer: new TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).pop();
-                        },
-                      text: '去登录',
+            body: Container(
+                height: 380,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.all(Radius.circular(20.0)),
+                ),
+                margin: EdgeInsets.symmetric(vertical: 100, horizontal: 40),
+                padding: EdgeInsets.all(10),
+                child: Column(children: <Widget>[
+                  Text(
+                    "注册",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  Text(
+                    "SIGN UP",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _opType == 0
+                      ? _phone()
+                      : _opType == 1 ? _smsCode() : _passwd(),
+                  Divider(),
+                  Text.rich(new TextSpan(
+                      text: '已有账号? ',
                       style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w400,
-                      ))
+                          fontSize: 14.0,
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w400),
+                      children: [
+                        TextSpan(
+                            recognizer: new TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pop();
+                              },
+                            text: '去登录',
+                            style: new TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.w400,
+                            ))
+                      ])),
                 ])),
-          ],
-        ));
+            backgroundColor: Colors.transparent));
   }
 
   Widget _passwd() {
@@ -128,7 +126,7 @@ class _UserRegisterState extends State<UserRegister> {
             maxLength: 16,
             obscureText: _obscureFlag,
             decoration: InputDecoration(
-                hintText: "请输入包含大小写字母及数字的16位密码",
+                hintText: "请输入16位密码",
                 border: OutlineInputBorder(),
                 counterText: "",
                 suffixIcon: IconButton(
@@ -171,11 +169,11 @@ class _UserRegisterState extends State<UserRegister> {
             },
           ),
           SizedBox(
-            height: 15,
-            child: Text(_errorText??"", style: TextStyle(color: Colors.red)),
+            height: 20,
+            child: Text(_errorText ?? "", style: TextStyle(color: Colors.red)),
           ),
           ProgressButton(
-            color: Colors.green,
+            color: Colors.indigo,
             defaultWidget: Text(
               "注册",
               style: TextStyle(color: Colors.white),
@@ -189,7 +187,7 @@ class _UserRegisterState extends State<UserRegister> {
                 if (_data.state) {
                   FocusScope.of(context).requestFocus(FocusNode());
 
-                  //  _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.green,)).closed.then((r){
+                  //  _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.indigo,)).closed.then((r){
                   //    Navigator.of(context).pop();
                   //  }
 
@@ -247,7 +245,7 @@ class _UserRegisterState extends State<UserRegister> {
                   keyboardType: TextInputType.number,
                   maxLength: 1,
                   decoration: InputDecoration(
-                      hintText: "1",
+                      // hintText: "1",
                       counterText: "",
                       border: OutlineInputBorder()),
                 ),
@@ -267,7 +265,7 @@ class _UserRegisterState extends State<UserRegister> {
                   maxLength: 1,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      hintText: "2",
+                      // hintText: "2",
                       counterText: "",
                       border: OutlineInputBorder()),
                 ),
@@ -287,7 +285,7 @@ class _UserRegisterState extends State<UserRegister> {
                   maxLength: 1,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      hintText: "3",
+                      // hintText: "3",
                       counterText: "",
                       border: OutlineInputBorder()),
                 ),
@@ -304,7 +302,7 @@ class _UserRegisterState extends State<UserRegister> {
                   keyboardType: TextInputType.number,
                   maxLength: 1,
                   decoration: InputDecoration(
-                      hintText: "4",
+                      // hintText: "4",
                       counterText: "",
                       border: OutlineInputBorder()),
                 ),
@@ -313,7 +311,7 @@ class _UserRegisterState extends State<UserRegister> {
           ),
         ),
         Text(
-          _errorText??"",
+          _errorText ?? "",
           style: TextStyle(color: Colors.red),
         ),
         SizedBox(
@@ -332,7 +330,7 @@ class _UserRegisterState extends State<UserRegister> {
                 })),
         ),
         ProgressButton(
-          color: Colors.green,
+          color: Colors.indigo,
           defaultWidget: Text(
             "确认",
             style: TextStyle(color: Colors.white),
@@ -344,6 +342,7 @@ class _UserRegisterState extends State<UserRegister> {
             var sms = (_sms1 + _sms2 + _sms3 + _sms4).trim();
             if (sms.length == 4 && await verificationSms(this._phoneVal, sms)) {
               setState(() {
+                _errorText = "";
                 _opType = 2;
                 _counter.cancel();
               });
@@ -380,15 +379,15 @@ class _UserRegisterState extends State<UserRegister> {
                   // contentPadding: EdgeInsets.zero,
                   counterText: "",
                   errorText: _errorText,
-                  prefixIcon: Icon(
-                    Icons.phone_iphone,
-                    color: Colors.green,
-                  ),
+                  // prefixIcon: Icon(
+                  //   Icons.phone_iphone,
+                  //   color: Colors.indigo,
+                  // ),
                   suffixStyle: TextStyle(),
                   suffixIcon: FlatButton(
                     child: Text(
                       "下一步",
-                      style: TextStyle(color: Colors.green),
+                      style: TextStyle(color: Colors.indigo),
                     ),
                     onPressed: () async {
                       if (_phoneKey.currentState.validate()) {
@@ -406,9 +405,9 @@ class _UserRegisterState extends State<UserRegister> {
                               _opType = 1;
                             });
                           }
-                        }else{
+                        } else {
                           setState(() {
-                           _errorText = _phonecanreg.messsage;
+                            _errorText = _phonecanreg.messsage;
                           });
                         }
                       }
@@ -427,10 +426,10 @@ class _UserRegisterState extends State<UserRegister> {
             children: [
               TextSpan(
                 text: "用户注册协议",
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: Colors.indigo),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () {
-                   Navigator.of(context).pushNamed("/notice");
+                    Navigator.of(context).pushNamed("/notice");
                   },
               )
             ])),

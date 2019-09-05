@@ -8,15 +8,15 @@ import 'package:date_format/date_format.dart';
 class TransferListPage extends StatefulWidget {
   String coin;
   String address;
-  TransferListPage(this.coin,this.address);
+  TransferListPage(this.coin, this.address);
   @override
   _TransferListPageState createState() =>
-      _TransferListPageState(this.coin,this.address);
+      _TransferListPageState(this.coin, this.address);
 }
 
 class _TransferListPageState extends State<TransferListPage> {
-  var coin,address;
-  _TransferListPageState(this.coin,this.address);
+  var coin, address;
+  _TransferListPageState(this.coin, this.address);
   List<TransferLog> _orders = new List();
   ScrollController _scrollController = new ScrollController();
   int currentPage = 1;
@@ -24,7 +24,7 @@ class _TransferListPageState extends State<TransferListPage> {
   @override
   void initState() {
     super.initState();
-    transferList(coin,address, currentPage).then((_pageData) {
+    transferList(coin, address, currentPage).then((_pageData) {
       setState(() {
         _orders = _pageData.rows;
         print(_pageData.currentPage);
@@ -75,8 +75,8 @@ class _TransferListPageState extends State<TransferListPage> {
                 style: TextStyle(fontSize: 15),
               ),
               title: Text(payTypes[_log.payType]),
-              trailing: Text( (_log.amount).toString(),
-                  style: TextStyle(color: Colors.green)),
+              trailing: Text((_log.amount).toString(),
+                  style: TextStyle(color: Colors.indigo)),
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (buildContext) {

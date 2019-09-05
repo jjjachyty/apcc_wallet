@@ -88,6 +88,8 @@ flutter:
       - assets/images/money.png
       - assets/images/avatar_bg.png
       - assets/images/logo.png
+      - assets/images/login_bg.png
+      - assets/images/center_bg@3x.png
       
   #  - images/a_dot_ham.jpeg
 

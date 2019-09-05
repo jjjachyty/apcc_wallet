@@ -35,9 +35,8 @@ class _UserCenterState extends State<UserCenter> {
   }
 
   Widget _item() {
-    return Expanded(
-      flex: 2,
-      child: ListView(
+    return ListView(
+      shrinkWrap: true,
       children: <Widget>[
         Divider(),
         new ListTile(
@@ -46,7 +45,7 @@ class _UserCenterState extends State<UserCenter> {
           isThreeLine: false,
           leading: Icon(
             Icons.info,
-            color: Colors.green,
+            color: Colors.indigo,
           ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("关于我们"),
@@ -60,7 +59,7 @@ class _UserCenterState extends State<UserCenter> {
           isThreeLine: false,
           leading: Icon(
             Icons.contacts,
-            color: Colors.green,
+            color: Colors.indigo,
           ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("联系我们"),
@@ -74,7 +73,7 @@ class _UserCenterState extends State<UserCenter> {
           isThreeLine: false,
           leading: Icon(
             Icons.bookmark,
-            color: Colors.green,
+            color: Colors.indigo,
           ),
           trailing: Icon(Icons.keyboard_arrow_right),
           title: Text("使用条款"),
@@ -88,95 +87,107 @@ class _UserCenterState extends State<UserCenter> {
           isThreeLine: false,
           leading: Icon(
             Icons.stars,
-            color: Colors.green,
+            color: Colors.indigo,
           ),
           trailing: Text(currentVersion.versionCode + "  "),
           title: Text("当前版本"),
         ),
       ],
-    ) 
     );
   }
 
   Widget _logined() {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 244, 244, 1),
       body: Column(
         children: <Widget>[
-          new BackdropFilter(
-              filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Container(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  decoration: new BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/avatar_bg.png"),
-                        fit: BoxFit.fill),
-                    color: Colors.green.shade500.withOpacity(0.8),
+          Container(
+              height: MediaQuery.of(context).size.height * 0.35,
+              decoration: new BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/center_bg@3x.png"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: Column(
+                children: <Widget>[
+                  AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
                   ),
-                  child: Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
+                      Container(
+                          height: 120,
+                          width: 120,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              backgroundImage: user.avatar == ""
+                                  ? AssetImage("assets/images/money.png")
+                                  : CachedNetworkImageProvider(avatarURL))),
+                      SizedBox(width: 20),
+                      Text(
+                        user.nickName,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              )),
+          Container(
+              decoration: BoxDecoration(color: Colors.white),
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Column(
+                children: <Widget>[
+                  ListView(
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      new ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        isThreeLine: false,
+                        leading: Icon(
+                          Icons.accessibility_new,
+                          color: Colors.indigo,
+                        ),
+                        title: Text(
+                          "我的健康",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        onTap: () {
+                          Toast.show("暂未开通", context);
+                        },
                       ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                              height: 120,
-                              width: 120,
-                              child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: user.avatar == ""
-                                      ? AssetImage("assets/images/money.png")
-                                      : CachedNetworkImageProvider(
-                                          avatarURL))),
-                          Text(
-                            user.nickName,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
+                      new ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        isThreeLine: false,
+                        leading: Icon(
+                          Icons.settings,
+                          color: Colors.indigo,
+                        ),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        title: Text("设置"),
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return UserSetting();
+                          }));
+                        },
                       ),
                     ],
-                  ))),
-        
-         Expanded(
-           flex: 1,
-           child:  ListView(children: <Widget>[
-              new ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                isThreeLine: false,
-                leading: Icon(
-                  Icons.accessibility_new,
-                  color: Colors.green,
-                ),
-                title: Text("我的健康",style: TextStyle(color: Colors.grey),),
-                onTap: () {
-                  Toast.show("暂未开通", context);
-                },
+                  ),
+                  _item(),
+                ],
+              )
+
+              // _item(),
               ),
-            new ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                isThreeLine: false,
-                leading: Icon(
-                  Icons.settings,
-                  color: Colors.green,
-                ),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                title: Text("设置"),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return UserSetting();
-                  }));
-                },
-              ),
-          ],),
-         ),
-            _item(),
         ],
       ),
     );
@@ -184,53 +195,52 @@ class _UserCenterState extends State<UserCenter> {
 
   Widget _nologin() {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(244, 244, 244, 1),
         body: Column(
-      children: <Widget>[
-        Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                // color: Colors.green,
+          children: <Widget>[
+            Container(
+                height: MediaQuery.of(context).size.height * 0.35,
                 decoration: new BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/images/avatar_bg.png"),
-                      fit: BoxFit.fill),
-                  gradient: RadialGradient(colors: [
-                    Colors.green.shade300,
-                    Colors.green.shade400,
-                    Colors.green
-                  ], radius: 1, tileMode: TileMode.mirror),
+                    image: AssetImage("assets/images/center_bg@3x.png"),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 40),
-                alignment: Alignment.center,
                 child: Column(
                   children: <Widget>[
-                    new GestureDetector(
-                        onTap: () async {
-                          Navigator.of(context).pushNamed("/login");
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: Image.asset(
+                    AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new GestureDetector(
+                            onTap: () async {
+                              Navigator.of(context).pushNamed("/login");
+                            },
+                            child: Container(
+                                child: Image.asset(
                               "assets/images/nologinavatar.png",
-                              width: 60,
+                              width: 120,
                               color: Colors.white,
                             ))),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "点击头像登陆",
-                      style: TextStyle(color: Colors.white),
+                        SizedBox(width: 10),
+                        Text(
+                          "点击头像登陆",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              )
-            ],
-          ),
-        ),
-       _item()
-      ],
-    ));
+                )),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              color: Colors.white,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: _item(),
+            )
+          ],
+        ));
   }
 }

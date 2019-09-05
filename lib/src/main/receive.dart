@@ -38,21 +38,15 @@ class _ReceiveState extends State<Receive> {
 
   @override
   Widget build(BuildContext context) {
-    return   PageView.builder(
-            itemCount: keys.length,
-            itemBuilder: (context,index){
-               return     Container(
-                        child: new QrImage(
-                          data: _currentAddr,
-                          foregroundColor: Colors.green,
-                          size: 250.0,
-                        ));
-             
-                       }
-                    
-              
-                );
-              
-       
+    return PageView.builder(
+        itemCount: keys.length,
+        itemBuilder: (context, index) {
+          return Container(
+              child: new QrImage(
+            data: _currentAddr,
+            foregroundColor: Colors.indigo,
+            size: 250.0,
+          ));
+        });
   }
 }

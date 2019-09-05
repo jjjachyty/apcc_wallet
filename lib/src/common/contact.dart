@@ -14,7 +14,7 @@ class ContactUs extends StatelessWidget {
             ListTile(
               leading: Icon(
                 IconData(0xe600, fontFamily: 'myIcon'),
-                color: Colors.green,
+                color: Colors.indigo,
               ),
               trailing: Text("yaxingda001（13308313620）"),
               onTap: () async {
@@ -26,19 +26,22 @@ class ContactUs extends StatelessWidget {
             ListTile(
               leading: Icon(
                 IconData(0xe63d, fontFamily: 'myIcon'),
-                color: Colors.green,
+                color: Colors.indigo,
               ),
               trailing: Text("..."),
             ),
             ListTile(
               leading: Icon(
                 IconData(0xe65c, fontFamily: 'myIcon'),
-                color: Colors.green,
+                color: Colors.indigo,
               ),
               trailing: Text("392851289"),
             ),
             ListTile(
-              leading: Icon(Icons.phone,color: Colors.green,),
+              leading: Icon(
+                Icons.phone,
+                color: Colors.indigo,
+              ),
               trailing: Text("023-68899565"),
               onTap: () {
                 launch("tel:023-12345678");
@@ -47,7 +50,7 @@ class ContactUs extends StatelessWidget {
             ListTile(
               leading: Icon(
                 Icons.pin_drop,
-                color: Colors.green,
+                color: Colors.indigo,
               ),
               trailing: Text("重庆市渝中区大坪协信总部城D区1栋3楼"),
             )

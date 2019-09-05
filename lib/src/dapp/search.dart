@@ -37,7 +37,7 @@ class _SearchAppPageState extends State<SearchAppPage> {
                 decoration: InputDecoration(
                     prefix: Icon(
                       Icons.search,
-                      color: Colors.green,
+                      color: Colors.indigo,
                     ),
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(6),
@@ -88,7 +88,7 @@ class _SearchAppPageState extends State<SearchAppPage> {
                       TextSpan(
                           text: _list[index].category,
                           style: TextStyle(
-                              color: Colors.green,
+                              color: Colors.indigo,
                               fontWeight: FontWeight.bold,
                               fontSize: 10),
                           children: [
@@ -108,7 +108,7 @@ class _SearchAppPageState extends State<SearchAppPage> {
                   ],
                 ),
                 onTap: () {
-                 launchDapp(context,_list[index]);
+                  launchDapp(context, _list[index]);
                 },
               );
             }));

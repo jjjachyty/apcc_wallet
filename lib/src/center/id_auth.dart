@@ -57,7 +57,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
                 });
               },
               child: Icon(IconData(0xe648, fontFamily: 'myIcon'),
-                  size: 100, color: Colors.green),
+                  size: 100, color: Colors.indigo),
             )),
             Expanded(
               child: _img1 == null
@@ -89,7 +89,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
                 });
               },
               child: Icon(IconData(0xe642, fontFamily: 'myIcon'),
-                  size: 100, color: Colors.green),
+                  size: 100, color: Colors.indigo),
             )),
             Expanded(
               child: _img2 == null
@@ -110,7 +110,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
           style: TextStyle(color: Colors.red),
         ),
         ProgressButton(
-          color: Colors.green,
+          color: Colors.indigo,
           defaultWidget: Text(
             "认证",
             style: TextStyle(color: Colors.white),
@@ -237,11 +237,11 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
           child: Text.rich(
             TextSpan(
                 text: "信息有误?,",
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: Colors.indigo),
                 children: [
                   TextSpan(
                     text: "重新认证",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.indigo),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
                         setState(() {
@@ -260,7 +260,7 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
           ),
         ),
         new ProgressButton(
-            color: Colors.green,
+            color: Colors.indigo,
             defaultWidget: Text(
               "确认无误",
               style: TextStyle(color: Colors.white),

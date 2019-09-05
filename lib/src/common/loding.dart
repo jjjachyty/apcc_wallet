@@ -7,9 +7,8 @@ class Loading extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+            backgroundColor: Colors.white,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo)),
       ),
     );
   }

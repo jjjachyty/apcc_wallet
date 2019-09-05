@@ -48,20 +48,21 @@ class RechargePage extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: '复制',
-                          style: TextStyle(fontSize: 15.0, color: Colors.blue),
+                          style:
+                              TextStyle(fontSize: 15.0, color: Colors.indigo),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () async {
                               Clipboard.setData(
                                   ClipboardData(text: asset.address.val));
                               key.currentState.showSnackBar(SnackBar(
-                                backgroundColor: Colors.green,
+                                backgroundColor: Colors.indigo,
                                 content: Text("已复制"),
                               ));
                             }),
                     ])),
                 new QrImage(
                   data: asset.address.val,
-                  foregroundColor: Colors.green,
+                  foregroundColor: Colors.indigo,
                   size: 250.0,
                 ),
               ],

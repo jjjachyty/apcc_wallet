@@ -107,7 +107,7 @@ class _IndexState extends State<Index> {
         //         Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: <Widget>[
-        //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
+        //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.indigo,),
         //             Text("APCC"),
         //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),),
         //           ],
@@ -116,7 +116,7 @@ class _IndexState extends State<Index> {
         //         Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: <Widget>[
-        //             Icon(IconData(0xf19b,fontFamily: 'myIcon'),color: Colors.green,),
+        //             Icon(IconData(0xf19b,fontFamily: 'myIcon'),color: Colors.indigo,),
         //             Text("ETH"),
         //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),),
         //           ],
@@ -125,7 +125,7 @@ class _IndexState extends State<Index> {
         //         Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: <Widget>[
-        //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.green,),
+        //             Icon(IconData(0xe61a,fontFamily: 'myIcon'),color: Colors.indigo,),
         //             Text("USDT"),
         //             Expanded(child: Text("\$12.888",textAlign: TextAlign.end,),),
         //           ],

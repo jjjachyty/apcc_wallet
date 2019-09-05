@@ -3,7 +3,6 @@ import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 
-
 class TradePassWd extends StatefulWidget {
   var hasPasswd = false;
   TradePassWd(this.hasPasswd);
@@ -13,12 +12,12 @@ class TradePassWd extends StatefulWidget {
 }
 
 class _TradePassWdState extends State<TradePassWd> {
-  var hasPasswd,_errText="";
+  var hasPasswd, _errText = "";
   _TradePassWdState(this.hasPasswd);
   var _obscureFlag = true;
   GlobalKey<FormState> _passwdForm = GlobalKey<FormState>();
   TextEditingController _passwdCtr = new TextEditingController();
-    TextEditingController _orgPasswdCtr = new TextEditingController();
+  TextEditingController _orgPasswdCtr = new TextEditingController();
 
   String _orgPasswd, _passwd, _passwdConf;
 
@@ -39,7 +38,7 @@ class _TradePassWdState extends State<TradePassWd> {
                   obscureText: _obscureFlag,
                   maxLength: 16,
                   validator: (val) {
-                   if (!passwdExp.hasMatch(val)) {
+                    if (!passwdExp.hasMatch(val)) {
                       return "密码为16位大小写字母及数字组合";
                     }
                   },
@@ -81,34 +80,29 @@ class _TradePassWdState extends State<TradePassWd> {
                     _passwdConf = val;
                   },
                 ),
-
-                       ProgressButton(
-                        color: Colors.green,
-                        defaultWidget: Text(
-                          "设置",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        progressWidget: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.lightGreen)),
-                        onPressed: () async {
-
-                          if (_passwdForm.currentState.validate()){
-                            _passwdForm.currentState.save();
-  var data =
-                              await setPayPasswd(_passwdConf);
-                          if (data.state) {
-                            SnackBar(
-                              content: Text("设置成功"),
-                            );
-                            Navigator.of(context).pop();
-                          }
-                          }
-                          
-                        },
-                      )
-                   
+                ProgressButton(
+                  color: Colors.indigo,
+                  defaultWidget: Text(
+                    "设置",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  progressWidget: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
+                  onPressed: () async {
+                    if (_passwdForm.currentState.validate()) {
+                      _passwdForm.currentState.save();
+                      var data = await setPayPasswd(_passwdConf);
+                      if (data.state) {
+                        SnackBar(
+                          content: Text("设置成功"),
+                        );
+                        Navigator.of(context).pop();
+                      }
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -142,7 +136,7 @@ class _TradePassWdState extends State<TradePassWd> {
                         },
                       )),
                   validator: (val) {
-                    if (val == null || val.length < 6 || val.length > 16 ) {
+                    if (val == null || val.length < 6 || val.length > 16) {
                       return "密码为6-16未字母或数字组成的数";
                     }
                   },
@@ -156,10 +150,10 @@ class _TradePassWdState extends State<TradePassWd> {
                   autovalidate: true,
                   maxLength: 16,
                   validator: (val) {
-                   if (!passwdExp.hasMatch(val)) {
+                    if (!passwdExp.hasMatch(val)) {
                       return "密码为16位大小写字母及数字组合";
                     }
-                    if (val == _orgPasswdCtr.text){
+                    if (val == _orgPasswdCtr.text) {
                       return "新密码与原密码一致";
                     }
                   },
@@ -200,12 +194,15 @@ class _TradePassWdState extends State<TradePassWd> {
                     _passwdConf = val;
                   },
                 ),
-                SizedBox(height: 20,
-                child:Text(_errText,style: TextStyle(color: Colors.red),),),
-                
+                SizedBox(
+                  height: 20,
+                  child: Text(
+                    _errText,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 ProgressButton(
-                
-                  color: Colors.green,
+                  color: Colors.indigo,
                   defaultWidget: Text(
                     "修改",
                     style: TextStyle(color: Colors.white),
@@ -215,17 +212,19 @@ class _TradePassWdState extends State<TradePassWd> {
                       valueColor:
                           AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
                   onPressed: () async {
-                    if (_passwdForm.currentState.validate()){
+                    if (_passwdForm.currentState.validate()) {
                       _passwdForm.currentState.save();
-                      final _result= await modifiyTradePasswd(_orgPasswd, _passwdConf);
-                      if (_result.state){
-                        SnackBar(content: Text("修改成功"),);
+                      final _result =
+                          await modifiyTradePasswd(_orgPasswd, _passwdConf);
+                      if (_result.state) {
+                        SnackBar(
+                          content: Text("修改成功"),
+                        );
                         Navigator.of(context).pop();
-                      }else{
+                      } else {
                         setState(() {
-                            _errText=_result.messsage;
+                          _errText = _result.messsage;
                         });
-                        
                       }
                     }
                   },
@@ -238,7 +237,6 @@ class _TradePassWdState extends State<TradePassWd> {
 
   @override
   Widget build(BuildContext context) {
-    
     if (this.hasPasswd) {
       return _modifyWidget();
     }
