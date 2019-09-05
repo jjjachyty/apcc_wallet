@@ -291,6 +291,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.6"
+  notus:
+    dependency: "direct overridden"
+    description:
+      path: "packages/notus"
+      ref: HEAD
+      resolved-ref: f3d45cab71a701cf8a52b6406e629ae7b074fed7
+      url: "https://github.com/memspace/zefyr.git"
+    source: git
+    version: "0.1.3"
   open_file:
     dependency: "direct main"
     description:
@@ -361,6 +370,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.4"
+  quill_delta:
+    dependency: transitive
+    description:
+      name: quill_delta
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   quiver:
     dependency: transitive
     description:
@@ -368,6 +384,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
+  quiver_hashcode:
+    dependency: transitive
+    description:
+      name: quiver_hashcode
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   redux:
     dependency: transitive
     description:
@@ -506,6 +529,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1+1"
+  zefyr:
+    dependency: "direct overridden"
+    description:
+      path: "packages/zefyr"
+      ref: HEAD
+      resolved-ref: f3d45cab71a701cf8a52b6406e629ae7b074fed7
+      url: "https://github.com/memspace/zefyr.git"
+    source: git
+    version: "0.7.0"
 sdks:
   dart: ">=2.2.2 <3.0.0"
   flutter: ">=1.5.0 <2.0.0"

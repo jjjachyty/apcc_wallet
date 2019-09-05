@@ -44,6 +44,7 @@ class _ImportMnemonicPageState extends State<ImportMnemonicPage> {
                     padding: EdgeInsets.all(10.0),
                     itemBuilder: (buildContext, index) {
                       return TextFormField(
+                        
                         maxLength: 1,
                         autofocus: index == 0 ? true : false,
                         decoration: InputDecoration(

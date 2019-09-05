@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
             constraints: BoxConstraints.expand(),
             child: new CachedNetworkImage(
               fit: BoxFit.fill,
-              imageUrl: "http://avatar.apcchis.com/splashscreens.png",
+              imageUrl: imageHost+"splashscreens.png",
               placeholder: (context, url) => Container(
                 color: Colors.white,
                 child: Image.asset("assets/images/logo.png"),

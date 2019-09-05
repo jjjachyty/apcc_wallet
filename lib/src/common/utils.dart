@@ -44,10 +44,6 @@ import 'package:shared_preferences/shared_preferences.dart';
   }
 
 
-  String getAvatarURL(String avatar){
-    return avatarURL+avatar+".webp?"+DateTime.now().minute.toString() ;
-  }
-
   double toDouble(String val){
      var _db = double.tryParse(val);
      if (_db ==null){

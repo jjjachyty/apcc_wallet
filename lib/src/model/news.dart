@@ -17,7 +17,7 @@ class News{
 Future<List<News>> getNews() async{
     List<News> _news = new List();
    var response = await get("/com/news",parameters:{"order": "create_at", "sort": "desc","size":5});
-   print("getNews");
+
   if(response.state){
     var _data = response.data["Rows"];
       for (var item in _data) {

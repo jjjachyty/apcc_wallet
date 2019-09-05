@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/model/coins.dart';
 import 'package:apcc_wallet/src/model/hd_wallet.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 import 'package:apcc_wallet/src/model/version.dart';
 
 class Data {
@@ -41,9 +42,11 @@ RegExp phoneExp = RegExp(
 RegExp passwdExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{16,16}$');
 RegExp nickNameExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,8}$');
 
-var avatarURL = "http://avatar.apcchis.com/";
-var newestVersion = Version(versionCode: "0.0.7");
-var currentVersion = Version(versionCode: "0.0.7");
+var imageHost = "http://avatar.apcchis.com/";
+var avatarURL = imageHost+user.avatar+".webp";
+
+var newestVersion = Version(versionCode: "0.0.9");
+var currentVersion = Version(versionCode: "0.0.9");
 
 var payTypes = {
   1000: "货币兑换",

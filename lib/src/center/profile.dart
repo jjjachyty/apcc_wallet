@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _ProfileState extends State<Profile> {
                             width: 150,
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
-                                backgroundImage: _image==null? user.avatar==""?AssetImage("assets/images/money.png"):NetworkImage(getAvatarURL(user.avatar)):Image.file(_image).image)
+                                backgroundImage: _image==null? user.avatar==""?AssetImage("assets/images/money.png"):CachedNetworkImageProvider(avatarURL):Image.file(_image).image)
                                 ),
                                 Positioned(
                                 
@@ -91,11 +92,12 @@ class _ProfileState extends State<Profile> {
                            _nickNamekey.currentState.save();
                               var _data  =await modifiyProfile(_image,_nickName);
                               if (_data.state){
+                                avatarURL += "?"+DateTime.now().toString();
                                 Navigator.of(context).pop();
                               }else{
-setState(() {
- _errText = _data.messsage; 
-});
+                                setState(() {
+                                _errText = _data.messsage; 
+                                });
                               }
                               
                             

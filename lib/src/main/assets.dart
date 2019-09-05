@@ -13,6 +13,7 @@ import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class AssetsPage extends StatefulWidget {
   @override
@@ -154,11 +155,16 @@ class _AssetsPageState extends State<AssetsPage> {
                                   TextSpan(
                                       recognizer: new TapGestureRecognizer()
                                         ..onTap = () {
+                                          //屏蔽USDT充值转账功能
+                                          if (_assets[index].symbol == "USDT"){
+                                            Toast.show("暂未开通", context);
+                                          }else{
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return RechargePage(_assets[index]);
                                           }));
+                                          }
                                         },
                                       text: "充值",
                                       style: TextStyle(color: Colors.white)),
@@ -172,6 +178,10 @@ class _AssetsPageState extends State<AssetsPage> {
                                       style: TextStyle(color: Colors.white),
                                       recognizer: new TapGestureRecognizer()
                                         ..onTap = () {
+                                          //屏蔽USDT充值转账功能
+                                          if (_assets[index].symbol == "USDT"){
+                                            Toast.show("暂未开通", context);
+                                          }else{
                                           if (user.idCardAuth == 1) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
@@ -199,7 +209,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                                         ),
                                                       ],
                                                     ));
-                                          }
+                                          }}
                                         }),
                                   textAlign: TextAlign.center,
                                 ),

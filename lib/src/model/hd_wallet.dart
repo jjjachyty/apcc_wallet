@@ -15,7 +15,7 @@ import '../bip39/src/bip39_base.dart' as bip39;
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
-final String apiUrl = "http://119.3.108.19:8110";
+final String apiUrl = "http://119.3.108.19:8111";
 
 final storage = new FlutterSecureStorage();
 final iv = "yyyyyyyyyyyyyyyy";
@@ -152,10 +152,10 @@ Future<String> createMain(String mnemonic, String password) async {
   print(password.length);
   print(iv.length);
   final seed = bip39.mnemonicToSeed(mnemonic);
-  print(HEX.encode(seed));
+  print("seed=${HEX.encode(seed)}");
   final root = bip32.BIP32.fromSeed(seed);
   print(root.toBase58());
-  print(root.privateKey);
+  print("rootPK=${HEX.encode(root.privateKey)}");
   // String nonce = await Cipher2.generateNonce();
   final encrypted =
       await Cipher2.encryptAesCbc128Padding7(root.toBase58(), password, iv);
@@ -185,8 +185,13 @@ Future<List<Address>> initAddress(
 
   var pbk = privateKeyBytesToPublic(mhc.privateKey);
 
-  var mhcAddress = EthereumAddress.fromPublicKey(pbk);
 
+  var mhc2 = rootkey.derivePath("m/44'/3333'/0'/0/1");
+
+
+print("第2个地址${EthereumAddress.fromPublicKey(privateKeyBytesToPublic(mhc2.privateKey)).hex}");
+  var mhcAddress = EthereumAddress.fromPublicKey(pbk);
+    print("地址=$mhcAddress");
   _adds.add(Address(
       coin: "MHC",
       val: mhcAddress.hex,

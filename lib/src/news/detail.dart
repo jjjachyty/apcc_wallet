@@ -22,7 +22,10 @@ class NewsDeatil extends StatelessWidget {
             appBar: AppBar(
               title: Text("新闻"),
             ),
-            body: Column(
+            body: Center(
+          child:SingleChildScrollView(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -36,13 +39,13 @@ class NewsDeatil extends StatelessWidget {
                   style: TextStyle(fontSize: 10, color: Colors.grey),
                   textAlign: TextAlign.end,
                 ),
-                Expanded(
-                  child: new MarkdownBody(
+                new MarkdownBody(
                     data: _news.content,
                   ),
-                )
               ],
-            ),
+            ))
+            )
+            ,
           );
         } else {
           return Loading();

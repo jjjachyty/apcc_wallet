@@ -52,8 +52,8 @@ class _VersionPageState extends State<VersionPage> {
         print(pr.isShowing());
         if (pr.isShowing()) {
           pr.hide();
-          // OpenFile.open(_localPath + "/MHC.apk");
-          installApk(_localPath + "/MHC.apk", "com.example.apcc_wallet");
+           OpenFile.open(_localPath + "/MHC.apk");
+          //installApk(_localPath + "/MHC.apk", "com.example.apcc_wallet");
         }
       }
     });
@@ -194,7 +194,7 @@ Future<bool> _checkPermission() async {
 
 Future<String> installApk(String filePath, String appId) async {
   return await InstallPlugin.installApk(
-      _localPath + "/MHC.apk", "com.example.apcc_wallet");
+      filePath, "com.example.apcc_wallet");
 }
 
 /// for iOS: go to app store by the url

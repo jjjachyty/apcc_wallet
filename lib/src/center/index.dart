@@ -5,8 +5,10 @@ import 'package:apcc_wallet/src/center/setting.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
 import 'package:apcc_wallet/src/model/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class Item {
   Function onClick;
@@ -33,8 +35,11 @@ class _UserCenterState extends State<UserCenter> {
   }
 
   Widget _item() {
-    return ListView(
+    return Expanded(
+      flex: 2,
+      child: ListView(
       children: <Widget>[
+        Divider(),
         new ListTile(
           dense: true,
           contentPadding: EdgeInsets.zero,
@@ -87,31 +92,9 @@ class _UserCenterState extends State<UserCenter> {
           ),
           trailing: Text(currentVersion.versionCode + "  "),
           title: Text("当前版本"),
-          // onTap: () {
-          //   Navigator.of(context).pushNamed("/notice");
-          // },
         ),
-        Divider(),
-        user == null
-            ? Divider()
-            : new ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                isThreeLine: false,
-                leading: Icon(
-                  Icons.settings,
-                  color: Colors.green,
-                ),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                title: Text("设置"),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return UserSetting();
-                  }));
-                },
-              ),
       ],
+    ) 
     );
   }
 
@@ -138,14 +121,14 @@ class _UserCenterState extends State<UserCenter> {
                       Column(
                         children: <Widget>[
                           Container(
-                              height: 150,
-                              width: 150,
+                              height: 120,
+                              width: 120,
                               child: CircleAvatar(
                                   backgroundColor: Colors.white,
                                   backgroundImage: user.avatar == ""
                                       ? AssetImage("assets/images/money.png")
-                                      : NetworkImage(
-                                          getAvatarURL(user.avatar)))),
+                                      : CachedNetworkImageProvider(
+                                          avatarURL))),
                           Text(
                             user.nickName,
                             style: TextStyle(
@@ -157,7 +140,43 @@ class _UserCenterState extends State<UserCenter> {
                       ),
                     ],
                   ))),
-          Expanded(child: _item()),
+        
+         Expanded(
+           flex: 1,
+           child:  ListView(children: <Widget>[
+              new ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                isThreeLine: false,
+                leading: Icon(
+                  Icons.accessibility_new,
+                  color: Colors.green,
+                ),
+                title: Text("我的健康",style: TextStyle(color: Colors.grey),),
+                onTap: () {
+                  Toast.show("暂未开通", context);
+                },
+              ),
+            new ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                isThreeLine: false,
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.green,
+                ),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                title: Text("设置"),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return UserSetting();
+                  }));
+                },
+              ),
+          ],),
+         ),
+            _item(),
         ],
       ),
     );
@@ -210,10 +229,7 @@ class _UserCenterState extends State<UserCenter> {
             ],
           ),
         ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(child: _item())
+       _item()
       ],
     ));
   }
