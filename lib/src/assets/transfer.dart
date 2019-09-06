@@ -1,10 +1,10 @@
+import 'package:apcc_wallet/src/assets/scan.dart';
 import 'package:apcc_wallet/src/assets/transfer_list.dart';
 import 'package:apcc_wallet/src/assets/transfer_success.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:qrcode_reader/qrcode_reader.dart';
 
 class TransferPage extends StatefulWidget {
   Assets assets;
@@ -24,21 +24,7 @@ class _TransferPageState extends State<TransferPage> {
   _TransferPageState(this.assets);
   TextEditingController _addressCtl = new TextEditingController();
   bool _type = false;
-  scan2() {
-    Future<String> futureString = new QRCodeReader()
-        .setAutoFocusIntervalInMs(200) // default 5000
-        .setForceAutoFocus(true) // default false
-        .setTorchEnabled(true) // default false
-        .setHandlePermissions(true) // default true
-        .setExecuteAfterPermissionGranted(true) // default true
-        // .setFrontCamera(false) // default false
-        .scan()
-        .then((onValue) {
-      setState(() {
-        _addressCtl.text = onValue;
-      });
-    });
-  }
+
 
   @override
   void initState() {
@@ -102,7 +88,15 @@ class _TransferPageState extends State<TransferPage> {
                     border: OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.filter_center_focus),
-                      onPressed: scan2,
+                      onPressed: () async{
+                      String _value =  await  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          return ScanPage();
+                        }));
+                        print("_value");
+                        setState(() {
+                          _addressCtl.text = _value;
+                        });
+                      },
                     )),
                 validator: (val) {
                   if (val == null || val == "") {
