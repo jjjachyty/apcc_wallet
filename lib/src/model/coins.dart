@@ -48,22 +48,10 @@ class Coin {
 }
 
 Map<String, Widget> coinIcons = {
-  "ETH": Icon(
-    IconData(0xe636, fontFamily: 'myIcon'),
-    color: Colors.red,
-  ),
-  "USDT": Icon(
-    IconData(0xe646, fontFamily: 'myIcon'),
-    color: Colors.red,
-  ),
-  "MHC": Icon(
-    IconData(0xf0246, fontFamily: 'myIcon'),
-    color: Colors.red,
-  ),
-  "BTC": Icon(
-    IconData(0xe661, fontFamily: 'myIcon'),
-    color: Colors.red,
-  ),
+  "ETH": Image.asset("assets/images/eth@2x.png",width: 39,height: 39,),
+  "USDT": Image.asset("assets/images/usdt@2x.png",width: 39,height: 39,),
+  "MHC": Image.asset("assets/images/mhc@2x.png",width: 39,height: 39,),
+  "BTC": Image.asset("assets/images/btc@2x.png",width: 39,height: 39,),
   "weiChat":Icon(
     IconData(0xe600, fontFamily: 'myIcon'),
     color: Colors.red,

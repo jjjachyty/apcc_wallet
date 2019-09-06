@@ -45,7 +45,8 @@ class _IndexState extends State<Index> {
 
   Widget _coinPrice() {
     return Container(
-        height: 200,
+      margin: EdgeInsets.only(bottom: 0),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: FutureBuilder(
           future: getPrice(),
           builder: (context, snapshot) {
@@ -55,37 +56,45 @@ class _IndexState extends State<Index> {
                 itemCount: price.length,
                 itemBuilder: (context, index) {
                   return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      Expanded(
-                        child: coinIcons[price[index].nameEn],
-                        flex: 1,
+                      Row(
+                        children: <Widget>[
+                          coinIcons[price[index].nameEn],
+                          SizedBox(width: 10,),
+                          Stack(
+                            children: <Widget>[
+                              Text(
+                                price[index].nameEn,
+                                style: TextStyle(color: Colors.blue.shade800),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Text(
+                                    (price[index].percent24h > 0 ? "↑" : "↓") +
+                                        price[index]
+                                            .percent24h
+                                            .toStringAsFixed(2) +
+                                        "%",
+                                    style: TextStyle(
+                                        color: price[index].percent24h > 0
+                                            ? Colors.red
+                                            : Colors.green,
+                                        fontSize: 10)),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Text(price[index].nameEn),
-                        flex: 2,
+                      Text(
+                        "￥" + price[index].priceCny.toStringAsFixed(2),
+                        style: TextStyle(
+                            color: price[index].percent24h > 0
+                                ? Colors.red
+                                : Colors.green,
+                            fontSize: 18),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "￥" + price[index].priceCny.toStringAsFixed(2),
-                          style: TextStyle(
-                              color: price[index].percent24h > 0
-                                  ? Colors.red
-                                  : Colors.green,
-                              fontSize: 18),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                            (price[index].percent24h > 0 ? "↑" : "↓") +
-                                price[index].percent24h.toStringAsFixed(2) +
-                                "%",
-                            style: TextStyle(
-                                color: price[index].percent24h > 0
-                                    ? Colors.red
-                                    : Colors.green,
-                                fontSize: 10)),
-                      )
                     ],
                   );
                 },
@@ -171,24 +180,19 @@ class _IndexState extends State<Index> {
         autoplay: true,
         autoplayDelay: 5000,
         // duration: 50000,
-         viewportFraction: 0.8,
-  scale: 0.9,
+        viewportFraction: 0.8,
+        scale: 0.9,
         itemBuilder: (context, index) {
           var _imgUr = _news[index].imgUrl;
-          return 
-              ConstrainedBox(
-                
-                child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child:Image.network(
+          return ConstrainedBox(
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
                   _imgUr,
-                  
                   fit: BoxFit.fill,
                 )),
-                constraints: new BoxConstraints.expand(),
-              );
-             
-            
+            constraints: new BoxConstraints.expand(),
+          );
         },
       ),
     );
@@ -230,18 +234,31 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor : Colors.grey.shade100,
-      appBar: AppBar(title: Text("重庆亚鑫达健康产业有限公司",style: TextStyle(fontSize: 12),),centerTitle: true,),
+        backgroundColor: Colors.grey.shade100,
+        appBar: AppBar(
+          title: Text(
+            "重庆亚鑫达健康产业有限公司",
+            style: TextStyle(fontSize: 12),
+          ),
+          centerTitle: true,
+        ),
         body: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _newsSwiper(),
-        Divider(),
-        // Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
-        _usedDapp(),
-      
-        _coinPrice(),
-      ],
-    ));
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _newsSwiper(),
+            Divider(),
+            // Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
+            Expanded(
+              flex: 1,
+              child:
+            _usedDapp(),
+            ),
+            Expanded(
+              flex: 2,
+              child: _coinPrice(),
+            )
+            
+          ],
+        ));
   }
 }
