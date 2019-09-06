@@ -46,13 +46,16 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: new BottomNavigationBar(
-        // backgroundColor: Colors.indigo,
-        // selectedItemColor: Colors.white,
+        backgroundColor: Colors.blue.shade800,
+        unselectedItemColor: Colors.white30,
+        selectedItemColor: Colors.white,
+        selectedFontSize: 15,
         onTap: onTabTapped,
         currentIndex: _currentMain,
         type: BottomNavigationBarType.fixed,
         items: [
           new BottomNavigationBarItem(
+           
             icon: new Icon(Icons.home),
             title: new Text('首页'),
           ),

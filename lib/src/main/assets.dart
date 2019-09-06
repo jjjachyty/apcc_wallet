@@ -56,8 +56,9 @@ class _AssetsPageState extends State<AssetsPage> {
     }
 
     return Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        body: SingleChildScrollView(
+        backgroundColor: Colors.blue.shade800,
+        body: Container(
+          
               child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,24 +68,29 @@ class _AssetsPageState extends State<AssetsPage> {
                 height: 40,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(
-                    "资产",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 25, color: Colors.indigo),
-                  ),
+                  
                   IconButton(
                     color: Colors.indigo,
-                    icon: Icon(Icons.refresh),
+                    icon: Icon(Icons.refresh ,color: Colors.white,),
                     onPressed: () {
                       _onRefresh();
                     },
                   )
                 ],
               ),
+              Expanded(
+                child: 
+              
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius:
+                              new BorderRadius.vertical(top: Radius.circular(20)),
+                  color: Colors.white
+                ),
+                padding: EdgeInsets.symmetric(vertical: 47,horizontal: 12),
+                // margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: <Widget>[
                     Card(
@@ -134,13 +140,15 @@ class _AssetsPageState extends State<AssetsPage> {
                                 ),
                               ],
                             ),
-                            Divider(
-                              color: Colors.white,
-                            ),
+                            // Divider(
+                            //   color: Colors.white,
+                            // ),
+                            SizedBox(height: 30,),
                             Row(
                               children: <Widget>[
                                 Expanded(
-                                  child: Text.rich(
+                                  child: 
+                                  Text.rich(
                                     TextSpan(
                                         recognizer: new TapGestureRecognizer()
                                           ..onTap = () {
@@ -277,9 +285,8 @@ class _AssetsPageState extends State<AssetsPage> {
                                 ),
                               ],
                             ),
-                            Divider(
-                              color: Colors.white,
-                            ),
+                            
+                            SizedBox(height: 30,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -343,7 +350,7 @@ class _AssetsPageState extends State<AssetsPage> {
                     )
                   ],
                 ),
-              )
+              )),
             ],
           )),
         );
