@@ -57,13 +57,17 @@ class _UserLoginState extends State<UserLogin> {
               ),
             ),
             child: Scaffold(
-                appBar: AppBar(
+                
+                body: 
+                Stack(
+                  children: <Widget>[
+                   AppBar(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
-                body: Center(
+                Center(
                     child: Container(
-                        height: 350,
+                        height: 400,
                         width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -85,7 +89,11 @@ class _UserLoginState extends State<UserLogin> {
                           ),
                           _opType ? _passwdLogin() : _smsLogin(),
                         ]))),
-                backgroundColor: Colors.transparent)));
+                
+                  ],
+                )
+                
+                , backgroundColor: Colors.transparent)));
   }
 
   Widget _passwdLogin() {

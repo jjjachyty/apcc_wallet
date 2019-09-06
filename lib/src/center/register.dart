@@ -64,17 +64,24 @@ class _UserRegisterState extends State<UserRegister> {
           ),
         ),
         child: Scaffold(
-            appBar: AppBar(
+          
+            body: 
+            Stack(
+              children: <Widget>[
+AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
-            body: Container(
-                height: 380,
+Center(
+              child: 
+            Container(
+                 height: 390,
+                width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: new BorderRadius.all(Radius.circular(20.0)),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 100, horizontal: 40),
+                // margin: EdgeInsets.symmetric(horizontal: 20),
                 padding: EdgeInsets.all(10),
                 child: Column(children: <Widget>[
                   Text(
@@ -88,9 +95,10 @@ class _UserRegisterState extends State<UserRegister> {
                   SizedBox(
                     height: 20,
                   ),
-                  _opType == 0
-                      ? _phone()
-                      : _opType == 1 ? _smsCode() : _passwd(),
+                  // _opType == 0
+                      // ? _phone()
+                      // : _opType == 1 ? _smsCode() : _passwd(),
+                       _passwd(),
                   Divider(),
                   Text.rich(new TextSpan(
                       text: '已有账号? ',
@@ -112,6 +120,10 @@ class _UserRegisterState extends State<UserRegister> {
                             ))
                       ])),
                 ])),
+            ),
+              ],
+            ),
+            
             backgroundColor: Colors.transparent));
   }
 
@@ -182,17 +194,11 @@ class _UserRegisterState extends State<UserRegister> {
                 backgroundColor: Colors.white,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
             onPressed: () async {
+           
               if (_formKey.currentState.validate()) {
                 var _data = await register(_phoneVal, _passwdCtr.text);
                 if (_data.state) {
                   FocusScope.of(context).requestFocus(FocusNode());
-
-                  //  _scaffoldkey.currentState.showSnackBar(SnackBar(content: Text("注册成功,请登录"),backgroundColor: Colors.indigo,)).closed.then((r){
-                  //    Navigator.of(context).pop();
-                  //  }
-
-                  //  );
-
                   var dialog = CupertinoAlertDialog(
                     content: Text(
                       "恭喜,注册成功",

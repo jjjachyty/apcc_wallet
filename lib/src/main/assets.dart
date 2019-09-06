@@ -57,10 +57,7 @@ class _AssetsPageState extends State<AssetsPage> {
 
     return Scaffold(
         backgroundColor: Colors.grey.shade50,
-        body: RefreshIndicator(
-          displacement: 100,
-          onRefresh: _onRefresh,
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
               child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +120,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                       ],
                                     )),
                                 Expanded(
-                                  flex: 3,
+                                  flex: 6,
                                   child: Text(
                                     _assets.length == 0
                                         ? "--"
@@ -266,7 +263,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                       ],
                                     )),
                                 Expanded(
-                                  flex: 3,
+                                  flex: 4,
                                   child: Text(
                                     _assets.length == 0
                                         ? "--"
@@ -349,6 +346,6 @@ class _AssetsPageState extends State<AssetsPage> {
               )
             ],
           )),
-        ));
+        );
   }
 }
