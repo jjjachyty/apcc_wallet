@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.apcc_wallet"
+        applicationId "com.apcchis.mhc"
         minSdkVersion 18
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
