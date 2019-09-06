@@ -49,7 +49,6 @@ class _UserLoginState extends State<UserLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -62,28 +61,30 @@ class _UserLoginState extends State<UserLogin> {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
-                body: Container(
-                    height: 350,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: new BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 100, horizontal: 40),
-                    padding: EdgeInsets.all(10),
-                    child: Column(children: <Widget>[
-                      Text(
-                        "登录",
-                        style: TextStyle(fontSize: 25),
-                      ),
-                      Text(
-                        "LOGIN IN",
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _opType ? _passwdLogin() : _smsLogin(),
-                    ])),
+                body: Center(
+                    child: Container(
+                        height: 350,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                              new BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Column(children: <Widget>[
+                          Text(
+                            "登录",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          Text(
+                            "LOGIN IN",
+                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _opType ? _passwdLogin() : _smsLogin(),
+                        ]))),
                 backgroundColor: Colors.transparent)));
   }
 
