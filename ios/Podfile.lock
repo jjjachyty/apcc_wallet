@@ -6,6 +6,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_downloader (0.0.1):
     - Flutter
+  - flutter_qr_reader (0.0.1):
+    - Flutter
   - flutter_secure_storage (3.2.0):
     - Flutter
   - flutter_webview_plugin (0.0.1):
@@ -23,8 +25,6 @@ PODS:
     - Flutter
   - permission_handler (3.2.2):
     - Flutter
-  - qrcode_reader (0.0.1):
-    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.1):
@@ -37,6 +37,7 @@ DEPENDENCIES:
   - cipher2 (from `.symlinks/plugins/cipher2/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
+  - flutter_qr_reader (from `.symlinks/plugins/flutter_qr_reader/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -44,7 +45,6 @@ DEPENDENCIES:
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - qrcode_reader (from `.symlinks/plugins/qrcode_reader/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -61,6 +61,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/flutter/ios"
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
+  flutter_qr_reader:
+    :path: ".symlinks/plugins/flutter_qr_reader/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_webview_plugin:
@@ -75,8 +77,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
-  qrcode_reader:
-    :path: ".symlinks/plugins/qrcode_reader/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
@@ -89,6 +89,7 @@ SPEC CHECKSUMS:
   CryptoSwift: ff68c35a53e03177d31aaa2c1e8b3e010aeed6cb
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
+  flutter_qr_reader: 254fd9eea45a65ef461e050d6607daf9cfb753e8
   flutter_secure_storage: 0c5779648ff644110e507909b77a57e620cbbf8b
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -97,7 +98,6 @@ SPEC CHECKSUMS:
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
-  qrcode_reader: 09b34d43b4c08fe5b63a6e56c96789bcea7b9148
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298

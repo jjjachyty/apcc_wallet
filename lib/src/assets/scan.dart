@@ -39,14 +39,23 @@ class _ScanPageState extends State<ScanPage> {
           content: Text(data),
           actions: <Widget>[
             CupertinoDialogAction(
+              child: Text("重新识别"),
+              onPressed: () {
+                Navigator.pop(context);
+                _key.currentState.startScan();
+              },
+            ),
+            CupertinoDialogAction(
               child: Text("确认"),
-              onPressed: () => Navigator.pop(context,data),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context, data);
+              },
             )
           ],
         );
       },
     );
-    _key.currentState.startScan();
   }
 
   @override
