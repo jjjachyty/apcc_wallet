@@ -110,7 +110,6 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
           style: TextStyle(color: Colors.red),
         ),
         ProgressButton(
-          color: Colors.indigo,
           defaultWidget: Text(
             "认证",
             style: TextStyle(color: Colors.white),
@@ -260,7 +259,6 @@ class _IDCardRecognitionState extends State<IDCardRecognition> {
           ),
         ),
         new ProgressButton(
-            color: Colors.indigo,
             defaultWidget: Text(
               "确认无误",
               style: TextStyle(color: Colors.white),

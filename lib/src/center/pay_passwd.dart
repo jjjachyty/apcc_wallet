@@ -81,7 +81,6 @@ class _TradePassWdState extends State<TradePassWd> {
                   },
                 ),
                 ProgressButton(
-                  color: Colors.indigo,
                   defaultWidget: Text(
                     "设置",
                     style: TextStyle(color: Colors.white),
@@ -202,7 +201,6 @@ class _TradePassWdState extends State<TradePassWd> {
                   ),
                 ),
                 ProgressButton(
-                  color: Colors.indigo,
                   defaultWidget: Text(
                     "修改",
                     style: TextStyle(color: Colors.white),

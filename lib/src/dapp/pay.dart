@@ -93,7 +93,6 @@ showPasswd(ContractVars vals, String callBackName) {
                       ),
                       Divider(),
                       ProgressButton(
-                          color: Colors.indigo,
                           defaultWidget: Text(
                             "确认",
                             style: TextStyle(color: Colors.white),

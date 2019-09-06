@@ -170,7 +170,7 @@ class _TransferPageState extends State<TransferPage> {
                 height: 10,
               ),
               ProgressButton(
-                  color: Colors.indigo,
+                  // color: Colors.indigo,
                   defaultWidget: Text(
                     "转账",
                     style: TextStyle(color: Colors.white),

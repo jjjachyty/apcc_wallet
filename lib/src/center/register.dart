@@ -185,7 +185,6 @@ Center(
             child: Text(_errorText ?? "", style: TextStyle(color: Colors.red)),
           ),
           ProgressButton(
-            color: Colors.indigo,
             defaultWidget: Text(
               "注册",
               style: TextStyle(color: Colors.white),
@@ -336,7 +335,6 @@ Center(
                 })),
         ),
         ProgressButton(
-          color: Colors.indigo,
           defaultWidget: Text(
             "确认",
             style: TextStyle(color: Colors.white),

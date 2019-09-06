@@ -163,7 +163,6 @@ class _ExchangePageState extends State<ExchangePage> {
               style: TextStyle(color: Colors.red),
             ),
             ProgressButton(
-              color: Colors.indigo,
               defaultWidget: Text(
                 "兑换",
                 style: TextStyle(color: Colors.white),

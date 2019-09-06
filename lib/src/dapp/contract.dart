@@ -68,7 +68,6 @@ callPayable(ContractVars vals, String callBackName) async {
               trailing: Text(_price.getInWei.toString() + " Wei"),
             ),
             ProgressButton(
-                color: Colors.indigo,
                 defaultWidget: Text(
                   "支付",
                   style: TextStyle(color: Colors.white),

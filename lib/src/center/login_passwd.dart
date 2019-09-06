@@ -78,7 +78,6 @@ class _LoginPasswdState extends State<LoginPasswd> {
                   ),
                 ),
                 ProgressButton(
-                  color: Colors.indigo,
                   defaultWidget: Text(
                     "修改",
                     style: TextStyle(color: Colors.white),

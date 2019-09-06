@@ -178,7 +178,6 @@ class _UserLoginState extends State<UserLogin> {
                 ),
               )),
           ProgressButton(
-            color: Colors.indigo,
             defaultWidget: Text(
               "登录",
               style: TextStyle(color: Colors.white),
@@ -342,7 +341,6 @@ class _UserLoginState extends State<UserLogin> {
           SizedBox(
             width: double.infinity,
             child: new ProgressButton(
-              color: Colors.indigo,
               defaultWidget: Text(
                 "登录",
                 style: TextStyle(color: Colors.white),

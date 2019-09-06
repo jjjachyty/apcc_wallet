@@ -90,7 +90,6 @@ class _ProfileState extends State<Profile> {
               child: Text(_errText, style: TextStyle(color: Colors.red)),
             ),
             ProgressButton(
-              color: Colors.indigo,
               defaultWidget: Text(
                 "修改",
                 style: TextStyle(color: Colors.white),

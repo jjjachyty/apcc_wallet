@@ -94,7 +94,6 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
                   height: 20,
                 ),
                 ProgressButton(
-                    color: Colors.indigo,
                     defaultWidget: Text(
                       "创建",
                       style: TextStyle(color: Colors.white),
