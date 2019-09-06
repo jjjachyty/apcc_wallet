@@ -65,7 +65,7 @@ class _AssetsPageState extends State<AssetsPage> {
             children: <Widget>[
               SizedBox(
                 width: double.infinity,
-                height: 40,
+                height: MediaQuery.of(context).size.height*0.1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
