@@ -150,7 +150,8 @@ class _IndexState extends State<Index> {
     }
 
     return Container(
-      height: 250,
+      padding: EdgeInsets.only(top: 12),
+      height: 180,
       width: MediaQuery.of(context).size.width,
       child: Swiper(
         pagination: SwiperPagination(
@@ -170,22 +171,28 @@ class _IndexState extends State<Index> {
         autoplay: true,
         autoplayDelay: 5000,
         // duration: 50000,
+         viewportFraction: 0.8,
+  scale: 0.9,
         itemBuilder: (context, index) {
           var _imgUr = _news[index].imgUrl;
           return Stack(
             children: <Widget>[
               ConstrainedBox(
-                child: Image.network(
+                
+                child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child:Image.network(
                   _imgUr,
+                  
                   fit: BoxFit.fill,
-                ),
+                )),
                 constraints: new BoxConstraints.expand(),
               ),
               Positioned(
                 bottom: 0,
                 child: Text(
                   _news[index].title,
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
             ],
@@ -231,6 +238,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("重庆亚鑫达健康产业有限公司",style: TextStyle(fontSize: 12),),centerTitle: true,),
         body: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
