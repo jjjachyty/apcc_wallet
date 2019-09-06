@@ -34,7 +34,9 @@ class _DappsPageState extends State<DappsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(0, 74, 149, 1),
       body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _swiper(),
           _searchBar(),
@@ -56,8 +58,14 @@ class _DappsPageState extends State<DappsPage> {
           },
           // enabled: false,
           decoration: InputDecoration(
-              hintText: "点击搜索Dapp",
-              prefixIcon: Icon(Icons.search),
+              hintText: "点击搜索DAPP",
+              hintStyle: TextStyle(
+                color: Colors.white54,
+              ),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.white54,
+              ),
               contentPadding: EdgeInsets.all(0),
               border: OutlineInputBorder()),
         ));
@@ -65,62 +73,95 @@ class _DappsPageState extends State<DappsPage> {
 
   Widget _appList() {
     return Expanded(
-        child: ListView.builder(
-            itemCount: _list.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Image.network(
-                  _list[index].logo,
-                  width: 60,
-                  fit: BoxFit.fill,
+        child: Container(
+      child: ListView.builder(
+          itemCount: _list.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: (){
+                 launchDapp(context, _list[index]);
+              },
+              child: Card(
+                //z轴的高度，设置card的阴影
+                elevation: 10.0,
+                //设置shape，这里设置成了R角
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 ),
-                title: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                //对Widget截取的行为，比如这里 Clip.antiAlias 指抗锯齿
+                clipBehavior: Clip.antiAlias,
+                semanticContainer: false,
+                child: Container(
+                  height: 91,
+                  padding: EdgeInsets.symmetric(horizontal: 23, vertical: 23),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        _list[index].name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Row(
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              _list[index].logo,
+                              width: 44,
+                              height: 44,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                _list[index].name,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ),
+                              Text(
+                                _list[index].subtitle,
+                                style: TextStyle(fontSize: 11,color: Colors.blue.shade200),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Text(
-                        _list[index].subtitle,
-                        style: TextStyle(fontSize: 12),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text.rich(
+                            TextSpan(
+                                text: _list[index].category,
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                                children: [
+                                  TextSpan(
+                                    text: _list[index].score + "分",
+                                    style: TextStyle(
+                                        color: Colors.orange,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                          Text(
+                            _list[index].used + "人在使用",
+                            style: TextStyle(fontSize: 10),
+                          )
+                        ],
                       ),
                     ],
                   ),
-                ),
-                trailing: Column(
-                  children: <Widget>[
-                    Text.rich(
-                      TextSpan(
-                          text: _list[index].category,
-                          style: TextStyle(
-                              color: Colors.indigo,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10),
-                          children: [
-                            TextSpan(
-                              text: _list[index].score + "分",
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ]),
-                    ),
-                    Text(
-                      _list[index].used + "人在使用",
-                      style: TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                onTap: () {
-                  launchDapp(context, _list[index]);
-                },
-              );
-            }));
+                ))
+            ); 
+          }),
+      padding: EdgeInsets.symmetric(horizontal: 12),
+    ));
   }
 
   Widget _swiper() {
