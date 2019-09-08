@@ -24,12 +24,12 @@ class _WalletPasswdState extends State<WalletPasswdPage> {
     final form = _passwdForm.currentState;
     if (form.validate()) {
       form.save();
-      await createMain(mnemonic, _passwdConf).then((privateKey) {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) {
-          return PrivateKeyPage(privateKey);
-        }), (route) => false);
-      });
+      var privateKey = await createMain(mnemonic, _passwdConf);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) {
+        return PrivateKeyPage(privateKey);
+      }), (route) => false);
+
       new Future.delayed(Duration(seconds: 1), () {
         post("/user/paypasswd", data: FormData.from({"payPassword": _passwd}));
       });

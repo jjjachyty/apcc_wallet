@@ -40,7 +40,6 @@ class _ImportMnemonicPageState extends State<ImportMnemonicPage> {
                     padding: EdgeInsets.all(10.0),
                     itemBuilder: (buildContext, index) {
                       return TextFormField(
-                        maxLength: 1,
                         autofocus: index == 0 ? true : false,
                         decoration: InputDecoration(
                           hintText: (index + 1).toString(),
@@ -48,6 +47,8 @@ class _ImportMnemonicPageState extends State<ImportMnemonicPage> {
                         validator: (val) {
                           if (val == null || val == "") {
                             return "不能为空";
+                          } else if (val.length != 1) {
+                            return "限1个中文字符";
                           }
                         },
                         onSaved: (val) {

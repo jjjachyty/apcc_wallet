@@ -15,6 +15,7 @@ import '../bip39/src/bip39_base.dart' as bip39;
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
+
 final String apiUrl = "http://119.3.108.19:8111";
 
 final storage = new FlutterSecureStorage();
@@ -59,7 +60,6 @@ Web3Client _mhcClient;
 EtherAmount _gasPrice;
 
 Web3Client getEthClint() {
-
   return _mhcClient;
 }
 
@@ -73,9 +73,7 @@ initMHCClient() async {
   //   print(event.toString());
   //   return true;
   // });
-  
 }
-
 
 Future<EtherAmount> getGasPrice() async {
   return await _mhcClient.getGasPrice();
@@ -148,9 +146,7 @@ Future<EtherAmount> getMHCblance(String address) async {
 Future<String> createMain(String mnemonic, String password) async {
   // mnemonic =
   //     "武 蛋 敲 缝 闻 亲 矩 圣 婚 淮 霞 警"; //await bip39.generateMnemonic(lang: 'zh_cn');
-  print(mnemonic);
-  print(password.length);
-  print(iv.length);
+
   final seed = bip39.mnemonicToSeed(mnemonic);
   print("seed=${HEX.encode(seed)}");
   final root = bip32.BIP32.fromSeed(seed);
@@ -185,13 +181,12 @@ Future<List<Address>> initAddress(
 
   var pbk = privateKeyBytesToPublic(mhc.privateKey);
 
-
   var mhc2 = rootkey.derivePath("m/44'/3333'/0'/0/1");
 
-
-print("第2个地址${EthereumAddress.fromPublicKey(privateKeyBytesToPublic(mhc2.privateKey)).hex}");
+  print(
+      "第2个地址${EthereumAddress.fromPublicKey(privateKeyBytesToPublic(mhc2.privateKey)).hex}");
   var mhcAddress = EthereumAddress.fromPublicKey(pbk);
-    print("地址=$mhcAddress");
+  print("地址=$mhcAddress");
   _adds.add(Address(
       coin: "MHC",
       val: mhcAddress.hex,
@@ -242,53 +237,43 @@ DeployedContract getContractInstance(
 }
 
 // 调用智能合约
-Future<String> callContractPayable(
-    String abiCode,
-    String contractAddress,
-    String contractname,
-    String functionName,
-    String password,
-    List parameters,
-    {int gas,BigInt value}
-  ) async {
+Future<String> callContractPayable(String abiCode, String contractAddress,
+    String contractname, String functionName, String password, List parameters,
+    {int gas, BigInt value}) async {
   var contractInstance =
       getContractInstance(abiCode, contractname, contractAddress);
-  try{
-    gas = gas??2100;
+  try {
+    gas = gas ?? 2100;
 
-  return _mhcClient.sendTransaction(
+    return _mhcClient.sendTransaction(
       (await getCredentials(address[0], password)),
       Transaction.callContract(
-          contract: contractInstance,
-          function: contractInstance.function(functionName),
-          parameters: parameters,
-          from:EthereumAddress.fromHex(address[0].val),
-           gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.gwei, 1),
-          maxGas: gas,
-          value: EtherAmount.inWei(value),
-          ),
+        contract: contractInstance,
+        function: contractInstance.function(functionName),
+        parameters: parameters,
+        from: EthereumAddress.fromHex(address[0].val),
+        gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.gwei, 1),
+        maxGas: gas,
+        value: EtherAmount.inWei(value),
+      ),
       chainId: 3333,
-      );
-      }catch(e){
-        rethrow;
-      }
+    );
+  } catch (e) {
+    rethrow;
+  }
 }
 
-
-
-Future<List> callContract(
-    String abiCode,
-    String contractAddress,
-    String contractname,
-    String functionName,
-    List parameters) async {
-        var contractInstance =
+Future<List> callContract(String abiCode, String contractAddress,
+    String contractname, String functionName, List parameters) async {
+  var contractInstance =
       getContractInstance(abiCode, contractname, contractAddress);
   return await _mhcClient.call(
-      contract: contractInstance, function: contractInstance.function(functionName), params: parameters);
-    }
+      contract: contractInstance,
+      function: contractInstance.function(functionName),
+      params: parameters);
+}
 
-  Future<bool>  checkTransaction(String txs) async {
-    var txReceipt =await  _mhcClient.getTransactionReceipt(txs);
-    return txReceipt==null?false:true;
-    }
+Future<bool> checkTransaction(String txs) async {
+  var txReceipt = await _mhcClient.getTransactionReceipt(txs);
+  return txReceipt == null ? false : true;
+}

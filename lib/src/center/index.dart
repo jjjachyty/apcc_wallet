@@ -36,9 +36,9 @@ class _UserCenterState extends State<UserCenter> {
 
   Widget _item() {
     return ListView(
+      padding: EdgeInsets.only(top: 0),
       shrinkWrap: true,
       children: <Widget>[
-        Divider(),
         new ListTile(
           dense: true,
           contentPadding: EdgeInsets.zero,

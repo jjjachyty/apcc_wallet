@@ -43,10 +43,10 @@ RegExp passwdExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{16,16}$');
 RegExp nickNameExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,8}$');
 
 var imageHost = "http://avatar.apcchis.com/";
-var avatarURL = imageHost+user.avatar+".webp";
+var avatarURL = imageHost + user.avatar + ".webp";
 
-var newestVersion = Version(versionCode: "0.1.0");
-var currentVersion = Version(versionCode: "0.1.0");
+var newestVersion = Version(versionCode: "0.1.1");
+var currentVersion = Version(versionCode: "0.1.1");
 
 var payTypes = {
   1000: "货币兑换",

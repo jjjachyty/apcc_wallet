@@ -66,11 +66,10 @@ class TransferLog {
     this.fromAddress,
     this.fromCoin,
     this.fromUser,
-this.amount,
+    this.amount,
     this.toUser,
     this.coin,
     this.toAddress,
-
     this.payType,
     this.free,
     this.createAt,
@@ -88,8 +87,7 @@ this.amount,
         this.toUser = item["ToUser"],
         this.coin = item["Coin"],
         this.toAddress = item["ToAddress"],
-        this.priceCny=item["PriceCny"],
-        
+        this.priceCny = item["PriceCny"],
         this.payType = item["PayType"],
         this.free = item["Free"],
         this.createAt = item["CreateAt"],
@@ -108,7 +106,6 @@ this.amount,
       "toUser": this.toUser,
       "coin": this.coin,
       "toAddress": this.toAddress,
-
       "payType": this.payType,
       "free": this.free,
       "createAt": this.createAt,
@@ -125,11 +122,11 @@ class Exchange {
   String user;
   String fromCoin;
   String fromAddress;
-   num fromPriceCny;
+  num fromPriceCny;
   String sendAddress;
   String toCoin;
   String toAddress;
-     num toPriceCny;
+  num toPriceCny;
 
   String sendTxs;
   String sendAt;
@@ -163,8 +160,8 @@ class Exchange {
       "user": this.user,
       "fromCoin": this.fromCoin,
       "fromAddress": this.fromAddress,
-      "fromPriceCny":this.fromPriceCny,
-      "toPriceCny":this.toPriceCny,
+      "fromPriceCny": this.fromPriceCny,
+      "toPriceCny": this.toPriceCny,
       "sendAddress": this.sendAddress,
       "toCoin": this.toCoin,
       "toAddress": this.toAddress,
@@ -172,7 +169,7 @@ class Exchange {
       "sendAt": this.sendAt,
       "free": this.free,
       "amount": this.fromAmount,
-      "toAmount":this.toAmount,
+      "toAmount": this.toAmount,
       "rate": this.rate,
       "createAt": this.createAt,
       "state": this.state
@@ -186,8 +183,7 @@ Future<List<Assets>> getLocalAssets() async {
     double _blacnce = 0;
 
     var _amount = await getMHCblance(addr.val);
-    _blacnce =
-        (_amount.getInWei / BigInt.from(1000000000000000000)).toDouble();
+    _blacnce = (_amount.getInWei / BigInt.from(1000000000000000000)).toDouble();
 
     assets.add(
         Assets(address: addr, symbol: addr.coin, blance: _blacnce, baseOn: ""));
@@ -198,11 +194,12 @@ Future<List<Assets>> getLocalAssets() async {
 Future<List<Assets>> getDBAssets() async {
   List<Assets> assets = new List();
   var _usdtAssets = await getDBCoins();
-  assets.add(Assets(
-      address: _usdtAssets.first.address,
-      symbol: _usdtAssets.first.symbol,
-      blance: (_usdtAssets.first.blance),
-      baseOn: _usdtAssets.first.baseOn));
+  _usdtAssets ??
+      assets.add(Assets(
+          address: _usdtAssets.first.address,
+          symbol: _usdtAssets.first.symbol,
+          blance: (_usdtAssets.first.blance),
+          baseOn: _usdtAssets.first.baseOn));
   return assets;
 }
 
@@ -237,8 +234,7 @@ Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
 }
 
 double getExchangeRate(String mainSymbol, exchangeSymbol) {
-  return coins[mainSymbol].priceCny /
-      coins[exchangeSymbol].priceCny;
+  return coins[mainSymbol].priceCny / coins[exchangeSymbol].priceCny;
 }
 
 //exchange货币兑换
@@ -249,7 +245,7 @@ Future<Data> exchange(
   // if (_data.state) {
   switch (from.symbol + to.symbol) {
     case "USDTMHC":
-    _data = await post("/exchange/usdt2mhc",
+      _data = await post("/exchange/usdt2mhc",
           data: FormData.from({
             "fromAddress": from.address.val,
             "password": password,
@@ -262,7 +258,7 @@ Future<Data> exchange(
       var _privateKey = await getAddressPrivateKey(from.address, password);
       var _key = bip32.BIP32.fromBase58(_privateKey);
 
-       _data =await  post("/exchange/mhc2usdt",
+      _data = await post("/exchange/mhc2usdt",
           data: FormData.from({
             "privateKey": bytesToHex(_key.privateKey,
                 include0x: false, forcePadLength: 64),
@@ -311,19 +307,19 @@ Future<Data> transfer(
       return await sendMHC(from.address, toAddress, password, amount);
       break;
     case "USDT":
-      return await sendUSDT(from.address.val, toAddress, amount,password);
+      return await sendUSDT(from.address.val, toAddress, amount, password);
     default:
   }
   ;
 }
 
 Future<PageData> transferList(String coin, address, page) async {
-    print("orders$coin $address");
+  print("orders$coin $address");
 
   List<TransferLog> _orders = new List();
   var _data = await get("/assets/logs", parameters: {
     "coin": coin,
-    "address":address,
+    "address": address,
     "order": "create_at",
     "sort": "desc",
     "page": page
