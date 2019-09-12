@@ -177,6 +177,79 @@ class Exchange {
   }
 }
 
+class MHCTransferLog {
+  String txHash;
+  int blockNumber;
+  String blockHash;
+  String from;
+  String to;
+  num gas;
+
+  num gasPrice;
+  num gasUsed;
+  num value;
+
+  num free;
+  int status;
+  num tokenValue;
+  String tokenTo;
+  String inputData;
+  String createAt;
+
+  MHCTransferLog({
+    this.txHash,
+    this.blockNumber,
+    this.blockHash,
+    this.from,
+    this.to,
+    this.gas,
+    this.gasPrice,
+    this.gasUsed,
+    this.value,
+    this.free,
+    this.status,
+    this.tokenValue,
+    this.tokenTo,
+    this.inputData,
+    this.createAt,
+  });
+  MHCTransferLog.fromJson(Map<String, dynamic> item)
+      : this.txHash = item["TxHash"],
+        this.blockNumber = item["BlockNumber"],
+        this.blockHash = item["BlockHash"],
+        this.from = item["From"],
+        this.to = item["To"],
+        this.gas = item["Gas"],
+        this.gasPrice = item["GasPrice"],
+        this.gasUsed = item["GasUsed"],
+        this.value = item["Value"],
+        this.free = item["Free"],
+        this.status = item["Status"],
+        this.tokenValue = item["TokenValue"],
+        this.tokenTo = item["TokenTo"],
+        this.inputData = item["InputData"],
+        this.createAt = item["CreateAt"];
+  Map<String, dynamic> toJson() {
+    return {
+      "txHash": this.txHash,
+      "blockNumber": this.blockNumber,
+      "blockHash": this.blockHash,
+      "from": this.from,
+      "to": this.to,
+      "gas": this.gas,
+      "gasPrice": this.gasPrice,
+      "gasUsed": this.gasUsed,
+      "value": this.value,
+      "free": this.free,
+      "status": this.status,
+      "tokenValue": this.tokenValue,
+      "tokenTo": this.tokenTo,
+      "inputData": this.inputData,
+      "createAt": this.createAt
+    };
+  }
+}
+
 Future<List<Assets>> getLocalAssets() async {
   List<Assets> assets = new List();
   for (var addr in address) {
@@ -365,6 +438,24 @@ Future<PageData> exchangeList(String mainCoin, exchangeCoin, page) async {
         createAt: item["CreateAt"],
         state: item["State"],
         sendAt: item["SendAt"]));
+  });
+  _pageData.rows = _orders;
+  return _pageData;
+}
+
+Future<PageData> mhctransferList(String address, page) async {
+  List<MHCTransferLog> _orders = new List();
+  var _data = await get("/assets/mhclogs", parameters: {
+    "address": address,
+    "order": "create_at",
+    "sort": "desc",
+    "page": page
+  });
+  print(_data.data);
+  var _pageData = PageData.fromJson(_data.data);
+  var _rows = _pageData.rows as List;
+  _rows.forEach((item) {
+    _orders.add(MHCTransferLog.fromJson(item));
   });
   _pageData.rows = _orders;
   return _pageData;

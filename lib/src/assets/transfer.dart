@@ -1,5 +1,6 @@
 import 'package:apcc_wallet/src/assets/scan.dart';
 import 'package:apcc_wallet/src/assets/transfer_list.dart';
+import 'package:apcc_wallet/src/assets/transfer_list_mhc.dart';
 import 'package:apcc_wallet/src/assets/transfer_success.dart';
 import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,6 @@ class _TransferPageState extends State<TransferPage> {
   _TransferPageState(this.assets);
   TextEditingController _addressCtl = new TextEditingController();
   bool _type = false;
-
 
   @override
   void initState() {
@@ -65,10 +65,17 @@ class _TransferPageState extends State<TransferPage> {
           IconButton(
             icon: Icon(Icons.list),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (buildContext) {
-                return TransferListPage(assets.symbol, assets.address.val);
-              }));
+              if (assets.symbol == "MHC") {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (buildContext) {
+                  return TransferListMHCPage(assets.address.val);
+                }));
+              } else {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (buildContext) {
+                  return TransferListPage(assets.symbol, assets.address.val);
+                }));
+              }
             },
           )
         ],
@@ -88,8 +95,9 @@ class _TransferPageState extends State<TransferPage> {
                     border: OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.filter_center_focus),
-                      onPressed: () async{
-                      String _value =  await  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                      onPressed: () async {
+                        String _value = await Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
                           return ScanPage();
                         }));
                         print("_value");
