@@ -67,16 +67,25 @@ class _TransferListMHCPageState extends State<TransferListMHCPage> {
           itemBuilder: (buildContext, index) {
             var _state = _orders[index].status == 1 ? "完成" : "转账中";
             var _log = _orders[index];
-
+            var _dict = _log.from==address?"转出":"转入";
             return ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Text(
                 formatDate(DateTime.parse(_log.createAt).toLocal(),
+<<<<<<< HEAD
                     [mm, "/", dd, " ", HH, ":", nn, ":", ss]),
                 textAlign: TextAlign.end,
               ),
               title: Text(_log.from == address ? "转入" : "转出"),
               trailing: Text((_log.value).toString(), style: TextStyle()),
+=======
+                    [yyyy,"/",mm, "/", dd, " ", HH, ":", nn, ":", ss]),
+                style: TextStyle(fontSize: 15),
+              ),
+              title: Text(_dict),
+              trailing: Text((_dict=="转入"?"+ ":"- ")+(_log.value).toString(),
+                  style: TextStyle(color: Colors.indigo)),
+>>>>>>> c3d441f0b2228c355464e2c9a93751b60a7a0d0d
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (buildContext) {
