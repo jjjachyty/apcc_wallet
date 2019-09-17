@@ -8,15 +8,15 @@ import 'package:date_format/date_format.dart';
 
 class TransferListMHCPage extends StatefulWidget {
   String address;
-  TransferListMHCPage( this.address);
+  TransferListMHCPage(this.address);
   @override
   _TransferListMHCPageState createState() =>
-      _TransferListMHCPageState( this.address);
+      _TransferListMHCPageState(this.address);
 }
 
 class _TransferListMHCPageState extends State<TransferListMHCPage> {
-  var  address;
-  _TransferListMHCPageState( this.address);
+  var address;
+  _TransferListMHCPageState(this.address);
   List<MHCTransferLog> _orders = new List();
   ScrollController _scrollController = new ScrollController();
   int currentPage = 1;
@@ -45,7 +45,7 @@ class _TransferListMHCPageState extends State<TransferListMHCPage> {
         isPerformingRequest = true;
         currentPage++;
       });
-      var _pageData = await mhctransferList( address, currentPage);
+      var _pageData = await mhctransferList(address, currentPage);
       setState(() {
         _orders.addAll(_pageData.rows);
         isPerformingRequest = false;
@@ -69,14 +69,14 @@ class _TransferListMHCPageState extends State<TransferListMHCPage> {
             var _log = _orders[index];
 
             return ListTile(
+              contentPadding: EdgeInsets.zero,
               leading: Text(
                 formatDate(DateTime.parse(_log.createAt).toLocal(),
                     [mm, "/", dd, " ", HH, ":", nn, ":", ss]),
-                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.end,
               ),
-              title: Text(""),
-              trailing: Text((_log.value).toString(),
-                  style: TextStyle(color: Colors.indigo)),
+              title: Text(_log.from == address ? "转入" : "转出"),
+              trailing: Text((_log.value).toString(), style: TextStyle()),
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (buildContext) {

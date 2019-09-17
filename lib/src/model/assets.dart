@@ -191,6 +191,7 @@ class MHCTransferLog {
 
   num free;
   int status;
+  int nonce;
   num tokenValue;
   String tokenTo;
   String inputData;
@@ -212,6 +213,7 @@ class MHCTransferLog {
     this.tokenTo,
     this.inputData,
     this.createAt,
+    this.nonce,
   });
   MHCTransferLog.fromJson(Map<String, dynamic> item)
       : this.txHash = item["TxHash"],
@@ -228,6 +230,7 @@ class MHCTransferLog {
         this.tokenValue = item["TokenValue"],
         this.tokenTo = item["TokenTo"],
         this.inputData = item["InputData"],
+        this.nonce = item["Nonce"],
         this.createAt = item["CreateAt"];
   Map<String, dynamic> toJson() {
     return {
@@ -241,6 +244,7 @@ class MHCTransferLog {
       "gasUsed": this.gasUsed,
       "value": this.value,
       "free": this.free,
+      "nonce": this.nonce,
       "status": this.status,
       "tokenValue": this.tokenValue,
       "tokenTo": this.tokenTo,
