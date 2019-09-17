@@ -191,7 +191,6 @@ class MHCTransferLog {
   int nonce;
   num free;
   int status;
-  int nonce;
   num tokenValue;
   String tokenTo;
   String inputData;
@@ -214,7 +213,6 @@ class MHCTransferLog {
     this.nonce,
     this.inputData,
     this.createAt,
-    this.nonce,
   });
   MHCTransferLog.fromJson(Map<String, dynamic> item)
       : this.txHash = item["TxHash"],
@@ -232,7 +230,6 @@ class MHCTransferLog {
         this.tokenValue = item["TokenValue"],
         this.tokenTo = item["TokenTo"],
         this.inputData = item["InputData"],
-        this.nonce = item["Nonce"],
         this.createAt = item["CreateAt"];
   Map<String, dynamic> toJson() {
     return {
@@ -242,7 +239,7 @@ class MHCTransferLog {
       "from": this.from,
       "to": this.to,
       "gas": this.gas,
-      "nonce":this.nonce,
+      "nonce": this.nonce,
       "gasPrice": this.gasPrice,
       "gasUsed": this.gasUsed,
       "value": this.value,
@@ -274,12 +271,12 @@ Future<List<Assets>> getLocalAssets() async {
 Future<List<Assets>> getDBAssets() async {
   List<Assets> assets = new List();
   var _usdtAssets = await getDBCoins();
- 
-      assets.add(Assets(
-          address: _usdtAssets.first.address,
-          symbol: _usdtAssets.first.symbol,
-          blance: (_usdtAssets.first.blance),
-          baseOn: _usdtAssets.first.baseOn));
+
+  assets.add(Assets(
+      address: _usdtAssets.first.address,
+      symbol: _usdtAssets.first.symbol,
+      blance: (_usdtAssets.first.blance),
+      baseOn: _usdtAssets.first.baseOn));
   return assets;
 }
 
@@ -288,7 +285,6 @@ Future<Data> getExchange(String mainSymbol, exchangeSymbol) async {
 
   var _data = await get("/assets/exchangeassets",
       parameters: {"mainCoin": mainSymbol, "exchangeCoin": exchangeSymbol});
-  print(_data);
   if (_data.state) {
     var _list = _data.data as List;
     _list.forEach((asset) {
@@ -390,7 +386,6 @@ Future<Data> transfer(
       return await sendUSDT(from.address.val, toAddress, amount, password);
     default:
   }
-  ;
 }
 
 Future<PageData> transferList(String coin, address, page) async {

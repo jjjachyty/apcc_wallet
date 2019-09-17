@@ -35,7 +35,7 @@ PODS:
 
 DEPENDENCIES:
   - cipher2 (from `.symlinks/plugins/cipher2/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_qr_reader (from `.symlinks/plugins/flutter_qr_reader/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -58,7 +58,7 @@ EXTERNAL SOURCES:
   cipher2:
     :path: ".symlinks/plugins/cipher2/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   flutter_downloader:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_qr_reader:
@@ -87,7 +87,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   cipher2: 215b8aa78b783cf5a17eb7b72fda55d025dbeefc
   CryptoSwift: ff68c35a53e03177d31aaa2c1e8b3e010aeed6cb
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   flutter_qr_reader: 254fd9eea45a65ef461e050d6607daf9cfb753e8
   flutter_secure_storage: 0c5779648ff644110e507909b77a57e620cbbf8b
