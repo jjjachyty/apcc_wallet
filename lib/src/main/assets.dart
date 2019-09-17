@@ -35,7 +35,6 @@ class _AssetsPageState extends State<AssetsPage> {
       });
     }
     var _usdtTmp = await getDBAssets();
-
     if (_usdtTmp.length > 0) {
       setState(() {
         _usdt = _usdtTmp;
@@ -154,20 +153,21 @@ class _AssetsPageState extends State<AssetsPage> {
                                                         recognizer:
                                                             new TapGestureRecognizer()
                                                               ..onTap = () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) {
-                                                                  return ExchangePage(
-                                                                      _mhc[0],
-                                                                      _usdt[0]);
-                                                                }));
+                                                                // Navigator.of(
+                                                                //         context)
+                                                                //     .push(MaterialPageRoute(
+                                                                //         builder:
+                                                                //             (context) {
+                                                                //   return ExchangePage(
+                                                                //       _mhc[0],
+                                                                //       _usdt[0]);
+                                                                // }));
                                                               },
                                                         text: "兑换",
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
+                                                            decoration: TextDecoration
+                                                      .lineThrough,
+                                                      color: Colors.white70)),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
@@ -312,7 +312,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                           ),
                                         ],
                                       ),
-                                      Row(
+                                     _usdt.length>0? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         crossAxisAlignment:
@@ -324,18 +324,20 @@ class _AssetsPageState extends State<AssetsPage> {
                                                   recognizer:
                                                       new TapGestureRecognizer()
                                                         ..onTap = () {
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) {
-                                                            return ExchangePage(
-                                                                _usdt[0],
-                                                                _mhc[0]);
-                                                          }));
+                                                          // Navigator.of(context).push(
+                                                          //     MaterialPageRoute(
+                                                          //         builder:
+                                                          //             (context) {
+                                                          //   return ExchangePage(
+                                                          //       _usdt[0],
+                                                          //       _mhc[0]);
+                                                          // }));
                                                         },
                                                   text: "兑换",
                                                   style: TextStyle(
-                                                      color: Colors.white)),
+                                                    decoration: TextDecoration
+                                                      .lineThrough,
+                                                      color: Colors.white70)),
                                               textAlign: TextAlign.center,
                                             ),
                                           ),
@@ -375,7 +377,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                             ),
                                           )
                                         ],
-                                      )
+                                      ):Divider()
                                     ],
                                   ),
                                 ),

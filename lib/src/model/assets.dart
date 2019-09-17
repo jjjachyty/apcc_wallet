@@ -188,7 +188,7 @@ class MHCTransferLog {
   num gasPrice;
   num gasUsed;
   num value;
-
+  int nonce;
   num free;
   int status;
   num tokenValue;
@@ -210,6 +210,7 @@ class MHCTransferLog {
     this.status,
     this.tokenValue,
     this.tokenTo,
+    this.nonce,
     this.inputData,
     this.createAt,
   });
@@ -223,6 +224,7 @@ class MHCTransferLog {
         this.gasPrice = item["GasPrice"],
         this.gasUsed = item["GasUsed"],
         this.value = item["Value"],
+        this.nonce = item["Nonce"],
         this.free = item["Free"],
         this.status = item["Status"],
         this.tokenValue = item["TokenValue"],
@@ -237,6 +239,7 @@ class MHCTransferLog {
       "from": this.from,
       "to": this.to,
       "gas": this.gas,
+      "nonce":this.nonce,
       "gasPrice": this.gasPrice,
       "gasUsed": this.gasUsed,
       "value": this.value,
@@ -267,7 +270,7 @@ Future<List<Assets>> getLocalAssets() async {
 Future<List<Assets>> getDBAssets() async {
   List<Assets> assets = new List();
   var _usdtAssets = await getDBCoins();
-  _usdtAssets ??
+ 
       assets.add(Assets(
           address: _usdtAssets.first.address,
           symbol: _usdtAssets.first.symbol,

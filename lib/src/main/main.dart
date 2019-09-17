@@ -4,6 +4,7 @@ import 'package:apcc_wallet/src/common/event_bus.dart';
 import 'package:apcc_wallet/src/common/version.dart';
 import 'package:apcc_wallet/src/main/assets.dart';
 import 'package:apcc_wallet/src/main/dapp.dart';
+import 'package:apcc_wallet/src/message/index.dart';
 import 'package:flutter/material.dart';
 
 import 'dapp.dart';
@@ -34,7 +35,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    pages..add(Index())..add(AssetsPage())..add(DappsPage())..add(UserCenter());
+    pages..add(Index())..add(AssetsPage())..add(DappsPage())..add(MessageIndex()) ..add(UserCenter());
     super.initState();
   }
 
@@ -66,6 +67,10 @@ class _MainPageState extends State<MainPage> {
           new BottomNavigationBarItem(
             icon: new Icon(Icons.apps),
             title: new Text('Dapp'),
+          ),
+          new BottomNavigationBarItem(
+            icon: new Icon(Icons.message),
+            title: new Text('聊天'),
           ),
           new BottomNavigationBarItem(
             icon: new Icon(Icons.person),

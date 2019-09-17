@@ -67,15 +67,15 @@ class _TransferListMHCPageState extends State<TransferListMHCPage> {
           itemBuilder: (buildContext, index) {
             var _state = _orders[index].status == 1 ? "完成" : "转账中";
             var _log = _orders[index];
-
+            var _dict = _log.from==address?"转出":"转入";
             return ListTile(
               leading: Text(
                 formatDate(DateTime.parse(_log.createAt).toLocal(),
-                    [mm, "/", dd, " ", HH, ":", nn, ":", ss]),
+                    [yyyy,"/",mm, "/", dd, " ", HH, ":", nn, ":", ss]),
                 style: TextStyle(fontSize: 15),
               ),
-              title: Text(""),
-              trailing: Text((_log.value).toString(),
+              title: Text(_dict),
+              trailing: Text((_dict=="转入"?"+ ":"- ")+(_log.value).toString(),
                   style: TextStyle(color: Colors.indigo)),
               onTap: () {
                 Navigator.of(context)
