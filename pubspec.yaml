@@ -31,7 +31,7 @@ dependencies:
   unorm_dart: ^0.1.1
   path_provider: ^1.1.0
   progress_dialog: ^1.1.0+1
-  qr_flutter: ^2.0.0
+  qr_flutter: ^3.0.1
   flutter_qr_reader: ^1.0.2
   flutter_swiper: ^1.1.6
   flutter_progress_button: '^0.6.4'

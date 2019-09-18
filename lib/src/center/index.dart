@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:apcc_wallet/src/center/qrcode.dart';
 import 'package:apcc_wallet/src/center/setting.dart';
 import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/common/utils.dart';
@@ -161,6 +162,25 @@ class _UserCenterState extends State<UserCenter> {
                         ),
                         onTap: () {
                           Toast.show("暂未开通", context);
+                        },
+                      ),
+                      new ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        isThreeLine: false,
+                        leading: Icon(
+                          Icons.blur_on,
+                          color: Colors.indigo,
+                        ),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        title: Text(
+                          "我的二维码",
+                        ),
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return MyQrCode();
+                          }));
                         },
                       ),
                       new ListTile(
