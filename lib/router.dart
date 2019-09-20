@@ -14,6 +14,7 @@ import 'package:apcc_wallet/src/hdwallet/index.dart';
 import 'package:apcc_wallet/src/hdwallet/mmic_repeat.dart';
 import 'package:apcc_wallet/src/hdwallet/mnemonic.dart';
 import 'package:apcc_wallet/src/hdwallet/passwd.dart';
+import 'package:apcc_wallet/src/healthy/index.dart';
 import 'package:apcc_wallet/src/main/main.dart';
 import 'package:flutter/material.dart';
 
@@ -36,5 +37,6 @@ final Map<String, WidgetBuilder> routes = {
   "/user/idcard": (BuildContext context) => new IDCardRecognition(),
   "/user/setting": (BuildContext context) => new UserSetting(),
   "/version": (BuildContext context) => new VersionPage(),
+  "/healthy/index":(BuildContext context) => new HealthyPage(),
   // "/transfersuccess": (BuildContext context) => new TransferSuccessPage(),
 };

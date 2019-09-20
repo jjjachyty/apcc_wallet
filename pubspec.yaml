@@ -54,6 +54,7 @@ dependencies:
   open_file: ^2.0.3
   install_plugin: ^2.0.1
   flutter_markdown: ^0.2.0
+  image_gallery_saver: ^1.2.2
 
 dependency_overrides:
   zefyr:
@@ -94,8 +95,15 @@ flutter:
       - assets/images/eth@2x.png
       - assets/images/usdt@2x.png
       - assets/images/mhc@2x.png
-      
-      
+      - assets/images/msg_contact_new_friend.png
+      - assets/images/healthy/body.png
+      - assets/images/healthy/cardiology_red.png
+      - assets/images/healthy/water.png
+      - assets/images/healthy/weight.png
+      - assets/images/healthy/height.png
+      - assets/images/healthy/lungs.png
+      - assets/images/healthy/kidney.png
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

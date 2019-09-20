@@ -158,10 +158,12 @@ class _UserCenterState extends State<UserCenter> {
                         ),
                         title: Text(
                           "我的健康",
-                          style: TextStyle(color: Colors.grey),
+                          
                         ),
+                                                trailing: Icon(Icons.keyboard_arrow_right),
+
                         onTap: () {
-                          Toast.show("暂未开通", context);
+                          Navigator.of(context).pushNamed("/healthy/index");
                         },
                       ),
                       new ListTile(
