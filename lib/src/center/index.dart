@@ -9,7 +9,7 @@ import 'package:apcc_wallet/src/model/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
+import 'package:extended_image/extended_image.dart';
 
 class Item {
   Function onClick;
@@ -122,11 +122,34 @@ class _UserCenterState extends State<UserCenter> {
                       Container(
                           height: 120,
                           width: 120,
-                          child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              backgroundImage: user.avatar == ""
-                                  ? AssetImage("assets/images/money.png")
-                                  : CachedNetworkImageProvider(avatarURL))),
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      children: <Widget>[
+                                        user.avatar == ""
+                                            ? Image.asset(
+                                                "assets/images/money.png",
+                                                fit: BoxFit.contain,
+                                              )
+                                            : Image.network(
+                                                avatarURL,
+                                                fit: BoxFit.contain,
+                                              ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: user.avatar == ""
+                                    ? AssetImage("assets/images/money.png")
+                                    : CachedNetworkImageProvider(avatarURL)),
+                          )),
                       SizedBox(width: 20),
                       Text(
                         user.nickName,
@@ -158,10 +181,8 @@ class _UserCenterState extends State<UserCenter> {
                         ),
                         title: Text(
                           "我的健康",
-                          
                         ),
-                                                trailing: Icon(Icons.keyboard_arrow_right),
-
+                        trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
                           Navigator.of(context).pushNamed("/healthy/index");
                         },

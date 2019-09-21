@@ -45,77 +45,72 @@ class _MyQrCodeState extends State<MyQrCode> {
       body: Center(
           child: GestureDetector(
         child: RepaintBoundary(
-          key: globalKey,
-          child: 
-          Container(
-            width: 250,
-            height: 300,
-            color: Colors.white,
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new QrImage(
-                data: user.uuid,
-                version: QrVersions.auto,
-                size: 250,
-                foregroundColor: Colors.indigo,
-                backgroundColor: Colors.white,
-                embeddedImage: NetworkImage(avatarURL),
-                embeddedImageStyle: QrEmbeddedImageStyle(
-                  size: Size(50, 50),
-                ),
-              ),
-              Text(
-                "扫一扫加我为好友",
-                style: TextStyle(color: Colors.grey),
-              )
-            ],
-          ),
-          )
-          
-        ),
-        onTap: () {
-          showModalBottomSheet(context:context ,builder:(context) {
-
-            return Container(
-              alignment: Alignment.center,
-              height: 100,
-              width: double.infinity,
-              child: 
-              
-              
-              
-              Column(
+            key: globalKey,
+            child: Container(
+              width: 250,
+              height: 300,
+              color: Colors.white,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-              
                 children: <Widget>[
-                  Divider(),
-                  FlatButton(
-                    child: Text("保存至相册"),
-                    color: Colors.white,
-                    onPressed: () async {
-                      var permissions = await PermissionHandler()
-                          .requestPermissions([PermissionGroup.storage]);
-
-                      if (permissions[PermissionGroup.storage] ==
-                          PermissionStatus.granted) {
-                        var result = await ImageGallerySaver.saveImage(
-                            await _capturePng());
-                        if (result != null) {
-                          Navigator.of(context).pop();
-
-                          Toast.show("保存成功", context);
-                        }
-                      }
-                    },
+                  new QrImage(
+                    data: user.uuid,
+                    version: QrVersions.auto,
+                    size: 250,
+                    foregroundColor: Colors.indigo,
+                    backgroundColor: Colors.white,
+                    embeddedImage: NetworkImage(avatarURL),
+                    embeddedImageStyle: QrEmbeddedImageStyle(
+                      size: Size(50, 50),
+                    ),
                   ),
-                   Divider(),
+                  Text(
+                    "扫一扫加我为好友",
+                    style: TextStyle(color: Colors.grey),
+                  )
                 ],
               ),
-            );
-          }, backgroundColor: Colors.white,elevation: 10);
+            )),
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.center,
+                  height: 100,
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Divider(),
+                      FlatButton(
+                        child: Text("保存至相册"),
+                        color: Colors.white,
+                        onPressed: () async {
+                          var permissions = await PermissionHandler()
+                              .requestPermissions([PermissionGroup.storage]);
+
+                          if (permissions[PermissionGroup.storage] ==
+                              PermissionStatus.granted) {
+                            var result = await ImageGallerySaver.saveImage(
+                                await _capturePng());
+                            if (result != null) {
+                              Navigator.of(context).pop();
+
+                              Toast.show("保存成功", context);
+                            }
+                          }
+                        },
+                      ),
+                      Divider(),
+                    ],
+                  ),
+                );
+              },
+              backgroundColor: Colors.white,
+              elevation: 10);
         },
       )),
     );

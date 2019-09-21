@@ -64,66 +64,62 @@ class _UserRegisterState extends State<UserRegister> {
           ),
         ),
         child: Scaffold(
-          
-            body: 
-            Stack(
+            body: Stack(
               children: <Widget>[
-AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
-Center(
-              child: 
-            Container(
-                 height: 390,
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: new BorderRadius.all(Radius.circular(20.0)),
+                AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
                 ),
-                // margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.all(10),
-                child: Column(children: <Widget>[
-                  Text(
-                    "注册",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  Text(
-                    "SIGN UP",
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // _opType == 0
-                      // ? _phone()
-                      // : _opType == 1 ? _smsCode() : _passwd(),
-                       _passwd(),
-                  Divider(),
-                  Text.rich(new TextSpan(
-                      text: '已有账号? ',
-                      style: new TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w400),
-                      children: [
-                        TextSpan(
-                            recognizer: new TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pop();
-                              },
-                            text: '去登录',
+                Center(
+                  child: Container(
+                      height: 390,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            new BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      // margin: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.all(10),
+                      child: Column(children: <Widget>[
+                        Text(
+                          "注册",
+                          style: TextStyle(fontSize: 25),
+                        ),
+                        Text(
+                          "SIGN UP",
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _opType == 0
+                            ? _phone()
+                            : _opType == 1 ? _smsCode() : _passwd(),
+                        Divider(),
+                        Text.rich(new TextSpan(
+                            text: '已有账号? ',
                             style: new TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.indigo,
-                              fontWeight: FontWeight.w400,
-                            ))
+                                fontSize: 14.0,
+                                color: Colors.grey[500],
+                                fontWeight: FontWeight.w400),
+                            children: [
+                              TextSpan(
+                                  recognizer: new TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  text: '去登录',
+                                  style: new TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.indigo,
+                                    fontWeight: FontWeight.w400,
+                                  ))
+                            ])),
                       ])),
-                ])),
-            ),
+                ),
               ],
             ),
-            
             backgroundColor: Colors.transparent));
   }
 
@@ -193,7 +189,6 @@ Center(
                 backgroundColor: Colors.white,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)),
             onPressed: () async {
-           
               if (_formKey.currentState.validate()) {
                 var _data = await register(_phoneVal, _passwdCtr.text);
                 if (_data.state) {

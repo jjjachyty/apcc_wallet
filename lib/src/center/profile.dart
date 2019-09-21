@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class Profile extends StatefulWidget {
   Profile();
@@ -20,7 +21,11 @@ class _ProfileState extends State<Profile> {
   GlobalKey<FormFieldState> _nickNamekey = new GlobalKey<FormFieldState>();
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1024,
+      maxHeight: 800,
+    );
 
     setState(() {
       _image = image;
@@ -102,7 +107,11 @@ class _ProfileState extends State<Profile> {
                   _nickNamekey.currentState.save();
                   var _data = await modifiyProfile(_image, _nickName);
                   if (_data.state) {
-                    avatarURL += "?" + DateTime.now().toString();
+                    user.avatar = user.uuid;
+                    avatarURL = imageHost +
+                        user.avatar +
+                        ".webp?" +
+                        DateTime.now().toString();
                     Navigator.of(context).pop();
                   } else {
                     setState(() {
