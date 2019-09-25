@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import 'event_bus.dart';
 
-var apiURL = "http://119.3.108.19:9090/api/wallet/v1";
+var apiURL = "http://10.0.0.68:9090/api/wallet/v1";
 
 Dio api;
 

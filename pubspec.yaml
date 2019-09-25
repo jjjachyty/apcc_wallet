@@ -56,16 +56,7 @@ dependencies:
   flutter_markdown: ^0.2.0
   image_gallery_saver: ^1.2.2
   extended_image: ^0.6.0
-
-dependency_overrides:
-  zefyr:
-    git:
-      url: https://github.com/memspace/zefyr.git
-      path: packages/zefyr
-  notus:
-    git:
-      url: https://github.com/memspace/zefyr.git
-      path: packages/notus
+  lpinyin: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -104,7 +95,7 @@ flutter:
       - assets/images/healthy/height.png
       - assets/images/healthy/lungs.png
       - assets/images/healthy/kidney.png
-
+      - assets/images/loading.gif
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

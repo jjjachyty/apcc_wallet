@@ -41,9 +41,10 @@ RegExp phoneExp = RegExp(
 
 RegExp passwdExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{16,16}$');
 RegExp nickNameExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,8}$');
+RegExp introduceExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,25}$');
 
 var imageHost = "http://avatar.apcchis.com/";
-var avatarURL = imageHost + user.avatar + ".webp";
+var avatarURL = imageHost + user.avatar + ".webp?"+DateTime.now().toString();
 
 var newestVersion = Version(versionCode: "0.1.9");
 var currentVersion = Version(versionCode: "0.1.9");
@@ -70,3 +71,5 @@ class PasswordError extends Error {
   PasswordError([this.message]);
   String toString() => "密码错误";
 }
+
+

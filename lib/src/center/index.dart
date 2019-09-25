@@ -100,10 +100,13 @@ class _UserCenterState extends State<UserCenter> {
   Widget _logined() {
     return Scaffold(
       backgroundColor: Color.fromRGBO(244, 244, 244, 1),
-      body: Column(
+      body:
+      SingleChildScrollView(
+        child:
+       Column(
         children: <Widget>[
           Container(
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.38,
               decoration: new BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/center_bg@3x.png"),
@@ -160,6 +163,8 @@ class _UserCenterState extends State<UserCenter> {
                       )
                     ],
                   ),
+                  SizedBox(height: 5,),
+                  Text(user.introduce,style: TextStyle(color: Colors.white,fontSize: 10),)
                 ],
               )),
           Container(
@@ -233,6 +238,8 @@ class _UserCenterState extends State<UserCenter> {
               ),
         ],
       ),
+       
+      )
     );
   }
 

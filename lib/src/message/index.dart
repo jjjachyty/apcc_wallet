@@ -38,7 +38,7 @@ class _MessageIndexState extends State<MessageIndex>
         controller: _tabController,
         children: <Widget>[
           new Center(child: new Text('待开放')),
-          new Center(child: new Text('待开放')),
+          new Center(child: ContactsPage()),
         ],
       ),
     );

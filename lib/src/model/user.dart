@@ -23,6 +23,7 @@ class User {
   String state; //账户状态
   IDCard idCard;
   int idCardAuth;
+  String introduce;
   List<Account> accounts; //账户
 
   User(
@@ -37,6 +38,7 @@ class User {
       this.lastLoginDevice,
       this.state,
       this.idCard,
+      this.introduce,
       this.accounts,
       this.idCardAuth});
 
@@ -46,6 +48,7 @@ class User {
         nickName = json["NickName"],
         avatar = json["Avatar"],
         idCardAuth = json["IDCardAuth"],
+        introduce = json["Introduce"],
         hasPayPasswd = json["HasPayPasswd"];
 
   String toJson() {
@@ -54,6 +57,7 @@ class User {
       'Phone': this.phone,
       'NickName': this.nickName,
       'Avatar': this.avatar,
+      'Introduce':this.introduce,
       'IDCardAuth': this.idCardAuth,
       'HasPayPasswd': this.hasPayPasswd
     };
@@ -135,7 +139,10 @@ Future<Data> checkPhone(String phone) async {
       parameters: 
           {"phone": phone});
 }
-
+Future<Data> getUserByPhone(String phone) async {
+  return await get("/user/"+phone,
+      parameters: null);
+}
 
 Future<Data> modifiyTradePasswd(String orgPasswd, passwdConf) async {
   return await post("/user/paypasswd",
@@ -148,8 +155,8 @@ Future<Data> modifiyLoginPasswd(String passwd) async {
       data: new FormData.from({"password": passwd}));
 }
 
-Future<Data> modifiyProfile(File image, String nickName) async {
-  var _forData = new FormData.from({"nickName": nickName});
+Future<Data> modifiyProfile(File image, String nickName,String introduce) async {
+  var _forData = new FormData.from({"nickName": nickName,"introduce":introduce});
 
   if (image != null) {
     String path = image.path;

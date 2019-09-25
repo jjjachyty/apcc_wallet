@@ -1,4 +1,5 @@
 import 'package:apcc_wallet/src/dapp/search.dart';
+import 'package:apcc_wallet/src/message/search_user.dart';
 import 'package:flutter/material.dart';
 
 class AddFriendsPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _AddFriendsPageState extends State<AddFriendsPage> {
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return SearchAppPage();
+              return SearchUserPage();
             }));
           },
           // enabled: false,

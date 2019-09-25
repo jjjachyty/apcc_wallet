@@ -1,8 +1,12 @@
+import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/message/add_friends.dart';
+import 'package:apcc_wallet/src/message/friend_profile.dart';
+import 'package:apcc_wallet/src/message/new_friends.dart';
+import 'package:apcc_wallet/src/model/im_friend.dart';
 import 'package:flutter/material.dart';
+import 'package:lpinyin/lpinyin.dart';
 
 import 'constants.dart';
-import '../model/contacts.dart' show Contact, ContactsPageData;
 import 'package:cached_network_image/cached_network_image.dart';
 
 class _ContactItem extends StatelessWidget {
@@ -43,7 +47,7 @@ class _ContactItem extends StatelessWidget {
       _avatarIcon = CachedNetworkImage(
         imageUrl: this.avatar,
         placeholder: (context, string) {
-          return Text(string);
+          return Image.asset("assets/images/loading.gif",width: 40,height: 40,);
         },
         width: Constants.ContactAvatarSize,
         height: Constants.ContactAvatarSize,
@@ -56,28 +60,26 @@ class _ContactItem extends StatelessWidget {
       );
     }
 
-    Widget _button = 
-    GestureDetector(
-      child:  Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      padding: const EdgeInsets.symmetric(vertical: MARGIN_VERTICAL),
-      decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(
-            width: Constants.DividerWidth,
-            color: Color(AppColors.DividerColor)),
-      )),
-      child: Row(
-        children: <Widget>[
-          _avatarIcon,
-          SizedBox(width: 10.0),
-          Text(title),
-        ],
+    Widget _button = GestureDetector(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: MARGIN_VERTICAL),
+        decoration: BoxDecoration(
+            border: Border(
+          bottom: BorderSide(
+              width: Constants.DividerWidth,
+              color: Color(AppColors.DividerColor)),
+        )),
+        child: Row(
+          children: <Widget>[
+            _avatarIcon,
+            SizedBox(width: 10.0),
+            Text(title),
+          ],
+        ),
       ),
-    ),
-    onTap: this.onPressed,
+      onTap: this.onPressed,
     );
-   
 
     //分组标签
     Widget _itemBody;
@@ -89,8 +91,7 @@ class _ContactItem extends StatelessWidget {
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             color: const Color(AppColors.ContactGroupTitleBgColor),
             alignment: Alignment.centerLeft,
-            child:
-                Text(this.groupTitle, style: AppStyles.GroupTitleItemTextStyle),
+            child: Text.rich(TextSpan(text: this.groupTitle)),
           ),
           _button,
         ],
@@ -105,7 +106,7 @@ class _ContactItem extends StatelessWidget {
 
 const INDEX_BAR_WORDS = [
   "↑",
-  "☆",
+  "★",
   "A",
   "B",
   "C",
@@ -143,8 +144,7 @@ class ContactsPage extends StatefulWidget {
 
 class _ContactsPageState extends State<ContactsPage> {
   ScrollController _scrollController;
-  final ContactsPageData data = ContactsPageData.mock();
-  final List<Contact> _contacts = [];
+  final List<Friend> _contacts = [];
   List<_ContactItem> _functionButtons;
   final Map _letterPosMap = {INDEX_BAR_WORDS[0]: 0.0};
 
@@ -152,11 +152,10 @@ class _ContactsPageState extends State<ContactsPage> {
     _functionButtons = [
       _ContactItem(
           avatar: 'assets/images/msg_contact_new_friend.png',
-          title: '添加好友',
+          title: '新的好友',
           onPressed: () {
-            print("添加好友");
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return AddFriendsPage();
+              return NewFriends();
             }));
           }),
       // _ContactItem(
@@ -198,16 +197,30 @@ class _ContactsPageState extends State<ContactsPage> {
     }
   }
 
+  String getIndex(String name) {
+    var pinyin = PinyinHelper.getPinyinE(name,
+        separator: " ", defPinyin: '★', format: PinyinFormat.WITHOUT_TONE);
+    return pinyin.substring(0, 1).toUpperCase();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    _contacts
-      ..addAll(data.contacts)
-      ..addAll(data.contacts)
-      ..addAll(data.contacts);
-    _contacts
-        .sort((Contact a, Contact b) => a.nameIndex.compareTo(b.nameIndex));
     _scrollController = new ScrollController();
+
+    myFriends().then((data) {
+      if (data.state) {
+        setState(() {
+          (data.data as List).forEach((frends) {
+            Friend friend = Friend.fromJson(frends);
+            friend.nameIndex = getIndex(friend.friendNickName);
+            _contacts.add(friend);
+          });
+          _contacts.sort(
+              (Friend a, Friend b) => a.nameIndex.compareTo(b.nameIndex));
+        });
+      }
+    });
   }
 
   @override
@@ -290,16 +303,22 @@ class _ContactsPageState extends State<ContactsPage> {
           }
           int _contactIndex = index - _functionButtons.length;
           bool _isGroupTitle = true;
-          Contact _contact = _contacts[_contactIndex];
+          Friend _contact = _contacts[_contactIndex];
 
           if (_contactIndex >= 1 &&
               _contact.nameIndex == _contacts[_contactIndex - 1].nameIndex) {
             _isGroupTitle = false;
           }
           return _ContactItem(
-              avatar: _contact.avatar,
-              title: _contact.name,
-              groupTitle: _isGroupTitle ? _contact.nameIndex : null);
+            avatar: imageHost + _contact.friendAvatar + ".webp",
+            title: _contact.friendNickName,
+            groupTitle: _isGroupTitle ? _contact.nameIndex : null,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return FriendPofilePage(_contact);
+              }));
+            },
+          );
         },
         itemCount: _contacts.length + _functionButtons.length,
       ),
