@@ -5,6 +5,7 @@ import 'package:apcc_wallet/src/common/splashScreen.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,9 +14,11 @@ void main() => runApp(MyApp());
 // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 
 class MyApp extends StatelessWidget {
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    PermissionHandler().requestPermissions([PermissionGroup.storage]);
     init(context);
     //  SystemChrome.setEnabledSystemUIOverlays([]);
     return new MaterialApp(

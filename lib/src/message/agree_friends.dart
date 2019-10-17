@@ -20,9 +20,9 @@ class AgreeFriendPage extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: FadeInImage.assetNetwork(
-                      placeholder: "assets/images/nologinavatar.png",
+                      placeholder: "images/nologinavatar.png",
                       image: apply.friendAvatar == ""
-                          ? "assets/images/nologinavatar.png"
+                          ? "images/nologinavatar.png"
                           : imageHost +
                               apply.friendAvatar +
                               ".webp?" +

@@ -46,8 +46,8 @@ RegExp introduceExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,25}$');
 var imageHost = "http://avatar.apcchis.com/";
 var avatarURL = imageHost + user.avatar + ".webp?"+DateTime.now().toString();
 
-var newestVersion = Version(versionCode: "0.1.9");
-var currentVersion = Version(versionCode: "0.1.9");
+var newestVersion = Version(versionCode: "0.2.0");
+var currentVersion = Version(versionCode: "0.2.0");
 
 var payTypes = {
   1000: "货币兑换",

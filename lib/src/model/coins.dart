@@ -48,10 +48,12 @@ class Coin {
 }
 
 Map<String, Widget> coinIcons = {
-  "ETH": Image.asset("assets/images/eth@2x.png",width: 39,height: 39,),
-  "USDT": Image.asset("assets/images/usdt@2x.png",width: 39,height: 39,),
-  "MHC": Image.asset("assets/images/mhc@2x.png",width: 39,height: 39,),
-  "BTC": Image.asset("assets/images/btc@2x.png",width: 39,height: 39,),
+  "ETH": Image.asset("images/eth@2x.png",width: 39,height: 39,),
+  "USDT": Image.asset("images/usdt@2x.png",width: 39,height: 39,),
+  "MHC": Image.asset("images/mhc@2x.png",width: 39,height: 39,),
+  "BTC": Image.asset("images/btc@2x.png",width: 39,height: 39,),
+  "EOS": Image.asset("images/EOS.png",width: 39,height: 39,),
+  "XRP": Image.asset("images/XRP.png",width: 39,height: 39,),
   "weiChat":Icon(
     IconData(0xe600, fontFamily: 'myIcon'),
     color: Colors.red,
@@ -71,7 +73,7 @@ var gateio =
 Future<List<Coin>> getPrice() async {
   List<Coin> _coinPrice = new List();
 
-  var coins = [["eth_cnyx","ETH"],["btc_cnyx","BTC"],["usdt_cnyx","USDT"]];
+  var coins = [["eth_cnyx","ETH"],["btc_cnyx","BTC"],["usdt_cnyx","USDT"],["eos_cnyx","EOS"],["xrp_cnyx","XRP"]];
 
   _coinPrice.add(Coin(nameEn: "MHC", priceCny: 1.0, percent24h: 0));
 

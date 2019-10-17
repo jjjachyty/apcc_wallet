@@ -45,7 +45,7 @@ class _HealthyPageState extends State<HealthyPage>
                           child: Row(
                             children: <Widget>[
                               Image.asset(
-                                  "assets/images/healthy/cardiology_red.png"),
+                                  "images/healthy/cardiology_red.png"),
                               Text(
                                 "0.0",
                                 style: TextStyle(
@@ -60,7 +60,7 @@ class _HealthyPageState extends State<HealthyPage>
                             width: 100,
                             child: Row(
                               children: <Widget>[
-                                Image.asset("assets/images/healthy/water.png"),
+                                Image.asset("images/healthy/water.png"),
                                 Text(
                                   "0.0",
                                   style: TextStyle(
@@ -79,7 +79,7 @@ class _HealthyPageState extends State<HealthyPage>
                             width: 100,
                             child: Row(
                               children: <Widget>[
-                                Image.asset("assets/images/healthy/lungs.png"),
+                                Image.asset("images/healthy/lungs.png"),
                                 Text(
                                   "0.0",
                                   style: TextStyle(
@@ -93,7 +93,7 @@ class _HealthyPageState extends State<HealthyPage>
                             width: 100,
                             child: Row(
                               children: <Widget>[
-                                Image.asset("assets/images/healthy/kidney.png"),
+                                Image.asset("images/healthy/kidney.png"),
                                 Text(
                                   "0.0",
                                   style: TextStyle(
@@ -112,7 +112,7 @@ class _HealthyPageState extends State<HealthyPage>
                             width: 100,
                             child: Row(
                               children: <Widget>[
-                                Image.asset("assets/images/healthy/weight.png"),
+                                Image.asset("images/healthy/weight.png"),
                                 Text(
                                   "0.0",
                                   style: TextStyle(
@@ -126,7 +126,7 @@ class _HealthyPageState extends State<HealthyPage>
                             width: 100,
                             child: Row(
                               children: <Widget>[
-                                Image.asset("assets/images/healthy/height.png"),
+                                Image.asset("images/healthy/height.png"),
                                 Text(
                                   "0.0",
                                   style: TextStyle(
@@ -144,7 +144,7 @@ class _HealthyPageState extends State<HealthyPage>
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Image.asset(
-                        "assets/images/healthy/body.png",
+                        "images/healthy/body.png",
                         height: 500,
                         width: 500,
                       ),

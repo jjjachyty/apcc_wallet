@@ -1,3 +1,4 @@
+import 'package:apcc_wallet/src/center/assessment.dart';
 import 'package:apcc_wallet/src/center/profile.dart';
 import 'package:apcc_wallet/src/model/user.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class UserSetting extends StatelessWidget {
                   }));
                 },
               ),
+                       
               new ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.zero,
@@ -59,23 +61,22 @@ class UserSetting extends StatelessWidget {
                   }
                 },
               ),
-              // new ListTile(
-              //   dense: true,
-              //   contentPadding: EdgeInsets.zero,
-              //   isThreeLine: false,
-              //   leading: Icon(
-              //     Icons.lock_outline,
-              //     color: Colors.indigo,
-              //   ),
-              //   trailing: Icon(Icons.keyboard_arrow_right),
-              //   title: Text("支付密码"),
-              //   onTap: () {
-              //     Navigator.of(context)
-              //         .push(MaterialPageRoute(builder: (context) {
-              //       return TradePassWd(store.state.user.hasPayPasswd);
-              //     }));
-              //   },
-              // ),
+                   new ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                isThreeLine: false,
+                leading: Icon(
+                  IconData(0xe626, fontFamily: 'myIcon'),color: Colors.indigo,
+                ),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                title: Text("专业认证"),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return Assessment();
+                  }));
+                },
+              ),
               new ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.zero,

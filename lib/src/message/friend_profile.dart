@@ -20,9 +20,9 @@ class FriendPofilePage extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: FadeInImage.assetNetwork(
-                      placeholder: "assets/images/loading.gif",
+                      placeholder: "images/loading.gif",
                       image: friend.friendAvatar == ""
-                          ? "assets/images/nologinavatar.png"
+                          ? "images/nologinavatar.png"
                           : imageHost +
                               friend.friendAvatar +
                               ".webp?" +

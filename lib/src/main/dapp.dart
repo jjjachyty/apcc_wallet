@@ -21,6 +21,8 @@ class _DappsPageState extends State<DappsPage> {
 
   @override
   void initState() {
+      final flutterWebViewPlugin = FlutterWebviewPlugin();
+
     // TODO: implement initState
     super.initState();
     all({"order": "used", "sort": "desc"}).then((page) {

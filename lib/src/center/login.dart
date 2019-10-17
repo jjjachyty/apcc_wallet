@@ -34,7 +34,7 @@ class _UserLoginState extends State<UserLogin> {
     }
     _phoneCtr.dispose();
   }
-
+  
   void _startTimer() {
     setState(() {
       _leftCount = 60;
@@ -52,7 +52,7 @@ class _UserLoginState extends State<UserLogin> {
         body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/login_bg.png"),
+                image: AssetImage("images/login_bg.png"),
                 fit: BoxFit.fill,
               ),
             ),

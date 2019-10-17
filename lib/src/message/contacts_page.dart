@@ -47,7 +47,7 @@ class _ContactItem extends StatelessWidget {
       _avatarIcon = CachedNetworkImage(
         imageUrl: this.avatar,
         placeholder: (context, string) {
-          return Image.asset("assets/images/loading.gif",width: 40,height: 40,);
+          return Image.asset("images/loading.gif",width: 40,height: 40,);
         },
         width: Constants.ContactAvatarSize,
         height: Constants.ContactAvatarSize,
@@ -151,7 +151,7 @@ class _ContactsPageState extends State<ContactsPage> {
   buildfunctionButtons(BuildContext context) {
     _functionButtons = [
       _ContactItem(
-          avatar: 'assets/images/msg_contact_new_friend.png',
+          avatar: 'images/msg_contact_new_friend.png',
           title: '新的好友',
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -159,21 +159,21 @@ class _ContactsPageState extends State<ContactsPage> {
             }));
           }),
       // _ContactItem(
-      //   avatar: 'assets/images/ic_group_chat.png',
+      //   avatar: 'images/ic_group_chat.png',
       //   title: '群聊',
       //   onPressed: (){
       //     print("点击了群聊");
       //   }
       // ),
       // _ContactItem(
-      //   avatar: 'assets/images/ic_tag.png',
+      //   avatar: 'images/ic_tag.png',
       //   title: '标签',
       //   onPressed: (){
       //     print("点击了标签");
       //   }
       // ),
       // _ContactItem(
-      //   avatar: 'assets/images/ic_public_account.png',
+      //   avatar: 'images/ic_public_account.png',
       //   title: '公众号',
       //   onPressed: (){
       //     print("添加公众号");

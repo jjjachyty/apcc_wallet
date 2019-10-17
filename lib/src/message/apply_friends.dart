@@ -23,8 +23,8 @@ class ApplyFriendPage extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/images/nologinavatar.png",
-                image: user.avatar==""?"assets/images/nologinavatar.png": imageHost +
+                placeholder: "images/nologinavatar.png",
+                image: user.avatar==""?"images/nologinavatar.png": imageHost +
                     user.avatar +
                     ".webp?" +
                     DateTime.now().toString(),

@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
               imageUrl: imageHost+"splashscreens.png",
               placeholder: (context, url) => Container(
                 color: Colors.white,
-                child: Image.asset("assets/images/logo.png"),
+                child: Image.asset("images/logo.png"),
                 ) ,
               errorWidget: (context, url, error) => new Icon(Icons.error),
             )

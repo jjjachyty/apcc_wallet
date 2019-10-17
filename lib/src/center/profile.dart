@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
                                 backgroundColor: Colors.white,
                                 backgroundImage: _image == null
                                     ? user.avatar == ""
-                                        ? AssetImage("assets/images/money.png")
+                                        ? AssetImage("images/money.png")
                                         : CachedNetworkImageProvider(avatarURL)
                                     : Image.file(_image).image)),
                         Positioned(

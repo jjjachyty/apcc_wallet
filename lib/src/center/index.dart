@@ -109,7 +109,7 @@ class _UserCenterState extends State<UserCenter> {
               height: MediaQuery.of(context).size.height * 0.38,
               decoration: new BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/center_bg@3x.png"),
+                  image: AssetImage("images/center_bg@3x.png"),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -136,7 +136,7 @@ class _UserCenterState extends State<UserCenter> {
                                       children: <Widget>[
                                         user.avatar == ""
                                             ? Image.asset(
-                                                "assets/images/money.png",
+                                                "images/money.png",
                                                 fit: BoxFit.contain,
                                               )
                                             : Image.network(
@@ -150,7 +150,7 @@ class _UserCenterState extends State<UserCenter> {
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 backgroundImage: user.avatar == ""
-                                    ? AssetImage("assets/images/money.png")
+                                    ? AssetImage("images/money.png")
                                     : CachedNetworkImageProvider(avatarURL)),
                           )),
                       SizedBox(width: 20),
@@ -252,7 +252,7 @@ class _UserCenterState extends State<UserCenter> {
                 height: MediaQuery.of(context).size.height * 0.35,
                 decoration: new BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/center_bg@3x.png"),
+                    image: AssetImage("images/center_bg@3x.png"),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -271,7 +271,7 @@ class _UserCenterState extends State<UserCenter> {
                             },
                             child: Container(
                                 child: Image.asset(
-                              "assets/images/nologinavatar.png",
+                              "images/nologinavatar.png",
                               width: 120,
                               color: Colors.white,
                             ))),

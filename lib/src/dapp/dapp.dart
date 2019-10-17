@@ -4,6 +4,7 @@ import 'package:apcc_wallet/src/common/define.dart';
 import 'package:apcc_wallet/src/dapp/common.dart';
 import 'package:apcc_wallet/src/dapp/jsChannel.dart';
 import 'package:apcc_wallet/src/model/dapp.dart';
+import 'package:apcc_wallet/src/model/user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,6 +43,10 @@ class _DappPageState extends State<DappPage> {
               "window.localStorage.setItem('address','" +
                   address[0].val +
                   "');");
+          flutterWebViewPlugin.evalJavascript(
+              "window.localStorage.setItem('user','" +
+                  user.toJson() +
+                  "');");
         }
       }
     });
@@ -77,18 +82,12 @@ class _DappPageState extends State<DappPage> {
         ),
         withLocalStorage: true,
         withJavascript: true,
-        initialChild: Builder(builder: (context) {
-          dappContext = context;
-          return Container(
-            color: Colors.indigo,
-            child: Center(
+        initialChild: Center(
               child: Text(
                 "广告位招租,详询客服",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.blue),
               ),
-            ),
-          );
-        }));
+            ),);
   }
 }
 

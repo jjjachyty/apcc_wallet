@@ -16,7 +16,7 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 
-final String apiUrl = "http://119.3.108.19:8111";
+final String apiUrl = "http://mhcserver.apcchis.cn";
 
 final storage = new FlutterSecureStorage();
 final iv = "yyyyyyyyyyyyyyyy";
