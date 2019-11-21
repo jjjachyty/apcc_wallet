@@ -254,7 +254,7 @@ class _IndexState extends State<Index> {
             _usedDapp(),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: _coinPrice(),
             )
             

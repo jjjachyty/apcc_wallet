@@ -164,7 +164,7 @@ class _UserCenterState extends State<UserCenter> {
                     ],
                   ),
                   SizedBox(height: 5,),
-                  Text(user.introduce,style: TextStyle(color: Colors.white,fontSize: 10),)
+                  Text(user.introduce??"",style: TextStyle(color: Colors.white,fontSize: 10),)
                 ],
               )),
           Container(
