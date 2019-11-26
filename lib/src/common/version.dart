@@ -27,8 +27,10 @@ class _VersionPageState extends State<VersionPage> {
     super.initState();
     // 初始化进度条
     ProgressDialog pr =
-        new ProgressDialog(context, ProgressDialogType.Download);
-    pr.setMessage('下载中…');
+        new ProgressDialog(context,type: ProgressDialogType.Download, isDismissible: false);
+            pr.style(
+              message: "下载中..."
+            );
 // 设置下载回调
     FlutterDownloader.registerCallback((id, status, progress) {
       // 打印输出下载信息
