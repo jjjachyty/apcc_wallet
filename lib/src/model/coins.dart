@@ -48,45 +48,71 @@ class Coin {
 }
 
 Map<String, Widget> coinIcons = {
-  "ETH": Image.asset("images/eth@2x.png",width: 39,height: 39,),
-  "USDT": Image.asset("images/usdt@2x.png",width: 39,height: 39,),
-  "MHC": Image.asset("images/mhc@2x.png",width: 39,height: 39,),
-  "BTC": Image.asset("images/btc@2x.png",width: 39,height: 39,),
-  "EOS": Image.asset("images/EOS.png",width: 39,height: 39,),
-  "XRP": Image.asset("images/XRP.png",width: 39,height: 39,),
-  "weiChat":Icon(
+  "ETH": Image.asset(
+    "images/eth@2x.png",
+    width: 39,
+    height: 39,
+  ),
+  "USDT": Image.asset(
+    "images/usdt@2x.png",
+    width: 39,
+    height: 39,
+  ),
+  "MHC": Image.asset(
+    "images/mhc@2x.png",
+    width: 39,
+    height: 39,
+  ),
+  "BTC": Image.asset(
+    "images/btc@2x.png",
+    width: 39,
+    height: 39,
+  ),
+  "EOS": Image.asset(
+    "images/EOS.png",
+    width: 39,
+    height: 39,
+  ),
+  "XRP": Image.asset(
+    "images/XRP.png",
+    width: 39,
+    height: 39,
+  ),
+  "weiChat": Icon(
     IconData(0xe600, fontFamily: 'myIcon'),
     color: Colors.red,
   ),
-  "weiBo":Icon(
+  "weiBo": Icon(
     IconData(0xe63d, fontFamily: 'myIcon'),
     color: Colors.red,
   ),
-  "qq":Icon(
+  "qq": Icon(
     IconData(0xe65c, fontFamily: 'myIcon'),
     color: Colors.red,
   ),
 };
 
-var gateio =
-    "https://data.gateio.co/api2/1/ticker";
+var gateio = "https://data.gateio.life/api2/1/ticker";
 Future<List<Coin>> getPrice() async {
   List<Coin> _coinPrice = new List();
 
-  var coins = [["eth_cnyx","ETH"],["btc_cnyx","BTC"],["usdt_cnyx","USDT"],["eos_cnyx","EOS"],["xrp_cnyx","XRP"]];
+  var coins = [
+    ["eth_cnyx", "ETH"],
+    ["btc_cnyx", "BTC"],
+    ["usdt_cnyx", "USDT"],
+    ["eos_cnyx", "EOS"],
+    ["xrp_cnyx", "XRP"]
+  ];
 
   _coinPrice.add(Coin(nameEn: "MHC", priceCny: 1.0, percent24h: 0));
 
   for (var symbol in coins) {
-      final _data = await Dio().get(gateio+"/"+symbol[0]);
+    final _data = await Dio().get(gateio + "/" + symbol[0]);
 
-  
-
-      _coinPrice.add(Coin(
-          nameEn: symbol[1],
-          priceCny: toDouble(_data.data["last"]),
-          percent24h: toDouble(_data.data["percentChange"])));
-    
+    _coinPrice.add(Coin(
+        nameEn: symbol[1],
+        priceCny: toDouble(_data.data["last"]),
+        percent24h: toDouble(_data.data["percentChange"])));
   }
   return _coinPrice;
 }

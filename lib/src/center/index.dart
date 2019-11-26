@@ -99,148 +99,150 @@ class _UserCenterState extends State<UserCenter> {
 
   Widget _logined() {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(244, 244, 244, 1),
-      body:
-      SingleChildScrollView(
-        child:
-       Column(
-        children: <Widget>[
-          Container(
-              height: MediaQuery.of(context).size.height * 0.38,
-              decoration: new BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("images/center_bg@3x.png"),
-                  fit: BoxFit.fill,
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
+        backgroundColor: Color.fromRGBO(244, 244, 244, 1),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.38,
+                  decoration: new BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/center_bg@3x.png"),
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                     children: <Widget>[
-                      Container(
-                          height: 120,
-                          width: 120,
-                          child: GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return SimpleDialog(
-                                      backgroundColor: Colors.transparent,
-                                      elevation: 0,
-                                      children: <Widget>[
-                                        user.avatar == ""
-                                            ? Image.asset(
-                                                "images/money.png",
-                                                fit: BoxFit.contain,
-                                              )
-                                            : Image.network(
-                                                avatarURL,
-                                                fit: BoxFit.contain,
-                                              ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage: user.avatar == ""
-                                    ? AssetImage("images/money.png")
-                                    : CachedNetworkImageProvider(avatarURL)),
-                          )),
-                      SizedBox(width: 20),
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              height: 120,
+                              width: 120,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return SimpleDialog(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0,
+                                          children: <Widget>[
+                                            user.avatar == ""
+                                                ? Image.asset(
+                                                    "images/money.png",
+                                                    fit: BoxFit.contain,
+                                                  )
+                                                : Image.network(
+                                                    avatarURL,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: user.avatar == ""
+                                        ? AssetImage("images/money.png")
+                                        : CachedNetworkImageProvider(
+                                            avatarURL)),
+                              )),
+                          SizedBox(width: 20),
+                          Text(
+                            user.nickName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(
-                        user.nickName,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
+                        user.introduce ?? "",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
                       )
                     ],
-                  ),
-                  SizedBox(height: 5,),
-                  Text(user.introduce,style: TextStyle(color: Colors.white,fontSize: 10),)
-                ],
-              )),
-          Container(
-              decoration: BoxDecoration(color: Colors.white),
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Column(
-                children: <Widget>[
-                  ListView(
-                    shrinkWrap: true,
+                  )),
+              Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Column(
                     children: <Widget>[
-                      new ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        isThreeLine: false,
-                        leading: Icon(
-                          Icons.accessibility_new,
-                          color: Colors.indigo,
-                        ),
-                        title: Text(
-                          "我的健康",
-                        ),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        onTap: () {
-                          Navigator.of(context).pushNamed("/healthy/index");
-                        },
+                      ListView(
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          new ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            isThreeLine: false,
+                            leading: Icon(
+                              Icons.accessibility_new,
+                              color: Colors.indigo,
+                            ),
+                            title: Text(
+                              "我的健康",
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/healthy/index");
+                            },
+                          ),
+                          new ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            isThreeLine: false,
+                            leading: Icon(
+                              Icons.blur_on,
+                              color: Colors.indigo,
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            title: Text(
+                              "我的二维码",
+                            ),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return MyQrCode();
+                              }));
+                            },
+                          ),
+                          new ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            isThreeLine: false,
+                            leading: Icon(
+                              Icons.settings,
+                              color: Colors.indigo,
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            title: Text("设置"),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return UserSetting();
+                              }));
+                            },
+                          ),
+                        ],
                       ),
-                      new ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        isThreeLine: false,
-                        leading: Icon(
-                          Icons.blur_on,
-                          color: Colors.indigo,
-                        ),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        title: Text(
-                          "我的二维码",
-                        ),
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return MyQrCode();
-                          }));
-                        },
-                      ),
-                      new ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        isThreeLine: false,
-                        leading: Icon(
-                          Icons.settings,
-                          color: Colors.indigo,
-                        ),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        title: Text("设置"),
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return UserSetting();
-                          }));
-                        },
-                      ),
+                      _item(),
                     ],
-                  ),
-                  _item(),
-                ],
-              )
+                  )
 
-              // _item(),
-              ),
-        ],
-      ),
-       
-      )
-    );
+                  // _item(),
+                  ),
+            ],
+          ),
+        ));
   }
 
   Widget _nologin() {
