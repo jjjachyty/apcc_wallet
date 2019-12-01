@@ -12,9 +12,9 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-
 void init(BuildContext context) async {
   await initSharedPreferences();
+
   // initWallet().then((val) {
   //   store.dispatch(RefreshWalletsAction(val));
   // });
@@ -24,7 +24,7 @@ void init(BuildContext context) async {
   //   }
   // });
   var token = await getStorageString("_token");
-  if (token ==null){
+  if (token == null) {
     token = "";
   }
   print("toke=${token}");
@@ -91,6 +91,4 @@ void init(BuildContext context) async {
 // var contractName="MhcThaw";
 //  var txs =  await callContractPayable(contractAbi,contractAddress,contractName,"add","22222222222222Qq",[EthereumAddress.fromHex("0x88761000d7fb6080490d54800fe5252e1a35d84d"),BigInt.from(500),BigInt.from(2)]);
 // print("TXs=============================$txs");
-
 }
-

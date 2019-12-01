@@ -6,6 +6,8 @@ import 'package:apcc_wallet/src/model/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:toast/toast.dart';
 
 class TransferPage extends StatefulWidget {
   Assets assets;
@@ -65,7 +67,7 @@ class _TransferPageState extends State<TransferPage> {
           IconButton(
             icon: Icon(Icons.list),
             onPressed: () {
-              if (assets.symbol == "MHC") {
+              if (assets.symbol == "YLC") {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (buildContext) {
                   return TransferListMHCPage(assets.address.val);
@@ -96,11 +98,20 @@ class _TransferPageState extends State<TransferPage> {
                     suffixIcon: IconButton(
                       icon: Icon(Icons.filter_center_focus),
                       onPressed: () async {
+                        Map<PermissionGroup, PermissionStatus> permissions =
+                            await PermissionHandler()
+                                .requestPermissions([PermissionGroup.camera]);
+                        if (permissions[PermissionGroup.camera] !=
+                            PermissionStatus.granted) {
+                          Toast.show("请先开启允许摄像头权限", context,
+                              duration: 2,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white);
+                        }
                         String _value = await Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return ScanPage();
                         }));
-                        print("_value");
                         setState(() {
                           _addressCtl.text = _value;
                         });
@@ -144,7 +155,7 @@ class _TransferPageState extends State<TransferPage> {
               SizedBox(
                 width: double.infinity,
                 child: Text(
-                  "预计手续费 $_free ${assets.symbol}",
+                  "预计手续费 ${_free ?? ''} ${assets.symbol}",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                   textAlign: TextAlign.left,
                 ),

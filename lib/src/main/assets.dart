@@ -108,7 +108,7 @@ class _AssetsPageState extends State<AssetsPage> {
                                               child: Stack(
                                                 children: <Widget>[
                                                   Text(
-                                                    "MHC",
+                                                    "YLC",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 25,
@@ -165,9 +165,11 @@ class _AssetsPageState extends State<AssetsPage> {
                                                               },
                                                         text: "兑换",
                                                         style: TextStyle(
-                                                            decoration: TextDecoration
-                                                      .lineThrough,
-                                                      color: Colors.white70)),
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                            color: Colors
+                                                                .white70)),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
@@ -312,72 +314,78 @@ class _AssetsPageState extends State<AssetsPage> {
                                           ),
                                         ],
                                       ),
-                                     _usdt.length>0? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Text.rich(
-                                              TextSpan(
-                                                  recognizer:
-                                                      new TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          // Navigator.of(context).push(
-                                                          //     MaterialPageRoute(
-                                                          //         builder:
-                                                          //             (context) {
-                                                          //   return ExchangePage(
-                                                          //       _usdt[0],
-                                                          //       _mhc[0]);
-                                                          // }));
-                                                        },
-                                                  text: "兑换",
-                                                  style: TextStyle(
-                                                    decoration: TextDecoration
-                                                      .lineThrough,
-                                                      color: Colors.white70)),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text.rich(
-                                              TextSpan(
-                                                recognizer:
-                                                    new TapGestureRecognizer()
-                                                      ..onTap = () {},
-                                                text: "充值",
-                                                style: TextStyle(
-                                                  decoration: TextDecoration
-                                                      .lineThrough,
-                                                  color: Colors.white70,
-                                                  decorationColor:
-                                                      Colors.white70,
-                                                ),
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text.rich(
-                                              TextSpan(
-                                                  text: "转账",
-                                                  style: TextStyle(
-                                                    color: Colors.white70,
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                    decorationColor:
-                                                        Colors.white70,
+                                      _usdt.length > 0
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                        recognizer:
+                                                            new TapGestureRecognizer()
+                                                              ..onTap = () {
+                                                                // Navigator.of(context).push(
+                                                                //     MaterialPageRoute(
+                                                                //         builder:
+                                                                //             (context) {
+                                                                //   return ExchangePage(
+                                                                //       _usdt[0],
+                                                                //       _mhc[0]);
+                                                                // }));
+                                                              },
+                                                        text: "兑换",
+                                                        style: TextStyle(
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                            color: Colors
+                                                                .white70)),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                  recognizer:
-                                                      new TapGestureRecognizer()
-                                                        ..onTap = () {}),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          )
-                                        ],
-                                      ):Divider()
+                                                ),
+                                                Expanded(
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      recognizer:
+                                                          new TapGestureRecognizer()
+                                                            ..onTap = () {},
+                                                      text: "充值",
+                                                      style: TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                        color: Colors.white70,
+                                                        decorationColor:
+                                                            Colors.white70,
+                                                      ),
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                        text: "转账",
+                                                        style: TextStyle(
+                                                          color: Colors.white70,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough,
+                                                          decorationColor:
+                                                              Colors.white70,
+                                                        ),
+                                                        recognizer:
+                                                            new TapGestureRecognizer()
+                                                              ..onTap = () {}),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          : Divider()
                                     ],
                                   ),
                                 ),

@@ -3,6 +3,7 @@ package com.apcchis.mhc;
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugins.GeneratedPluginRegistrant;
+import vn.hunghd.flutterdownloader.FlutterDownloaderPlugin;
 
 public class MainActivity extends FlutterActivity {
   @Override

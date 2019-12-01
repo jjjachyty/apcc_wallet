@@ -188,7 +188,7 @@ Future<List<Address>> initAddress(
   var mhcAddress = EthereumAddress.fromPublicKey(pbk);
   print("地址=$mhcAddress");
   _adds.add(Address(
-      coin: "MHC",
+      coin: "YLC",
       val: mhcAddress.hex,
       path: mhcPath,
       privateKey: await Cipher2.encryptAesCbc128Padding7(

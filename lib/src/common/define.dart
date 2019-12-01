@@ -44,10 +44,10 @@ RegExp nickNameExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,8}$');
 RegExp introduceExp = RegExp(r'^[\w\u4e00-\u9fa5]{1,25}$');
 
 var imageHost = "http://avatar.apcchis.com/";
-var avatarURL = imageHost + user.avatar + ".webp?"+DateTime.now().toString();
+var avatarURL = imageHost + user.avatar + ".webp?" + DateTime.now().toString();
 
-var newestVersion = Version(versionCode: "0.2.1");
-var currentVersion = Version(versionCode: "0.2.1");
+var newestVersion = Version(versionCode: "0.2.4");
+var currentVersion = Version(versionCode: "0.2.4");
 
 var payTypes = {
   1000: "货币兑换",
@@ -71,5 +71,3 @@ class PasswordError extends Error {
   PasswordError([this.message]);
   String toString() => "密码错误";
 }
-
-

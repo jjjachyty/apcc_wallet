@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:install_plugin/install_plugin.dart';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -19,26 +20,59 @@ class VersionPage extends StatefulWidget {
 }
 
 class _VersionPageState extends State<VersionPage> {
+  List<_TaskInfo> _tasks;
+  bool _isLoading = false;
+  bool _permissionReady;
+  ProgressDialog pr;
+  String _localPath;
+  ReceivePort _port = ReceivePort();
+
   @override
   void initState() {
-    _findLocalPath().then((path) {
-      _localPath = path + '/Download';
-    });
     super.initState();
-    // 初始化进度条
-    ProgressDialog pr =
-        new ProgressDialog(context,type: ProgressDialogType.Download, isDismissible: false);
-            pr.style(
-              message: "下载中..."
-            );
-// 设置下载回调
-    FlutterDownloader.registerCallback((id, status, progress) {
-      // 打印输出下载信息
+    if (Platform.isAndroid) {
+      FlutterDownloader.initialize().then((Null) {
+        _bindBackgroundIsolate();
+
+        FlutterDownloader.registerCallback(downloadCallback);
+        _permissionReady = false;
+        _prepare();
+        pr = new ProgressDialog(context,
+            type: ProgressDialogType.Download, isDismissible: false);
+        pr.style(message: "下载中，请稍后…");
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isAndroid) {
+      _unbindBackgroundIsolate();
+    }
+    super.dispose();
+  }
+
+  void _bindBackgroundIsolate() {
+    print("_bindBackgroundIsolate");
+    bool isSuccess = IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    if (!isSuccess) {
+      _unbindBackgroundIsolate();
+      _bindBackgroundIsolate();
+      return;
+    }
+    _port.listen((dynamic data) {
+      setState(() {
+        pr.show();
+      });
+
+      print('UI Isolate Callback: $data');
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+
       print(
           'Download task ($id) is in status ($status) and process ($progress)');
-      if (!pr.isShowing()) {
-        pr.show();
-      }
 
       if (status == DownloadTaskStatus.running) {
         pr.update(progress: progress.toDouble(), message: "下载中，请稍后…");
@@ -61,140 +95,187 @@ class _VersionPageState extends State<VersionPage> {
     });
   }
 
+  void _unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "新版本${newestVersion.versionCode}发布",
-          style: TextStyle(color: Colors.white),
-        ),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed("/main");
-          },
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "去更新",
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () async {
-              if (Platform.isIOS) {
-                if (await canLaunch(newestVersion.iosDownloadUrl)) {
-                  await launch(newestVersion.iosDownloadUrl);
-                } else {
-                  Toast.show("无法打开浏览器", context);
-                }
-                // gotoAppStore("");
-                //ios相关代码
-              } else if (Platform.isAndroid) {
-                //
-                download(context);
-              }
+    return new Scaffold(
+        appBar: new AppBar(
+          centerTitle: true,
+          title: new Text("新版本${newestVersion.versionCode}发布"),
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed("/main");
             },
-          )
-        ],
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerRight,
+          ),
+          actions: <Widget>[
+            FlatButton(
               child: Text(
-                "发布时间 ${newestVersion.releaseTime}",
-                style: TextStyle(fontSize: 12),
+                "去更新",
+                style: TextStyle(color: Colors.white),
               ),
-            ),
-            Expanded(
-              child: new MarkdownBody(
-                  data:
-                      "${newestVersion.releaseNote}"), //SingleChildScrollView(child: Text("${newestVersion.releaseNote}"),) ,
-            ),
+              onPressed: () async {
+                if (Platform.isAndroid) {
+                  _requestDownload(_TaskInfo(
+                      name: "MHC.apk",
+                      link: "${newestVersion.androidDownloadUrl}"));
+                } else {
+                  if (await canLaunch(newestVersion.iosDownloadUrl)) {
+                    await launch(newestVersion.iosDownloadUrl);
+                  } else {
+                    Toast.show(
+                      "无法打开浏览器",
+                      context,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                    );
+                  }
+                }
+              },
+            )
           ],
         ),
-      ),
-    );
+        body: Builder(
+            builder: (context) => _isLoading
+                ? new Center(
+                    child: new CircularProgressIndicator(),
+                  )
+                : new Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "发布时间 ${newestVersion.releaseTime}",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Expanded(
+                          child: new MarkdownBody(
+                              data:
+                                  "${newestVersion.releaseNote}"), //SingleChildScrollView(child: Text("${newestVersion.releaseNote}"),) ,
+                        ),
+                      ],
+                    ),
+                  )));
   }
-}
 
-download(BuildContext context) async {
-  if (await _checkPermission()) {
-    var _downloadPath = await createPath();
-    print("_downloadPath$_downloadPath");
-    print("${newestVersion.androidDownloadUrl}");
-    await _downloadFile(newestVersion.androidDownloadUrl, _downloadPath);
-
-    //检测权限
-  } else {
-    Toast.show("授权取消,更新失败", context);
+  void _requestDownload(_TaskInfo task) async {
+    task.taskId = await FlutterDownloader.enqueue(
+        url: task.link,
+        savedDir: _localPath,
+        showNotification: true,
+        fileName: "MHC.apk",
+        openFileFromNotification: true);
   }
-}
-// 获取存储路径
 
-Future<String> _findLocalPath() async {
-  // 因为Apple没有外置存储，所以第一步我们需要先对所在平台进行判断
-  // 如果是android，使用getExternalStorageDirectory
-  // 如果是iOS，使用getApplicationSupportDirectory
-  final directory = Platform.isAndroid
-      ? await getExternalStorageDirectory()
-      : await getApplicationSupportDirectory();
-  return directory.path;
-}
-
-Future<String> createPath() async {
-  // 获取存储路径
-
-  final savedDir = Directory(_localPath);
-// 判断下载路径是否存在
-  bool hasExisted = await savedDir.exists();
-// 不存在就新建路径
-  if (!hasExisted) {
-    savedDir.create();
+  void _cancelDownload(_TaskInfo task) async {
+    await FlutterDownloader.cancel(taskId: task.taskId);
   }
-  return _localPath;
-}
 
-// 根据 downloadUrl 和 savePath 下载文件
-_downloadFile(downloadUrl, savePath) {
-  FlutterDownloader.enqueue(
-    url: downloadUrl,
-    savedDir: savePath,
-    showNotification: false,
-    fileName: "MHC.apk",
-    // show download progress in status bar (for Android)
-    openFileFromNotification:
-        false, // click on notification to open downloaded file (for Android)
-  );
-}
+  void _pauseDownload(_TaskInfo task) async {
+    await FlutterDownloader.pause(taskId: task.taskId);
+  }
 
-// 申请权限
-Future<bool> _checkPermission() async {
-  // 先对所在平台进行判断
-  if (Platform.isAndroid) {
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
-    if (permission != PermissionStatus.granted) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.storage]);
-      if (permissions[PermissionGroup.storage] == PermissionStatus.granted) {
+  void _resumeDownload(_TaskInfo task) async {
+    String newTaskId = await FlutterDownloader.resume(taskId: task.taskId);
+    task.taskId = newTaskId;
+  }
+
+  void _retryDownload(_TaskInfo task) async {
+    String newTaskId = await FlutterDownloader.retry(taskId: task.taskId);
+    task.taskId = newTaskId;
+  }
+
+  Future<bool> _openDownloadedFile(_TaskInfo task) {
+    return FlutterDownloader.open(taskId: task.taskId);
+  }
+
+  void _delete(_TaskInfo task) async {
+    await FlutterDownloader.remove(
+        taskId: task.taskId, shouldDeleteContent: true);
+    await _prepare();
+    setState(() {});
+  }
+
+  Future<bool> _checkPermission() async {
+    if (Platform.isAndroid) {
+      PermissionStatus permission = await PermissionHandler()
+          .checkPermissionStatus(PermissionGroup.storage);
+      if (permission != PermissionStatus.granted) {
+        Map<PermissionGroup, PermissionStatus> permissions =
+            await PermissionHandler()
+                .requestPermissions([PermissionGroup.storage]);
+        if (permissions[PermissionGroup.storage] == PermissionStatus.granted) {
+          return true;
+        }
+      } else {
         return true;
       }
     } else {
       return true;
     }
-  } else {
-    return true;
+    return false;
   }
-  return false;
+
+  Future<Null> _prepare() async {
+    final tasks = await FlutterDownloader.loadTasks();
+    _tasks = [];
+    _tasks.add(_TaskInfo(
+        name: "MHC.apk", link: "${newestVersion.androidDownloadUrl}"));
+
+    tasks?.forEach((task) {
+      for (_TaskInfo info in _tasks) {
+        if (info.link == task.url) {
+          info.taskId = task.taskId;
+          info.status = task.status;
+          info.progress = task.progress;
+        }
+      }
+    });
+
+    _permissionReady = await _checkPermission();
+
+    _localPath = (await _findLocalPath()) + '/Download';
+
+    final savedDir = Directory(_localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<String> _findLocalPath() async {
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
 }
 
-/// for iOS: go to app store by the url
-// Future<String> gotoAppStore(String urlString) async {
-//   return await InstallPlugin.gotoAppStore("www.baidu.com");
-// }
+class _TaskInfo {
+  final String name;
+  final String link;
+
+  String taskId;
+  int progress = 0;
+  DownloadTaskStatus status = DownloadTaskStatus.undefined;
+
+  _TaskInfo({this.name, this.link});
+}

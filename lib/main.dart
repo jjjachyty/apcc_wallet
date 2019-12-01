@@ -5,9 +5,12 @@ import 'package:apcc_wallet/src/common/splashScreen.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  runApp(new MyApp());
+}
 
 // SystemUiOverlayStyle systemUiOverlayStyle =
 //     SystemUiOverlayStyle(statusBarColor: Colors.transparent);

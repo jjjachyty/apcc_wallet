@@ -63,6 +63,11 @@ Map<String, Widget> coinIcons = {
     width: 39,
     height: 39,
   ),
+  "YLC": Image.asset(
+    "images/YLC.png",
+    width: 39,
+    height: 39,
+  ),
   "BTC": Image.asset(
     "images/btc@2x.png",
     width: 39,
@@ -104,7 +109,7 @@ Future<List<Coin>> getPrice() async {
     ["xrp_cnyx", "XRP"]
   ];
 
-  _coinPrice.add(Coin(nameEn: "MHC", priceCny: 1.0, percent24h: 0));
+  _coinPrice.add(Coin(nameEn: "YLC", priceCny: 1.0, percent24h: 0));
 
   for (var symbol in coins) {
     final _data = await Dio().get(gateio + "/" + symbol[0]);

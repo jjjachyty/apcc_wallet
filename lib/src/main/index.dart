@@ -45,7 +45,7 @@ class _IndexState extends State<Index> {
 
   Widget _coinPrice() {
     return Container(
-      margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(bottom: 0),
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: FutureBuilder(
           future: getPrice(),
@@ -62,7 +62,9 @@ class _IndexState extends State<Index> {
                       Row(
                         children: <Widget>[
                           coinIcons[price[index].nameEn],
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Stack(
                             children: <Widget>[
                               Text(
@@ -72,13 +74,13 @@ class _IndexState extends State<Index> {
                               Padding(
                                 padding: EdgeInsets.only(top: 20),
                                 child: Text(
-                                    (price[index].percent24h > 0 ? "↑" : "↓") +
+                                    (price[index].percent24h >= 0 ? "↑" : "↓") +
                                         price[index]
                                             .percent24h
                                             .toStringAsFixed(2) +
                                         "%",
                                     style: TextStyle(
-                                        color: price[index].percent24h > 0
+                                        color: price[index].percent24h >= 0
                                             ? Colors.red
                                             : Colors.green,
                                         fontSize: 10)),
@@ -90,7 +92,7 @@ class _IndexState extends State<Index> {
                       Text(
                         "￥" + price[index].priceCny.toStringAsFixed(2),
                         style: TextStyle(
-                            color: price[index].percent24h > 0
+                            color: price[index].percent24h >= 0
                                 ? Colors.red
                                 : Colors.green,
                             fontSize: 18),
@@ -237,7 +239,7 @@ class _IndexState extends State<Index> {
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(
-            "重庆亚鑫达健康产业有限公司",
+            "数字中国产业联盟",
             style: TextStyle(fontSize: 12),
           ),
           centerTitle: true,
@@ -250,14 +252,12 @@ class _IndexState extends State<Index> {
             // Text(user==null?"推荐":"常用",style: TextStyle(fontSize: 12)),
             Expanded(
               flex: 1,
-              child:
-            _usedDapp(),
+              child: _usedDapp(),
             ),
             Expanded(
               flex: 3,
               child: _coinPrice(),
             )
-            
           ],
         ));
   }
